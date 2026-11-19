@@ -1,0 +1,25 @@
+@layer ui-sdk;
+
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  html {
+    background-color: var(--v2-background-bg-deep);
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--oc-bg);
+    color: var(--oc-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--v2-blue-200);
+    color: var(--v2-grey-1200);
+  }
+}

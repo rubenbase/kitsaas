@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>kitsaas</title>
+    <script>
+      // Single dark-mode switch for the tokens in src/theme.css and for the
+      // component stylesheets that read `[data-color-scheme]` (like
+      // src/components/ui/button.css). Runs before the first paint, so there is
+      // no light flash, and follows the OS afterwards.
+      ;(() => {
+        const query = window.matchMedia('(prefers-color-scheme: dark)')
+        const apply = () => {
+          document.documentElement.dataset.colorScheme = query.matches
+            ? 'dark'
+            : 'light'
+        }
+        apply()
+        query.addEventListener('change', apply)
+      })()
+    </script>
+  </head>
+  <body class="font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>
