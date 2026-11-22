@@ -42,6 +42,31 @@
       ]
     },
     {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "An inline callout for a status or warning that stays on the page, in neutral, info, success, warning and danger, with optional title, icon and action.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/solid"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/solid/theme.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/alert.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/alert.tsx"
+        },
+        {
+          "path": "src/components/ui/alert.css",
+          "type": "registry:ui",
+          "target": "components/ui/alert.css"
+        }
+      ]
+    },
+    {
       "name": "alert-dialog",
       "type": "registry:ui",
       "title": "Alert Dialog",

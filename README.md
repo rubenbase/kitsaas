@@ -1,6 +1,11 @@
 # kitsaas
 
-A Vite + Solid 2 single-page app. No meta-framework, no SSR — just Vite, Solid and Tailwind.
+Kitsaas is like [shadcn/ui](https://ui.shadcn.com), but built on
+[ui-sdk](https://ui-sdk.dev) rather than Base UI or Radix UI, and styled like
+[opencode](https://github.com/anomalyco/opencode). ui-sdk supplies the headless
+behavior and accessibility; Kitsaas supplies opencode's look.
+
+The docs site is a Vite + Solid 2 single-page app. No meta-framework, no SSR — just Vite, Solid and Tailwind.
 
 # Getting Started
 
@@ -123,6 +128,23 @@ Every state is styled from the DOM: `:hover`, `:active`, `:focus-visible`,
 `:disabled`/`data-disabled`, `data-expanded` for menu triggers and
 `data-pending` while a Promise-returning `onClick` runs. Pass
 `data-state="hover" | "pressed" | "focus"` to pin a state in docs or tests.
+
+`Alert` is an inline callout that stays on the page (Toast is transient,
+Alert Dialog asks a question). ui-sdk has no alert, so it is plain markup with
+`role="alert"` by default; pass `role="status"` or `role="note"` for a callout
+that is there from the first paint. Its colors are opencode's state tokens, so
+`variant="warning"` is the console's "credit balance is running low" banner:
+
+```tsx
+<Alert variant="warning" role="status">
+  <AlertDescription>
+    Your credit balance is running low. Add credits to avoid interruptions.
+  </AlertDescription>
+</Alert>
+```
+
+`variant` is `neutral` (default), `info`, `success`, `warning` or `danger`.
+`AlertTitle`, a leading icon and a trailing `AlertAction` are optional.
 
 ## Routing
 

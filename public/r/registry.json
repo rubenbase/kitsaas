@@ -4,32 +4,32 @@
   "homepage": "https://kitsaas.dev",
   "frameworks": {
     "solid": {
-      "components": 58,
+      "components": 59,
       "overrides": 0,
       "indexUrl": "https://kitsaas.dev/r/solid/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/solid/{name}.json"
     },
     "react": {
-      "components": 58,
-      "overrides": 4,
+      "components": 59,
+      "overrides": 5,
       "indexUrl": "https://kitsaas.dev/r/react/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/react/{name}.json"
     },
     "vue": {
-      "components": 58,
-      "overrides": 2,
+      "components": 59,
+      "overrides": 3,
       "indexUrl": "https://kitsaas.dev/r/vue/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/vue/{name}.json"
     },
     "svelte": {
-      "components": 58,
-      "overrides": 2,
+      "components": 59,
+      "overrides": 3,
       "indexUrl": "https://kitsaas.dev/r/svelte/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/svelte/{name}.json"
     },
     "web": {
-      "components": 58,
-      "overrides": 2,
+      "components": 59,
+      "overrides": 3,
       "indexUrl": "https://kitsaas.dev/r/web/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/web/{name}.json"
     }
@@ -53,6 +53,12 @@
       "type": "registry:ui",
       "title": "Accordion",
       "description": "Opens one section at a time unless multiple is set; every trigger stays in the tab order, disabled ones included."
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "An inline callout for a status or warning that stays on the page, in neutral, info, success, warning and danger, with optional title, icon and action."
     },
     {
       "name": "alert-dialog",

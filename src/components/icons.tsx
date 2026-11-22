@@ -363,3 +363,23 @@ export function WebFrameworkIcon(props: IconProps) {
     </Icon>
   )
 }
+
+export function InfoIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="8" cy="8" r="6.25" />
+      <path d="M8 7.25v3.5" />
+      <path d="M8 5.25h.01" />
+    </Icon>
+  )
+}
+
+export function AlertTriangleIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M7.13 2.5a1 1 0 0 1 1.74 0l5.5 9.75a1 1 0 0 1-.87 1.5H2.5a1 1 0 0 1-.87-1.5Z" />
+      <path d="M8 6.25v3" />
+      <path d="M8 11.25h.01" />
+    </Icon>
+  )
+}

@@ -1,6 +1,7 @@
 import type { JSX } from '@solidjs/web'
 
 import { AccordionDemo } from './demos/accordion'
+import { AlertDemo } from './demos/alert'
 import { AlertDialogDemo } from './demos/alert-dialog'
 import { AutocompleteDemo } from './demos/autocomplete'
 import { AvatarDemo } from './demos/avatar'
@@ -75,6 +76,14 @@ export const componentCatalog: ComponentEntry[] = [
       'Opens one section at a time unless multiple is set; every trigger stays in the tab order, disabled ones included.',
     packageName: '@ui-sdk/solid/accordion',
     Demo: AccordionDemo,
+  },
+  {
+    slug: 'alert',
+    name: 'Alert',
+    description:
+      'An inline callout for a status or warning that stays on the page, in neutral, info, success, warning and danger, with optional title, icon and action.',
+    packageName: '@ui-sdk/solid',
+    Demo: AlertDemo,
   },
   {
     slug: 'alert-dialog',
