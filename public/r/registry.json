@@ -4,32 +4,32 @@
   "homepage": "https://kitsaas.dev",
   "frameworks": {
     "solid": {
-      "components": 59,
+      "components": 60,
       "overrides": 0,
       "indexUrl": "https://kitsaas.dev/r/solid/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/solid/{name}.json"
     },
     "react": {
-      "components": 59,
-      "overrides": 5,
+      "components": 60,
+      "overrides": 6,
       "indexUrl": "https://kitsaas.dev/r/react/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/react/{name}.json"
     },
     "vue": {
-      "components": 59,
-      "overrides": 3,
+      "components": 60,
+      "overrides": 4,
       "indexUrl": "https://kitsaas.dev/r/vue/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/vue/{name}.json"
     },
     "svelte": {
-      "components": 59,
-      "overrides": 3,
+      "components": 60,
+      "overrides": 4,
       "indexUrl": "https://kitsaas.dev/r/svelte/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/svelte/{name}.json"
     },
     "web": {
-      "components": 59,
-      "overrides": 3,
+      "components": 60,
+      "overrides": 4,
       "indexUrl": "https://kitsaas.dev/r/web/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/web/{name}.json"
     }
@@ -77,6 +77,12 @@
       "type": "registry:ui",
       "title": "Avatar",
       "description": "Shows initials until the image loads and keeps them if it fails, reporting the loading status on every part."
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A small inline label for metadata and status chips, ported from opencode: compact or standard, in neutral, accent, subtle and danger, plus info, success and warning."
     },
     {
       "name": "button",

@@ -142,6 +142,31 @@
       ]
     },
     {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A small inline label for metadata and status chips, ported from opencode: compact or standard, in neutral, accent, subtle and danger, plus info, success and warning.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/svelte"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/svelte/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/svelte/badge.ts",
+          "type": "registry:ui",
+          "target": "components/ui/badge.ts"
+        },
+        {
+          "path": "src/components/ui/badge.css",
+          "type": "registry:ui",
+          "target": "components/ui/badge.css"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",

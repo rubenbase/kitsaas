@@ -5,6 +5,7 @@ import { AlertDemo } from './demos/alert'
 import { AlertDialogDemo } from './demos/alert-dialog'
 import { AutocompleteDemo } from './demos/autocomplete'
 import { AvatarDemo } from './demos/avatar'
+import { BadgeDemo } from './demos/badge'
 import { ButtonDemo } from './demos/button'
 import { ButtonGroupDemo } from './demos/button-group'
 import { CalendarDemo } from './demos/calendar'
@@ -108,6 +109,14 @@ export const componentCatalog: ComponentEntry[] = [
       'Shows initials until the image loads and keeps them if it fails, reporting the loading status on every part.',
     packageName: '@ui-sdk/solid/avatar',
     Demo: AvatarDemo,
+  },
+  {
+    slug: 'badge',
+    name: 'Badge',
+    description:
+      'A small inline label for metadata and status chips, ported from opencode: compact or standard, in neutral, accent, subtle and danger, plus info, success and warning.',
+    packageName: '@ui-sdk/solid',
+    Demo: BadgeDemo,
   },
   {
     slug: 'button',

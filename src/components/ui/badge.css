@@ -1,0 +1,116 @@
+/*
+ * 1:1 port of opencode's Badge (`@opencode/ui/badge`,
+ * packages/ui/src/data-display/badge/badge.css, MIT). The rules are upstream's,
+ * with the selectors renamed to Kitsaas's slot:
+ *
+ *   [data-component="tag"]  →  [data-slot="badge"]
+ *
+ * Upstream's `standard` appearance still reads two legacy (pre-v2) tokens.
+ * Kitsaas only ports the v2 set, so they map to their closest v2 token:
+ *
+ *   --surface-raised-base  →  --v2-overlay-simple-overlay-hover
+ *                             (dark: both #ffffff0f; light: 3.1% vs 3.9% black)
+ *   --text-base (colour)   →  --v2-text-text-muted
+ *                             (Kitsaas's --text-base is Tailwind's font size)
+ *
+ * Kitsaas additions, marked below: `info`, `success` and `warning`, built
+ * exactly like upstream's `danger` from the --v2-state-* tokens Alert uses,
+ * and a 12px size for an inline <svg> icon.
+ *
+ * Every colour is a token, so both schemes follow [data-color-scheme] with no
+ * dark block here. The rule set is attribute driven, so the React, Vue and
+ * web-component bindings reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="badge"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 16px;
+    padding: 0 4px;
+    user-select: none;
+
+    border-radius: 2px;
+    border: 0.5px solid var(--v2-border-border-base);
+    background: var(--v2-background-bg-layer-02);
+
+    font-style: normal;
+    font-weight: 530;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="badge"][data-high-contrast] {
+    border-color: var(--v2-border-border-strong);
+  }
+
+  [data-slot="badge"][data-variant="accent"] {
+    border: 0;
+    background: var(--v2-background-bg-accent);
+    color: var(--v2-text-text-contrast);
+  }
+
+  [data-slot="badge"][data-variant="danger"] {
+    border: 0.5px solid var(--v2-state-border-danger);
+    background: var(--v2-state-bg-danger);
+    color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="badge"][data-variant="subtle"] {
+    border: 0;
+    background: var(--v2-background-bg-layer-03);
+  }
+
+  [data-slot="badge"][data-appearance="standard"] {
+    height: 18px;
+    padding: 0 6px;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-small);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-large);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variant-numeric: normal;
+  }
+
+  [data-slot="badge"][data-appearance="standard"][data-variant="neutral"] {
+    border: 0.5px solid var(--v2-border-border-base);
+    background: var(--v2-overlay-simple-overlay-hover);
+    color: var(--v2-text-text-muted);
+  }
+
+  /* Kitsaas additions: the other state colours, built like `danger`. */
+  [data-slot="badge"][data-variant="info"] {
+    border: 0.5px solid var(--v2-state-border-info);
+    background: var(--v2-state-bg-info);
+    color: var(--v2-state-fg-info);
+  }
+
+  [data-slot="badge"][data-variant="success"] {
+    border: 0.5px solid var(--v2-state-border-success);
+    background: var(--v2-state-bg-success);
+    color: var(--v2-state-fg-success);
+  }
+
+  [data-slot="badge"][data-variant="warning"] {
+    border: 0.5px solid var(--v2-state-border-warning);
+    background: var(--v2-state-bg-warning);
+    color: var(--v2-state-fg-warning);
+  }
+
+  /* Kitsaas addition: an inline icon, sized to fit the 16px box. */
+  [data-slot="badge"] > svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    color: currentColor;
+  }
+}

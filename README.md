@@ -76,11 +76,7 @@ block would flip the tokens without flipping the components.
 
 ### Component stylesheets
 
-Components that are a straight port of an opencode component keep their
-upstream CSS beside the component (`src/components/ui/button.css`) as
-attribute rules (`data-variant`, `data-size`, `data-state`, `data-disabled`).
-The rule set is framework agnostic, so the other ui-sdk bindings can reuse it.
-
+Each component keeps its CSS beside it (`src/components/ui/button.css`).
 Those files are layered into Tailwind's `components` layer, and cascade layers
 are ordered by first appearance. Import `src/styles.css` **before** any
 component module that ships CSS, or the component rules land below
@@ -145,6 +141,21 @@ that is there from the first paint. Its colors are opencode's state tokens, so
 
 `variant` is `neutral` (default), `info`, `success`, `warning` or `danger`.
 `AlertTitle`, a leading icon and a trailing `AlertAction` are optional.
+
+`Badge` is a port of opencode's Badge (`@opencode/ui/badge`): a small inline
+label for metadata and status chips, like the "Free" and "Latest" tags in the
+model picker. Like Alert it is plain markup (a `<span>`):
+
+```tsx
+<Badge>Latest</Badge>
+<Badge variant="accent" appearance="standard">New</Badge>
+```
+
+`appearance` is `compact` (16px, default) or `standard` (18px). `variant` is
+upstream's `neutral` (default), `accent`, `subtle` and `danger`, plus `info`,
+`success` and `warning`, which Kitsaas builds like `danger`. Pass
+`data-high-contrast` to strengthen the neutral border. `SidebarMenuBadge` stays
+the count pinned to a sidebar row; use `Badge` everywhere else.
 
 ## Routing
 

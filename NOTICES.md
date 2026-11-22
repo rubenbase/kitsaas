@@ -50,6 +50,7 @@ mappings are called out in each file's header.
 | --- | --- |
 | `ui/accordion.css` | `data-display/accordion/accordion.css` |
 | `ui/avatar.css` | `data-display/avatar/avatar.css` |
+| `ui/badge.css` | `data-display/badge/badge.css` |
 | `ui/checkbox.css` | `forms/checkbox/checkbox.css` + `checkbox-compact.css` |
 | `ui/collapsible.css` | `components/collapsible.css` |
 | `ui/dialog.css` | `overlays/dialog/dialog.css` |

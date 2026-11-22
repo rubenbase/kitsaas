@@ -142,6 +142,31 @@
       ]
     },
     {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A small inline label for metadata and status chips, ported from opencode: compact or standard, in neutral, accent, subtle and danger, plus info, success and warning.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/react"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/react/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/react/badge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/badge.tsx"
+        },
+        {
+          "path": "src/components/ui/badge.css",
+          "type": "registry:ui",
+          "target": "components/ui/badge.css"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
