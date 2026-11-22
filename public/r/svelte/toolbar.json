@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toolbar",
+  "type": "registry:ui",
+  "title": "Toolbar",
+  "description": "Groups buttons, toggles, inputs, menus, and separators under a single roving tab stop.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/svelte"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/svelte/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/svelte/ui/toolbar.ts",
+      "type": "registry:ui",
+      "target": "components/ui/toolbar.ts",
+      "content": "import './toolbar.css'\n\nexport {\n  createToolbarController,\n  Toolbar,\n  ToolbarButton,\n  ToolbarGroup,\n  ToolbarInput,\n  ToolbarLink,\n  ToolbarSeparator,\n} from '@ui-sdk/svelte/toolbar'\nexport type {\n  ToolbarApi,\n  ToolbarButtonState,\n  ToolbarController,\n  ToolbarGroupState,\n  ToolbarInputState,\n  ToolbarLinkState,\n  ToolbarOptions,\n  ToolbarOrientation,\n  ToolbarSeparatorState,\n  ToolbarState,\n} from '@ui-sdk/svelte/toolbar'\n"
+    },
+    {
+      "path": "src/components/ui/toolbar.css",
+      "type": "registry:ui",
+      "target": "components/ui/toolbar.css",
+      "content": "/*\n * Toolbar styles for Kitsaas on top of @ui-sdk/solid/toolbar.\n *\n * Attribute-driven rules (`data-orientation`, `data-disabled`, `data-open`)\n * using semantic `--v2-*` tokens that flip automatically with\n * `[data-color-scheme=\"dark\"]`.\n */\n\n@layer components {\n  [data-slot=\"toolbar\"] {\n    display: inline-flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n    align-items: center;\n    gap: 2px;\n    max-width: 100%;\n    padding: 4px;\n    border-radius: 8px;\n    border: 1px solid var(--v2-border-border-base);\n    background-color: var(--v2-background-bg-layer-01);\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"toolbar\"][data-orientation=\"vertical\"] {\n    flex-direction: column;\n    align-items: stretch;\n  }\n\n  [data-slot=\"toolbar-group\"] {\n    display: inline-flex;\n    flex-direction: row;\n    align-items: center;\n    gap: 2px;\n  }\n\n  [data-slot=\"toolbar-group\"][data-orientation=\"vertical\"] {\n    flex-direction: column;\n    align-items: stretch;\n  }\n\n  /* Seamless integration for ToggleGroup & Toggle placed inside Toolbar */\n  [data-slot=\"toolbar\"] [data-slot=\"toggle-group\"] {\n    padding: 0;\n    border-radius: 0;\n    background-color: transparent;\n    box-shadow: none;\n  }\n\n  [data-slot=\"toolbar\"] [data-slot=\"toggle\"] {\n    border-radius: 4px;\n  }\n\n  [data-slot=\"toolbar-button\"],\n  [data-slot=\"toolbar-link\"] {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    position: relative;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 6px;\n    height: 28px;\n    min-width: 28px;\n    padding: 0 8px;\n    border: 0;\n    border-radius: 4px;\n    background-color: transparent;\n    color: var(--v2-text-text-base);\n    font-family: var(--font-family-sans);\n    font-style: normal;\n    font-weight: 530;\n    font-size: 13px;\n    line-height: 20px;\n    letter-spacing: -0.04px;\n    font-variant-numeric: tabular-nums;\n    text-decoration: none;\n    white-space: nowrap;\n    user-select: none;\n    cursor: pointer;\n    outline: none;\n    transition:\n      background-color 100ms ease,\n      color 100ms ease;\n  }\n\n  [data-slot=\"toolbar-button\"]:has(> svg:only-child) {\n    width: 28px;\n    padding: 0;\n    color: var(--v2-icon-icon-base);\n  }\n\n  [data-slot=\"toolbar-button\"] > svg,\n  [data-slot=\"toolbar-link\"] > svg {\n    width: 16px;\n    height: 16px;\n    flex-shrink: 0;\n    color: currentColor;\n  }\n\n  [data-slot=\"toolbar-link\"] {\n    font-weight: 440;\n    color: var(--v2-text-text-muted);\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"toolbar-button\"]:hover:not(:disabled, [data-disabled]),\n    [data-slot=\"toolbar-link\"]:hover:not([data-disabled]) {\n      background-color: var(--v2-overlay-simple-overlay-hover);\n      color: var(--v2-text-text-base);\n    }\n  }\n\n  [data-slot=\"toolbar-button\"]:is(:active, [data-open]):not(:disabled, [data-disabled]),\n  [data-slot=\"toolbar-link\"]:active:not([data-disabled]) {\n    background-color: var(--v2-overlay-simple-overlay-pressed);\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"toolbar-button\"]:focus-visible,\n  [data-slot=\"toolbar-link\"]:focus-visible {\n    outline: 2px solid var(--v2-border-border-focus);\n    outline-offset: 2px;\n    z-index: 1;\n  }\n\n  [data-slot=\"toolbar-button\"]:is(:disabled, [data-disabled]),\n  [data-slot=\"toolbar-link\"][data-disabled] {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"toolbar-input\"] {\n    box-sizing: border-box;\n    width: 152px;\n    min-width: 0;\n    height: 28px;\n    padding: 0 8px;\n    margin: 0;\n    border: 0;\n    border-radius: 6px;\n    outline: 1px solid transparent;\n    outline-offset: -1px;\n    background: var(--v2-background-bg-base);\n    box-shadow: var(--v2-elevation-input);\n    color: var(--v2-text-text-base);\n    font-family: var(--font-family-sans);\n    font-style: normal;\n    font-weight: 440;\n    font-size: 13px;\n    line-height: var(--line-height-compact);\n    letter-spacing: -0.04px;\n    transition:\n      outline-color 85ms ease-out,\n      box-shadow 85ms ease-out;\n  }\n\n  [data-slot=\"toolbar-input\"]::placeholder {\n    color: var(--v2-text-text-faint);\n    user-select: none;\n  }\n\n  [data-slot=\"toolbar-input\"]:focus {\n    outline-color: var(--v2-border-border-focus);\n    box-shadow: none;\n  }\n\n  [data-slot=\"toolbar-input\"]:is(:disabled, [data-disabled]) {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"toolbar-separator\"] {\n    flex-shrink: 0;\n    align-self: center;\n    width: 1px;\n    height: 18px;\n    margin: 0 4px;\n    background-color: var(--v2-border-border-base);\n  }\n\n  [data-slot=\"toolbar-separator\"][data-orientation=\"horizontal\"] {\n    align-self: stretch;\n    width: auto;\n    height: 1px;\n    margin: 4px 2px;\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"toolbar-button\"],\n    [data-slot=\"toolbar-link\"],\n    [data-slot=\"toolbar-input\"] {\n      transition: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "svelte",
+    "uiSdkPackage": "@ui-sdk/svelte/toolbar"
+  }
+}

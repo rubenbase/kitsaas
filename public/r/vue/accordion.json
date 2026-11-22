@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "description": "Opens one section at a time unless multiple is set; every trigger stays in the tab order, disabled ones included.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/vue"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/vue/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/vue/ui/accordion.ts",
+      "type": "registry:ui",
+      "target": "components/ui/accordion.ts",
+      "content": "import './accordion.css'\n\nexport {\n  Accordion,\n  AccordionHeader,\n  AccordionItem,\n  AccordionPanel,\n  AccordionTrigger,\n} from '@ui-sdk/vue/accordion'\n"
+    },
+    {
+      "path": "src/components/ui/accordion.css",
+      "type": "registry:ui",
+      "target": "components/ui/accordion.css",
+      "content": "/*\n * 1:1 port of opencode's Accordion (`@opencode/ui`, MIT):\n * packages/ui/src/data-display/accordion/accordion.css.\n *\n * Only the selectors changed, to meet ui-sdk's markup. Every value is\n * upstream, so rest / hover / open / focus-visible / disabled match\n * `data-component=\"accordion\"`:\n *\n *   [data-component=\"accordion\"]        →  [data-slot=\"accordion\"]\n *   [data-slot=\"accordion-item\"]        →  same (ui-sdk's item slot)\n *   [data-slot=\"accordion-header\"]      →  same (ui-sdk's header slot)\n *   [data-slot=\"accordion-trigger\"]     →  same (ui-sdk's trigger slot)\n *   [data-slot=\"accordion-content\"]     →  [data-slot=\"accordion-panel\"]\n *   [data-expanded]                     →  [data-open]\n *   [data-disabled]                     →  same (ui-sdk's attribute)\n *\n * Upstream nests the item rules under the root, so they stay scoped to the\n * root here too. Its `@keyframes slideDown / slideUp` read Kobalte's\n * `--kb-accordion-content-height` and no rule in the file ever applies them,\n * so they are not carried over; ui-sdk exposes `--accordion-panel-height` for\n * a panel animation instead.\n *\n * accordion.css has no [data-color-scheme=\"dark\"] block: the --v2-* tokens\n * flip with the scheme. The trigger drops its focus ring upstream, so\n * `:focus-visible { outline: none }` is kept as is.\n *\n * The rule set is attribute driven, so the React, Vue and web-component\n * bindings can reuse this file unchanged.\n */\n\n@layer components {\n  [data-slot=\"accordion\"] {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    gap: 0px;\n    align-self: stretch;\n  }\n\n  [data-slot=\"accordion\"] [data-slot=\"accordion-item\"] {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    align-self: stretch;\n    overflow: visible;\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    + [data-slot=\"accordion-item\"] {\n    margin-top: -1px;\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    [data-slot=\"accordion-header\"] {\n    width: 100%;\n    display: flex;\n    align-items: center;\n    margin: 0;\n    padding: 0;\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    [data-slot=\"accordion-header\"]\n    [data-slot=\"accordion-trigger\"] {\n    width: 100%;\n    display: flex;\n    height: 32px;\n    padding: 8px 12px;\n    justify-content: space-between;\n    align-items: center;\n    align-self: stretch;\n    cursor: default;\n    user-select: none;\n\n    background-color: var(--v2-background-bg-base);\n    border: 1px solid var(--v2-border-border-base);\n    border-radius: 0;\n    box-shadow: none;\n    overflow: clip;\n    color: var(--v2-text-text-base);\n    transition: background-color 0.15s ease;\n\n    font-family: var(--font-family-sans);\n    font-size: var(--font-size-small);\n    font-style: normal;\n    font-weight: var(--font-weight-regular);\n    line-height: var(--line-height-large);\n    letter-spacing: var(--letter-spacing-normal);\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"accordion\"]\n      [data-slot=\"accordion-item\"]\n      [data-slot=\"accordion-header\"]\n      [data-slot=\"accordion-trigger\"]:hover:not([data-disabled]) {\n      background-color: var(--v2-overlay-simple-overlay-hover);\n    }\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    [data-slot=\"accordion-header\"]\n    [data-slot=\"accordion-trigger\"]:focus-visible {\n    outline: none;\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    [data-slot=\"accordion-header\"]\n    [data-slot=\"accordion-trigger\"][data-disabled] {\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]:first-child\n    [data-slot=\"accordion-header\"]\n    [data-slot=\"accordion-trigger\"] {\n    border-top-left-radius: var(--radius-lg);\n    border-top-right-radius: var(--radius-lg);\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]:last-child:not([data-open])\n    [data-slot=\"accordion-header\"]\n    [data-slot=\"accordion-trigger\"] {\n    border-bottom-left-radius: var(--radius-lg);\n    border-bottom-right-radius: var(--radius-lg);\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"][data-open]\n    [data-slot=\"accordion-panel\"] {\n    border: 1px solid var(--v2-border-border-base);\n    border-top: 0;\n    background-color: var(--v2-background-bg-layer-01);\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]:last-child[data-open]\n    [data-slot=\"accordion-panel\"] {\n    border-bottom-left-radius: var(--radius-lg);\n    border-bottom-right-radius: var(--radius-lg);\n  }\n\n  [data-slot=\"accordion\"]\n    [data-slot=\"accordion-item\"]\n    [data-slot=\"accordion-panel\"] {\n    overflow: hidden;\n    width: 100%;\n    border: 0;\n    background-color: transparent;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "vue",
+    "uiSdkPackage": "@ui-sdk/vue/accordion"
+  }
+}

@@ -1,0 +1,1481 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kitsaas-web",
+  "homepage": "https://kitsaas.dev",
+  "items": [
+    {
+      "name": "theme",
+      "type": "registry:style",
+      "title": "Kitsaas Theme",
+      "description": "Kitsaas --v2-* design tokens (light and dark schemes) and Tailwind v4 @theme bindings.",
+      "files": [
+        {
+          "path": "src/theme.css",
+          "type": "registry:file",
+          "target": "~/src/theme.css"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Opens one section at a time unless multiple is set; every trigger stays in the tab order, disabled ones included.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/accordion.ts",
+          "type": "registry:ui",
+          "target": "components/ui/accordion.ts"
+        },
+        {
+          "path": "src/components/ui/accordion.css",
+          "type": "registry:ui",
+          "target": "components/ui/accordion.css"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Asks for explicit confirmation before a critical or destructive action, supporting async confirm handlers and imperative confirm flows.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/alert-dialog.ts",
+          "type": "registry:ui",
+          "target": "components/ui/alert-dialog.ts"
+        },
+        {
+          "path": "src/components/ui/alert-dialog.css",
+          "type": "registry:ui",
+          "target": "components/ui/alert-dialog.css"
+        }
+      ]
+    },
+    {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Suggests matching options while you type without restricting free-form input, with inline completion, highlighting, and live status updates.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/autocomplete.ts",
+          "type": "registry:ui",
+          "target": "components/ui/autocomplete.ts"
+        },
+        {
+          "path": "src/components/ui/autocomplete.css",
+          "type": "registry:ui",
+          "target": "components/ui/autocomplete.css"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Shows initials until the image loads and keeps them if it fails, reporting the loading status on every part.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/avatar.ts",
+          "type": "registry:ui",
+          "target": "components/ui/avatar.ts"
+        },
+        {
+          "path": "src/components/ui/avatar.css",
+          "type": "registry:ui",
+          "target": "components/ui/avatar.css"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Stays pending while an async action runs, handles disabled state, and renders as a link when given an href.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/button.ts",
+          "type": "registry:ui",
+          "target": "components/ui/button.ts"
+        },
+        {
+          "path": "src/components/ui/button.css",
+          "type": "registry:ui",
+          "target": "components/ui/button.css"
+        }
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Joins related buttons, inputs, and menus into one segmented control, with separators and nested groups.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json",
+        "https://kitsaas.dev/r/web/separator.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/button-group.ts",
+          "type": "registry:ui",
+          "target": "components/ui/button-group.ts"
+        },
+        {
+          "path": "src/components/ui/button-group.css",
+          "type": "registry:ui",
+          "target": "components/ui/button-group.css"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Picks a single date, multiple dates, or a continuous date range from a keyboard-navigable month grid.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/calendar.ts",
+          "type": "registry:ui",
+          "target": "components/ui/calendar.ts"
+        },
+        {
+          "path": "src/components/ui/calendar.css",
+          "type": "registry:ui",
+          "target": "components/ui/calendar.css"
+        }
+      ]
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Pages through slides using native scroll snap, arrow controls, progress tracking, and pagination indicators.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/carousel.ts",
+          "type": "registry:ui",
+          "target": "components/ui/carousel.ts"
+        },
+        {
+          "path": "src/components/ui/carousel.css",
+          "type": "registry:ui",
+          "target": "components/ui/carousel.css"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Reports checked, unchecked and mixed through ARIA, and keeps a hidden native input in sync, so it submits and resets with its form.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/checkbox.ts",
+          "type": "registry:ui",
+          "target": "components/ui/checkbox.ts"
+        },
+        {
+          "path": "src/components/ui/checkbox.css",
+          "type": "registry:ui",
+          "target": "components/ui/checkbox.css"
+        }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Shows and hides one panel; the trigger stays focusable and keeps its contents only while it is open.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/collapsible.ts",
+          "type": "registry:ui",
+          "target": "components/ui/collapsible.ts"
+        },
+        {
+          "path": "src/components/ui/collapsible.css",
+          "type": "registry:ui",
+          "target": "components/ui/collapsible.css"
+        }
+      ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Selects colors across a 2D area, hue and alpha sliders, CSS/channel inputs, swatches, and an optional eyedropper.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/color-picker.ts",
+          "type": "registry:ui",
+          "target": "components/ui/color-picker.ts"
+        },
+        {
+          "path": "src/components/ui/color-picker.css",
+          "type": "registry:ui",
+          "target": "components/ui/color-picker.css"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Searches a list of options to choose one or several values, with selection chips, groups, select-all, and creatable entries.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/combobox.ts",
+          "type": "registry:ui",
+          "target": "components/ui/combobox.ts"
+        },
+        {
+          "path": "src/components/ui/combobox.css",
+          "type": "registry:ui",
+          "target": "components/ui/combobox.css"
+        }
+      ]
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "Fuzzy-searches actions and grouped commands with keyboard shortcut hints and nested sub-views, inline or inside a dialog.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/command.ts",
+          "type": "registry:ui",
+          "target": "components/ui/command.ts"
+        },
+        {
+          "path": "src/components/ui/command.css",
+          "type": "registry:ui",
+          "target": "components/ui/command.css"
+        }
+      ]
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "Date Input",
+      "description": "Edits dates and date-times one locale-ordered segment at a time with arrow-key stepping and native form submission.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/date-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/date-input.ts"
+        },
+        {
+          "path": "src/components/ui/date-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/date-input.css"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Combines a segmented date field with a floating calendar popover for single dates, ranges, and quick presets.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json",
+        "https://kitsaas.dev/r/web/calendar.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/date-picker.ts",
+          "type": "registry:ui",
+          "target": "components/ui/date-picker.ts"
+        },
+        {
+          "path": "src/components/ui/date-picker.css",
+          "type": "registry:ui",
+          "target": "components/ui/date-picker.css"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Opens a task in the top layer, traps focus, closes on Escape, a press outside or a close part, and returns focus to its trigger.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/dialog.ts",
+          "type": "registry:ui",
+          "target": "components/ui/dialog.ts"
+        },
+        {
+          "path": "src/components/ui/dialog.css",
+          "type": "registry:ui",
+          "target": "components/ui/dialog.css"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Slides a draggable sheet in from any screen edge with snap points, a resize handle, and nested stacking.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/drawer.ts",
+          "type": "registry:ui",
+          "target": "components/ui/drawer.ts"
+        },
+        {
+          "path": "src/components/ui/drawer.css",
+          "type": "registry:ui",
+          "target": "components/ui/drawer.css"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Ties a control to its label and description, and marks every part invalid once a submit finds a problem.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/field.ts",
+          "type": "registry:ui",
+          "target": "components/ui/field.ts"
+        },
+        {
+          "path": "src/components/ui/field.css",
+          "type": "registry:ui",
+          "target": "components/ui/field.css"
+        }
+      ]
+    },
+    {
+      "name": "file-input",
+      "type": "registry:ui",
+      "title": "File Input",
+      "description": "Accepts dropped, pasted, or browsed files with validation, file list management, and form submission.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/file-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/file-input.ts"
+        },
+        {
+          "path": "src/components/ui/file-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/file-input.css"
+        }
+      ]
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover Card",
+      "description": "Previews a link on hover or keyboard focus, stays open while the pointer crosses the gap, and still follows the link on press.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/hover-card.ts",
+          "type": "registry:ui",
+          "target": "components/ui/hover-card.ts"
+        },
+        {
+          "path": "src/components/ui/hover-card.css",
+          "type": "registry:ui",
+          "target": "components/ui/hover-card.css"
+        }
+      ]
+    },
+    {
+      "name": "image-cropper",
+      "type": "registry:ui",
+      "title": "Image Cropper",
+      "description": "Crops images by resizing a selection box or panning and zooming behind a fixed frame, with aspect-ratio, rotate, and flip controls.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/image-cropper.ts",
+          "type": "registry:ui",
+          "target": "components/ui/image-cropper.ts"
+        },
+        {
+          "path": "src/components/ui/image-cropper.css",
+          "type": "registry:ui",
+          "target": "components/ui/image-cropper.css"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Reports typing, clearing and a form reset with their reasons, and clears from a group part that returns focus to the field.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/input.ts"
+        },
+        {
+          "path": "src/components/ui/input.css",
+          "type": "registry:ui",
+          "target": "components/ui/input.css"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Names native inputs and custom controls alike, forwarding clicks to activate or focus the associated control.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/label.ts",
+          "type": "registry:ui",
+          "target": "components/ui/label.ts"
+        },
+        {
+          "path": "src/components/ui/label.css",
+          "type": "registry:ui",
+          "target": "components/ui/label.css"
+        }
+      ]
+    },
+    {
+      "name": "listbox",
+      "type": "registry:ui",
+      "title": "Listbox",
+      "description": "Presents an always-visible option list with roving focus, typeahead, groups, and single or multi-range selection.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/listbox.ts",
+          "type": "registry:ui",
+          "target": "components/ui/listbox.ts"
+        },
+        {
+          "path": "src/components/ui/listbox.css",
+          "type": "registry:ui",
+          "target": "components/ui/listbox.css"
+        }
+      ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "Opens a list of actions with the arrow keys, typeahead and Escape, keeping checked items in place and a submenu open under the pointer.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/menu.ts",
+          "type": "registry:ui",
+          "target": "components/ui/menu.ts"
+        },
+        {
+          "path": "src/components/ui/menu.css",
+          "type": "registry:ui",
+          "target": "components/ui/menu.css"
+        }
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Connects top-level application menus under a single tab stop so arrow keys and hover glide seamlessly between them.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json",
+        "https://kitsaas.dev/r/web/menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/menubar.ts",
+          "type": "registry:ui",
+          "target": "components/ui/menubar.ts"
+        },
+        {
+          "path": "src/components/ui/menubar.css",
+          "type": "registry:ui",
+          "target": "components/ui/menubar.css"
+        }
+      ]
+    },
+    {
+      "name": "meter",
+      "type": "registry:ui",
+      "title": "Meter",
+      "description": "Displays a bounded measurement such as storage or quota, classifying optimum, suboptimum, and critical ranges semantically.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/meter.ts",
+          "type": "registry:ui",
+          "target": "components/ui/meter.ts"
+        },
+        {
+          "path": "src/components/ui/meter.css",
+          "type": "registry:ui",
+          "target": "components/ui/meter.css"
+        }
+      ]
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Groups site navigation links into floating disclosure panels with keyboard support and a sliding active indicator.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/navigation-menu.ts",
+          "type": "registry:ui",
+          "target": "components/ui/navigation-menu.ts"
+        },
+        {
+          "path": "src/components/ui/navigation-menu.css",
+          "type": "registry:ui",
+          "target": "components/ui/navigation-menu.css"
+        }
+      ]
+    },
+    {
+      "name": "number-input",
+      "type": "registry:ui",
+      "title": "Number Input",
+      "description": "Formats locale-aware numbers, currencies, and units with stepper buttons, keyboard stepping, and scrubbable labels.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/number-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/number-input.ts"
+        },
+        {
+          "path": "src/components/ui/number-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/number-input.css"
+        }
+      ]
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "OTP Input",
+      "description": "Collects one-time verification codes across individual slots with paste handling, autofill, and native form validation.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/otp-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/otp-input.ts"
+        },
+        {
+          "path": "src/components/ui/otp-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/otp-input.css"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Navigates multi-page datasets with ellipsis collapsing, first/previous/next/last controls, and router-friendly links.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/pagination.ts",
+          "type": "registry:ui",
+          "target": "components/ui/pagination.ts"
+        },
+        {
+          "path": "src/components/ui/pagination.css",
+          "type": "registry:ui",
+          "target": "components/ui/pagination.css"
+        }
+      ]
+    },
+    {
+      "name": "password-input",
+      "type": "registry:ui",
+      "title": "Password Input",
+      "description": "Enters secrets with an integrated visibility toggle button and full Field validation support.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/password-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/password-input.ts"
+        },
+        {
+          "path": "src/components/ui/password-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/password-input.css"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Opens a small task beside its trigger, moves focus in, flips and shifts to stay in view, and returns focus on close.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/popover.ts",
+          "type": "registry:ui",
+          "target": "components/ui/popover.ts"
+        },
+        {
+          "path": "src/components/ui/popover.css",
+          "type": "registry:ui",
+          "target": "components/ui/popover.css"
+        }
+      ]
+    },
+    {
+      "name": "preferences",
+      "type": "registry:ui",
+      "title": "Preferences",
+      "description": "Applies storage-backed user preferences onto data attributes so CSS can adapt before hydration without flash.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/preferences.ts",
+          "type": "registry:ui",
+          "target": "components/ui/preferences.ts"
+        },
+        {
+          "path": "src/components/ui/preferences.css",
+          "type": "registry:ui",
+          "target": "components/ui/preferences.css"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Reports how far a task has come through the progressbar role, and sweeps while the value is unknown.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/progress.ts",
+          "type": "registry:ui",
+          "target": "components/ui/progress.ts"
+        },
+        {
+          "path": "src/components/ui/progress.css",
+          "type": "registry:ui",
+          "target": "components/ui/progress.css"
+        }
+      ]
+    },
+    {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio",
+      "description": "Keeps one value across the group, checks as the arrow keys move, and submits the checked option with its form.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/radio.ts",
+          "type": "registry:ui",
+          "target": "components/ui/radio.ts"
+        },
+        {
+          "path": "src/components/ui/radio.css",
+          "type": "registry:ui",
+          "target": "components/ui/radio.css"
+        }
+      ]
+    },
+    {
+      "name": "rating",
+      "type": "registry:ui",
+      "title": "Rating",
+      "description": "Picks whole or half-star ratings with hover preview, arrow-key navigation, and read-only average displays.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/rating.ts",
+          "type": "registry:ui",
+          "target": "components/ui/rating.ts"
+        },
+        {
+          "path": "src/components/ui/rating.css",
+          "type": "registry:ui",
+          "target": "components/ui/rating.css"
+        }
+      ]
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "Resizable",
+      "description": "Splits layouts into draggable, keyboard-resizable, and collapsible panels horizontally, vertically, or nested.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/resizable.ts",
+          "type": "registry:ui",
+          "target": "components/ui/resizable.ts"
+        },
+        {
+          "path": "src/components/ui/resizable.css",
+          "type": "registry:ui",
+          "target": "components/ui/resizable.css"
+        }
+      ]
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "Pairs native scrolling with styled thin scrollbars, edge overflow fades, and stick-to-end streaming behavior.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/scroll-area.ts",
+          "type": "registry:ui",
+          "target": "components/ui/scroll-area.ts"
+        },
+        {
+          "path": "src/components/ui/scroll-area.css",
+          "type": "registry:ui",
+          "target": "components/ui/scroll-area.css"
+        }
+      ]
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented Control",
+      "description": "Keeps one option checked with a single tab stop, moves the selection with the arrow keys, and slides its indicator to the checked item.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/segmented-control.ts",
+          "type": "registry:ui",
+          "target": "components/ui/segmented-control.ts"
+        },
+        {
+          "path": "src/components/ui/segmented-control.css",
+          "type": "registry:ui",
+          "target": "components/ui/segmented-control.css"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Opens a listbox under the trigger, moves the highlight with the arrow keys and typeahead, and keeps the chosen value — or values, with multiple — in the form.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json",
+        "https://kitsaas.dev/r/web/menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/select.ts",
+          "type": "registry:ui",
+          "target": "components/ui/select.ts"
+        },
+        {
+          "path": "src/components/ui/select.css",
+          "type": "registry:ui",
+          "target": "components/ui/select.css"
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Divides content with a horizontal or vertical hairline, announced to screen readers unless it is decorative.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/separator.ts",
+          "type": "registry:ui",
+          "target": "components/ui/separator.ts"
+        },
+        {
+          "path": "src/components/ui/separator.css",
+          "type": "registry:ui",
+          "target": "components/ui/separator.css"
+        }
+      ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Composable application sidebar built on @ui-sdk/core with collapsible offcanvas and icon modes, floating and inset variants, groups, submenus, rail toggle, and mobile drawer support.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json",
+        "https://kitsaas.dev/r/web/drawer.json",
+        "https://kitsaas.dev/r/web/separator.json",
+        "https://kitsaas.dev/r/web/tooltip.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/web/sidebar.ts",
+          "type": "registry:ui",
+          "target": "components/ui/sidebar.ts"
+        },
+        {
+          "path": "src/components/ui/sidebar-primitive.ts",
+          "type": "registry:lib",
+          "target": "components/ui/sidebar-primitive.ts"
+        },
+        {
+          "path": "src/components/ui/sidebar.css",
+          "type": "registry:ui",
+          "target": "components/ui/sidebar.css"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Adjusts single values or multi-thumb ranges with pointer dragging, stepped marks, and keyboard controls.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/slider.ts",
+          "type": "registry:ui",
+          "target": "components/ui/slider.ts"
+        },
+        {
+          "path": "src/components/ui/slider.css",
+          "type": "registry:ui",
+          "target": "components/ui/slider.css"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Turns a setting on and off in place, keeps a hidden native input in sync, and submits and resets with its form.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/switch.ts",
+          "type": "registry:ui",
+          "target": "components/ui/switch.ts"
+        },
+        {
+          "path": "src/components/ui/switch.css",
+          "type": "registry:ui",
+          "target": "components/ui/switch.css"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Switches panels with one tab selected at a time, moving focus and selection with the arrow keys and tying each tab to its panel.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/tabs.ts",
+          "type": "registry:ui",
+          "target": "components/ui/tabs.ts"
+        },
+        {
+          "path": "src/components/ui/tabs.css",
+          "type": "registry:ui",
+          "target": "components/ui/tabs.css"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Reports typing, a form reset and a controller's changes with their reasons, and grows with its text when autoResize is set.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/textarea.ts",
+          "type": "registry:ui",
+          "target": "components/ui/textarea.ts"
+        },
+        {
+          "path": "src/components/ui/textarea.css",
+          "type": "registry:ui",
+          "target": "components/ui/textarea.css"
+        }
+      ]
+    },
+    {
+      "name": "time-input",
+      "type": "registry:ui",
+      "title": "Time Input",
+      "description": "Edits 12-hour or 24-hour times segment by segment with optional seconds and min/max validation.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/time-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/time-input.ts"
+        },
+        {
+          "path": "src/components/ui/time-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/time-input.css"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Presents chronological events, changelogs, or workflow milestones with connectors, status markers, and arrow-key navigation.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/timeline.ts",
+          "type": "registry:ui",
+          "target": "components/ui/timeline.ts"
+        },
+        {
+          "path": "src/components/ui/timeline.css",
+          "type": "registry:ui",
+          "target": "components/ui/timeline.css"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Stacks notifications in a live region, pauses its timer while hovered or focused, and closes on Escape, a swipe or its own duration.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/toast.ts",
+          "type": "registry:ui",
+          "target": "components/ui/toast.ts"
+        },
+        {
+          "path": "src/components/ui/toast.css",
+          "type": "registry:ui",
+          "target": "components/ui/toast.css"
+        }
+      ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Keeps a button pressed or coordinates single and multi-select toggle groups with arrow-key navigation.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/toggle.ts",
+          "type": "registry:ui",
+          "target": "components/ui/toggle.ts"
+        },
+        {
+          "path": "src/components/ui/toggle.css",
+          "type": "registry:ui",
+          "target": "components/ui/toggle.css"
+        }
+      ]
+    },
+    {
+      "name": "token-input",
+      "type": "registry:ui",
+      "title": "Token Input",
+      "description": "Mixes free text with removable inline tokens for tags, recipients, or references with keyboard selection and deletion.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/token-input.ts",
+          "type": "registry:ui",
+          "target": "components/ui/token-input.ts"
+        },
+        {
+          "path": "src/components/ui/token-input.css",
+          "type": "registry:ui",
+          "target": "components/ui/token-input.css"
+        }
+      ]
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:ui",
+      "title": "Toolbar",
+      "description": "Groups buttons, toggles, inputs, menus, and separators under a single roving tab stop.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/toolbar.ts",
+          "type": "registry:ui",
+          "target": "components/ui/toolbar.ts"
+        },
+        {
+          "path": "src/components/ui/toolbar.css",
+          "type": "registry:ui",
+          "target": "components/ui/toolbar.css"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Names or describes its trigger on hover and keyboard focus, flips to another side when there is no room, and closes on Escape without moving focus.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/tooltip.ts",
+          "type": "registry:ui",
+          "target": "components/ui/tooltip.ts"
+        },
+        {
+          "path": "src/components/ui/tooltip.css",
+          "type": "registry:ui",
+          "target": "components/ui/tooltip.css"
+        }
+      ]
+    },
+    {
+      "name": "tree",
+      "type": "registry:ui",
+      "title": "Tree",
+      "description": "Navigates nested file hierarchies and expandable branches with arrow keys, typeahead, and single or tri-state selection.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/tree.ts",
+          "type": "registry:ui",
+          "target": "components/ui/tree.ts"
+        },
+        {
+          "path": "src/components/ui/tree.css",
+          "type": "registry:ui",
+          "target": "components/ui/tree.css"
+        }
+      ]
+    },
+    {
+      "name": "trigger-menu",
+      "type": "registry:ui",
+      "title": "Trigger Menu",
+      "description": "Opens caret-anchored suggestions when typing trigger characters like @, /, or # inside an input or textarea.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/trigger-menu.ts",
+          "type": "registry:ui",
+          "target": "components/ui/trigger-menu.ts"
+        },
+        {
+          "path": "src/components/ui/trigger-menu.css",
+          "type": "registry:ui",
+          "target": "components/ui/trigger-menu.css"
+        }
+      ]
+    },
+    {
+      "name": "waterfall",
+      "type": "registry:ui",
+      "title": "Waterfall",
+      "description": "Visualizes request traces and nested spans along a shared millisecond time axis with expandable rows and milestones.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/web"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/web/ui/waterfall.ts",
+          "type": "registry:ui",
+          "target": "components/ui/waterfall.ts"
+        },
+        {
+          "path": "src/components/ui/waterfall.css",
+          "type": "registry:ui",
+          "target": "components/ui/waterfall.css"
+        }
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:ui",
+      "title": "Chart",
+      "description": "Opencode-styled data visualization primitives built on @tanstack/charts.",
+      "dependencies": [
+        "@tanstack/charts"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/web/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/web/chart.ts",
+          "type": "registry:ui",
+          "target": "components/ui/chart.ts"
+        },
+        {
+          "path": "src/components/ui/chart.css",
+          "type": "registry:ui",
+          "target": "components/ui/chart.css"
+        }
+      ]
+    }
+  ]
+}

@@ -39,3 +39,34 @@ Ported material:
   `packages/ui/src/actions/submit.css`. Only selectors were adapted (from
   `data-component="button-v2"` to ui-sdk's `data-slot="button"`), plus a
   `nav` variant that has no upstream counterpart.
+
+Every other component in `src/components/ui/` is the same kind of port: the
+upstream stylesheet's declarations kept as written, with only the selectors
+adapted to ui-sdk's markup (`data-component="…"` → `data-slot="…"`, Kobalte's
+runtime variables replaced by ui-sdk's). Kitsaas-only props, parts and token
+mappings are called out in each file's header.
+
+| Kitsaas | Upstream |
+| --- | --- |
+| `ui/accordion.css` | `data-display/accordion/accordion.css` |
+| `ui/avatar.css` | `data-display/avatar/avatar.css` |
+| `ui/checkbox.css` | `forms/checkbox/checkbox.css` + `checkbox-compact.css` |
+| `ui/collapsible.css` | `components/collapsible.css` |
+| `ui/dialog.css` | `overlays/dialog/dialog.css` |
+| `ui/field.css` | `forms/field/field.css` |
+| `ui/hover-card.css` | `components/hover-card.css` |
+| `ui/input.css` | `forms/text-input/text-input.css` |
+| `ui/menu.css` | `navigation/menu/menu.css` |
+| `ui/popover.css` | `components/popover.css` |
+| `ui/progress.css` | `components/progress.css` |
+| `ui/radio.css` | `forms/radio/radio.css` |
+| `ui/segmented-control.css` | `navigation/segmented-control/segmented-control.css` |
+| `ui/select.css` | `forms/select/select.css` |
+| `ui/separator.css` | `layout/divider/divider.css` |
+| `ui/switch.css` | `forms/switch/switch.css` |
+| `ui/tabs.css` | `navigation/tabs/tabs-current.css` |
+| `ui/textarea.css` | `forms/textarea/textarea.css` |
+| `ui/toast.css` | `feedback/toast/toast.css` |
+| `ui/tooltip.css` | `overlays/tooltip/tooltip.css` |
+
+All upstream paths are relative to `packages/ui/src` in the opencode repo.

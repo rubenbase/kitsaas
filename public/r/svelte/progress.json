@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:ui",
+  "title": "Progress",
+  "description": "Reports how far a task has come through the progressbar role, and sweeps while the value is unknown.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/svelte"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/svelte/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/svelte/ui/progress.ts",
+      "type": "registry:ui",
+      "target": "components/ui/progress.ts",
+      "content": "import './progress.css'\n\nexport {\n  Progress,\n  ProgressIndicator,\n  ProgressLabel,\n  ProgressTrack,\n  ProgressValue,\n} from '@ui-sdk/svelte/progress'\n"
+    },
+    {
+      "path": "src/components/ui/progress.css",
+      "type": "registry:ui",
+      "target": "components/ui/progress.css",
+      "content": "/*\n * 1:1 port of opencode's Progress (`@opencode/ui`, MIT):\n * packages/ui/src/components/progress.css.\n *\n * Only the selectors changed, to meet ui-sdk's markup. Every value is\n * upstream: the 4px / 8px gaps, the 8px track with its 999px radius and 1px\n * border, the 200ms width transition and the 1.3s indeterminate sweep.\n *\n *   [data-component=\"progress\"]        →  [data-slot=\"progress\"]  (ui-sdk's root slot)\n *   [data-slot=\"progress-header\"]      →  same name (upstream's own slot; render it\n *                                         as a plain div inside <Progress>)\n *   [data-slot=\"progress-label\"]       →  same name\n *   [data-slot=\"progress-value-label\"] →  [data-slot=\"progress-value\"]\n *   [data-slot=\"progress-track\"]       →  same name\n *   [data-slot=\"progress-fill\"]        →  [data-slot=\"progress-indicator\"]\n *   width: var(--kb-progress-fill-width)  →  the indicator's inline width, which\n *                                         ui-sdk writes as a percentage\n *\n * `data-indeterminate` is upstream's own attribute; ui-sdk renders it on every\n * part when `value` is null, so the sweep needs no Kitsaas prop. Determinate\n * progress needs no CSS of its own: ui-sdk sets the fill's inline width.\n *\n * Three OC-1 alias tokens Kitsaas doesn't carry are mapped to the --v2-* token\n * that is nearest, noted at each use: --text-base, --text-weak and\n * --surface-base.\n *\n * Upstream has no [data-color-scheme=\"dark\"] block: every --v2-* token read\n * here flips with the scheme.\n *\n * The rule set is attribute driven, so the React, Vue and web-component\n * bindings can reuse this file unchanged.\n */\n\n@layer components {\n  [data-slot=\"progress\"] {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n  }\n\n  [data-slot=\"progress\"] [data-slot=\"progress-header\"] {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 8px;\n  }\n\n  [data-slot=\"progress\"] [data-slot=\"progress-label\"],\n  [data-slot=\"progress\"] [data-slot=\"progress-value\"] {\n    font-family: var(--font-family-sans);\n    font-size: var(--font-size-small);\n    font-weight: var(--font-weight-regular);\n    line-height: var(--line-height-large);\n    letter-spacing: var(--letter-spacing-normal);\n  }\n\n  /* upstream --text-base (#6f6f6f light); grey-700 is the nearest token */\n  [data-slot=\"progress\"] [data-slot=\"progress-label\"] {\n    color: var(--v2-text-text-muted);\n  }\n\n  /* upstream --text-weak (#8f8f8f light); grey-600 is the nearest token */\n  [data-slot=\"progress\"] [data-slot=\"progress-value\"] {\n    color: var(--v2-text-text-faint);\n    font-variant-numeric: tabular-nums;\n  }\n\n  [data-slot=\"progress\"] [data-slot=\"progress-track\"] {\n    position: relative;\n    width: 100%;\n    height: 8px;\n    overflow: hidden;\n    border-radius: 999px;\n    border: 1px solid var(--v2-border-border-base);\n    /* upstream --surface-base, black 3.1% over the page; layer-01 is the\n       nearest token that flips with the scheme */\n    background-color: var(--v2-background-bg-layer-01);\n  }\n\n  [data-slot=\"progress\"] [data-slot=\"progress-indicator\"] {\n    height: 100%;\n    border-radius: inherit;\n    background-color: var(--v2-icon-icon-base);\n    transition: width 200ms ease;\n  }\n\n  [data-slot=\"progress\"][data-indeterminate] [data-slot=\"progress-indicator\"] {\n    width: 35%;\n    animation: progress-indeterminate 1.3s ease-in-out infinite;\n  }\n\n  @keyframes progress-indeterminate {\n    from {\n      transform: translateX(-100%);\n    }\n\n    to {\n      transform: translateX(300%);\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "svelte",
+    "uiSdkPackage": "@ui-sdk/svelte/progress"
+  }
+}

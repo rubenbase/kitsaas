@@ -1,0 +1,127 @@
+/*
+ * 1:1 port of opencode's Tooltip (`@opencode/ui`, MIT):
+ * packages/ui/src/overlays/tooltip/tooltip.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is upstream,
+ * so the compact look, the 120ms in, the 80ms out and the large appearance all
+ * match `data-component="tooltip-v2"`:
+ *
+ *   [data-component="tooltip-v2-trigger"]  →  [data-slot="tooltip-trigger"]
+ *   [data-component="tooltip-v2"]          →  [data-slot="tooltip-content"]
+ *   [data-appearance="compact|large"]      →  same (forwarded from the root prop)
+ *   [data-closed]                          →  same (ui-sdk's attribute; the out
+ *                                              rule also matches
+ *                                              [data-ending-style], which is
+ *                                              the state ui-sdk waits on for
+ *                                              an exit animation)
+ *   [data-popper-positioner] z-index       →  the content's own z-index
+ *   :root[data-motion="reduce"]            →  same, plus the OS preference
+ *
+ * ui-sdk renders the content in the top layer with no positioner element, so
+ * the two `z-index: 1000` rules upstream splits between the positioner and the
+ * content land on the content alone.
+ *
+ * `transform-origin` reads ui-sdk's `--transform-origin` instead of Kobalte's
+ * `--kb-tooltip-content-transform-origin`.
+ *
+ * `appearance="standard"` is not ported: it reads opencode app-level tokens
+ * this repo does not ship (--surface-float-base, --text-invert-strong,
+ * --shadow-md). It is also the only rule that sets `max-width: 320px`, so no
+ * max-width is carried over; compact and large both size to their text.
+ * `data-force-open` only appeared in that block. Upstream tooltips have no
+ * arrow part, so ui-sdk's TooltipArrow ships unstyled.
+ *
+ * The trigger rule covers a bare trigger. A trigger rendered as another part,
+ * like a Kitsaas Button through `render`, keeps that part's `data-slot`, so the
+ * button's own layout rules apply instead.
+ *
+ * tooltip.css has no [data-color-scheme="dark"] block: the --v2-* tokens flip
+ * with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="tooltip-trigger"] {
+    display: flex;
+  }
+
+  [data-slot="tooltip-content"] {
+    z-index: 1000;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 6px;
+    gap: 6px;
+
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-floating);
+    border-radius: 4px;
+
+    font-style: normal;
+    font-weight: 530;
+    font-size: 11px;
+    line-height: 12px;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-base);
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: "slnt" 0;
+
+    user-select: none;
+    pointer-events: none;
+
+    animation: tooltipV2In 120ms ease-out;
+    transform-origin: var(--transform-origin);
+  }
+
+  [data-slot="tooltip-content"]:is([data-closed], [data-ending-style]) {
+    animation: tooltipV2Out 80ms ease-in forwards;
+  }
+
+  [data-slot="tooltip-content"][data-appearance="large"] {
+    padding: 12px;
+    font-size: 13px;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+  }
+
+  @keyframes tooltipV2In {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes tooltipV2Out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  :root[data-motion="reduce"] [data-slot="tooltip-content"],
+  :root[data-motion="reduce"] [data-slot="tooltip-content"][data-closed],
+  :root[data-motion="reduce"] [data-slot="tooltip-content"][data-ending-style] {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="tooltip-content"],
+    [data-slot="tooltip-content"][data-closed],
+    [data-slot="tooltip-content"][data-ending-style] {
+      animation: none;
+    }
+  }
+}

@@ -1,0 +1,89 @@
+/*
+ * 1:1 port of opencode's Field (`@opencode/ui`, MIT):
+ * packages/ui/src/forms/field/field.css (`field-v2`).
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream's root wraps
+ * its own label, helper copy and control; ui-sdk splits those into parts, so
+ * the two helper divs share one rule:
+ *
+ *   [data-component="field-v2"]                 →  [data-slot="field"]
+ *   [data-slot="field-v2-label"]                →  [data-slot="field-label"]
+ *   [data-slot="field-v2-label-text"]           →  no ui-sdk part: the label
+ *                                                  is the flex row itself
+ *   [data-slot="field-v2-label"] tooltip trigger →  not ported (ui-sdk's Field
+ *   [data-slot="field-v2-label-info"]               has no info button/tooltip)
+ *   [data-slot="field-v2-prefix"]               →  [data-slot="field-description"]
+ *   [data-slot="field-v2-suffix"]               →  [data-slot="field-error"]
+ *   [data-slot="field-v2-control"]              →  not ported (ui-sdk's
+ *                                                  FieldControl is a native
+ *                                                  input, not a wrapper)
+ *
+ * `data-invalid`, `data-required`, `data-disabled` and `data-focused` come from
+ * ui-sdk and land on every part. Upstream styles none of them on field-v2: the
+ * control shows invalid and disabled, and the label stays base-coloured, so
+ * this file does the same. Its only addition is the danger colour on the error
+ * part, which upstream does not have; it uses the same
+ * `--v2-state-fg-danger` token the invalid controls use.
+ *
+ * Upstream has no [data-color-scheme="dark"] block; every --v2-* token this
+ * file reads flips with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="field"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  [data-slot="field"] [data-slot="field-label"] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+    gap: 4px;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-style: normal;
+    font-weight: 530;
+    font-size: 13px;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+    cursor: default;
+    user-select: none;
+  }
+
+  /* Upstream's prefix/suffix. `margin: 0` stands in for its divs: ui-sdk's
+     description is a <p>, which the browser would otherwise space. */
+  [data-slot="field"] [data-slot="field-description"],
+  [data-slot="field"] [data-slot="field-error"] {
+    align-self: stretch;
+    width: 100%;
+    min-height: 11px;
+    margin: 0;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-muted);
+    font-variation-settings: "slnt" 0;
+    user-select: none;
+  }
+
+  /* Kitsaas addition: ui-sdk has an error part, upstream only has suffix copy.
+     It is rendered only while it shows, so it can carry the invalid colour. */
+  [data-slot="field"] [data-slot="field-error"][data-invalid] {
+    color: var(--v2-state-fg-danger);
+  }
+}

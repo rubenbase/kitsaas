@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menubar",
+  "type": "registry:ui",
+  "title": "Menubar",
+  "description": "Connects top-level application menus under a single tab stop so arrow keys and hover glide seamlessly between them.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/vue"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/vue/theme.json",
+    "https://kitsaas.dev/r/vue/menu.json"
+  ],
+  "files": [
+    {
+      "path": "registry/vue/ui/menubar.ts",
+      "type": "registry:ui",
+      "target": "components/ui/menubar.ts",
+      "content": "import './menubar.css'\n\nexport {\n  createMenubarController,\n  Menubar,\n} from '@ui-sdk/vue/menubar'\nexport type {\n  MenubarApi,\n  MenubarController,\n  MenubarMember,\n  MenubarOptions,\n  MenubarOrientation,\n  MenubarPrimitive,\n  MenubarState,\n} from '@ui-sdk/vue/menubar'\n"
+    },
+    {
+      "path": "src/components/ui/menubar.css",
+      "type": "registry:ui",
+      "target": "components/ui/menubar.css",
+      "content": "@import \"./menu.css\";\n\n@layer components {\n  [data-slot=\"menubar\"] {\n    box-sizing: border-box;\n    display: inline-flex;\n    flex-direction: row;\n    align-items: center;\n    gap: 2px;\n    padding: 3px;\n    border-radius: 6px;\n    background: var(--v2-background-bg-layer-01);\n    box-shadow: inset 0 0 0 1px var(--v2-border-border-muted);\n\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-rendering: geometricPrecision;\n  }\n\n  [data-slot=\"menubar\"][data-orientation=\"vertical\"] {\n    flex-direction: column;\n    align-items: stretch;\n    width: fit-content;\n    min-width: 140px;\n  }\n\n  [data-slot=\"menubar\"][data-disabled] {\n    opacity: 0.5;\n  }\n\n  /* Top-level menubar triggers (excludes submenu triggers inside menu-content). */\n  [data-slot=\"menubar\"] > [data-slot=\"menu-trigger\"] {\n    box-sizing: border-box;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 6px;\n    height: 24px;\n    padding: 0 9px;\n    border: 0;\n    border-radius: 4px;\n    background: transparent;\n    color: var(--v2-text-text-base);\n    font: inherit;\n    font-size: 13px;\n    font-weight: 530;\n    line-height: 16px;\n    letter-spacing: -0.04px;\n    font-variant-numeric: tabular-nums;\n    white-space: nowrap;\n    user-select: none;\n    cursor: default;\n    outline: none;\n    transition:\n      background-color 100ms ease-out,\n      color 100ms ease-out;\n  }\n\n  [data-slot=\"menubar\"][data-orientation=\"vertical\"]\n    > [data-slot=\"menu-trigger\"] {\n    justify-content: flex-start;\n    height: 28px;\n    padding: 0 10px;\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"menubar\"]\n      > [data-slot=\"menu-trigger\"]:hover:not([data-open]):not([data-disabled]):not(\n        [aria-disabled=\"true\"]\n      ) {\n      background: var(--v2-overlay-simple-overlay-hover);\n    }\n  }\n\n  [data-slot=\"menubar\"]\n    > [data-slot=\"menu-trigger\"]:active:not([data-disabled]):not(\n      [aria-disabled=\"true\"]\n    ) {\n    background: var(--v2-overlay-simple-overlay-pressed);\n  }\n\n  [data-slot=\"menubar\"] > [data-slot=\"menu-trigger\"][data-open] {\n    background: var(--v2-background-bg-layer-03);\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"menubar\"] > [data-slot=\"menu-trigger\"]:focus-visible {\n    outline: 2px solid var(--v2-border-border-focus);\n    outline-offset: 1px;\n  }\n\n  [data-slot=\"menubar\"]\n    > [data-slot=\"menu-trigger\"]:is([data-disabled], [aria-disabled=\"true\"]) {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  /* Ensure popover resets stay clean for menus opened from a menubar. */\n  [data-slot=\"menubar\"] [data-slot=\"menu-content\"] {\n    border: 0;\n    margin: 0;\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"menubar\"] > [data-slot=\"menu-trigger\"] {\n      transition: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "vue",
+    "uiSdkPackage": "@ui-sdk/vue/menubar"
+  }
+}

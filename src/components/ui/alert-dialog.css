@@ -1,0 +1,151 @@
+/*
+ * AlertDialog styles for Kitsaas, aligned with dialog.css tokens and layout
+ * grammar on top of @ui-sdk/solid/alert-dialog.
+ *
+ * All rules are attribute-driven (`data-slot`, `data-size`, `data-starting-style`,
+ * `data-ending-style`, `data-nested-open`, `data-pending`) and read semantic
+ * `--v2-*` tokens that flip automatically with `[data-color-scheme="dark"]`.
+ */
+
+@layer components {
+  [data-slot="alert-dialog-backdrop"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background-color: var(--v2-overlay-simple-overlay-scrim);
+    transition: opacity 150ms ease;
+  }
+
+  [data-slot="alert-dialog-backdrop"]:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+  }
+
+  [data-slot="alert-dialog-content"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: min(calc(100vw - 32px), 420px);
+    height: fit-content;
+    max-height: calc(100vh - 32px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-overlay);
+    border-radius: 12px;
+    overflow: auto;
+    pointer-events: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scale: calc(1 - var(--dialog-stack, 0) * 0.04);
+    translate: 0 calc(var(--dialog-stack, 0) * -8px);
+    transition:
+      opacity 180ms ease,
+      translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      scale 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-slot="alert-dialog-content"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-slot="alert-dialog-content"]:focus-visible {
+    outline: none;
+  }
+
+  [data-slot="alert-dialog-content"][data-size="large"] {
+    width: min(calc(100vw - 32px), 480px);
+  }
+
+  [data-slot="alert-dialog-content"]:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.97;
+  }
+
+  [data-slot="alert-dialog-content"][data-ending-style] {
+    transition-duration: 140ms;
+  }
+
+  [data-slot="alert-dialog-header"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    gap: 4px;
+    padding: 16px 16px 0;
+    flex-shrink: 0;
+  }
+
+  [data-slot="alert-dialog-title"] {
+    margin: 0;
+    flex: none;
+    user-select: none;
+    font-weight: 530;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.13px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="alert-dialog-description"] {
+    margin: 0;
+    flex: none;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    user-select: none;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-muted);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="alert-dialog-body"] {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  [data-slot="alert-dialog-footer"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    gap: 8px;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+
+  [data-slot="alert-dialog-shortcut"] {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: 4px;
+    font-family: var(--font-family-sans);
+    font-size: 11px;
+    font-weight: 530;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--v2-text-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="alert-dialog-backdrop"],
+    [data-slot="alert-dialog-content"] {
+      transition: none;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
+  optimizeDeps: { exclude: ['@ui-sdk/core'] },
   plugins: [tailwindcss(), solid()],
 })
 

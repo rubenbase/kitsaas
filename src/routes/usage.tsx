@@ -1,12 +1,5 @@
-import { PageContent, PageLayout } from '#/components/app-shell'
-import { MockDashboard } from '#/components/mock-dashboard'
+import { PageLayout } from '#/components/app-shell'
 
 export function UsagePage() {
-  return (
-    <PageLayout tabs>
-      <PageContent class="pt-16 max-md:pt-8">
-        <MockDashboard />
-      </PageContent>
-    </PageLayout>
-  )
+  return <PageLayout>{null}</PageLayout>
 }

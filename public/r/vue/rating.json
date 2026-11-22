@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rating",
+  "type": "registry:ui",
+  "title": "Rating",
+  "description": "Picks whole or half-star ratings with hover preview, arrow-key navigation, and read-only average displays.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/vue"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/vue/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/vue/ui/rating.ts",
+      "type": "registry:ui",
+      "target": "components/ui/rating.ts",
+      "content": "import { defineComponent, h } from 'vue'\nimport { Rating as UiRating } from '@ui-sdk/vue/rating'\n\nimport './rating.css'\n\nexport {\n  createRatingController,\n  RatingItem,\n} from '@ui-sdk/vue/rating'\nexport type {\n  RatingController,\n  RatingItemState,\n  RatingOptions,\n  RatingState,\n} from '@ui-sdk/vue/rating'\n\nexport type RatingSize = 'small' | 'normal' | 'large'\nexport type RatingTone = 'amber' | 'neutral'\n\nexport const Rating = defineComponent({\n  name: 'Rating',\n  inheritAttrs: false,\n  props: {\n    size: { type: String, default: 'normal' },\n    tone: { type: String, default: 'amber' },\n  },\n  setup(props, { attrs, slots }) {\n    return () =>\n      h(\n        UiRating,\n        {\n          ...attrs,\n          'data-size': props.size,\n          'data-tone': props.tone,\n        },\n        slots,\n      )\n  },\n})\n"
+    },
+    {
+      "path": "src/components/ui/rating.css",
+      "type": "registry:ui",
+      "target": "components/ui/rating.css",
+      "content": "@layer components {\n  [data-slot=\"rating\"] {\n    --rating-size: 20px;\n    --rating-gap: 3px;\n    --rating-empty-color: var(--v2-border-border-strong);\n    --rating-fill-color: var(--v2-yellow-600);\n    --rating-fill-stroke: var(--v2-yellow-700);\n\n    display: inline-flex;\n    flex-direction: row;\n    align-items: center;\n    gap: var(--rating-gap);\n    vertical-align: middle;\n    user-select: none;\n  }\n\n  [data-slot=\"rating\"][data-size=\"small\"] {\n    --rating-size: 16px;\n    --rating-gap: 2px;\n  }\n\n  [data-slot=\"rating\"][data-size=\"large\"] {\n    --rating-size: 24px;\n    --rating-gap: 4px;\n  }\n\n  [data-slot=\"rating\"][data-tone=\"neutral\"] {\n    --rating-fill-color: var(--v2-text-text-base);\n    --rating-fill-stroke: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"rating\"][data-disabled] {\n    opacity: 0.45;\n  }\n\n  [data-slot=\"rating-item\"] {\n    position: relative;\n    display: inline-flex;\n    flex: none;\n    align-items: center;\n    justify-content: center;\n    width: var(--rating-size);\n    height: var(--rating-size);\n    border-radius: 4px;\n    color: var(--rating-empty-color);\n    transition: transform 100ms ease-out;\n  }\n\n  [data-slot=\"rating-item\"][data-highlighted]:not([data-disabled]):not(\n      [data-readonly]\n    ) {\n    transform: scale(1.08);\n  }\n\n  [data-slot=\"rating-item\"]:has(> [role=\"radio\"]:focus-visible) {\n    outline: 2px solid var(--v2-border-border-focus);\n    outline-offset: 2px;\n  }\n\n  [data-slot=\"rating-item\"] > [role=\"radio\"] {\n    cursor: pointer;\n    outline: none;\n  }\n\n  [data-slot=\"rating-item\"][data-readonly] > [role=\"radio\"] {\n    cursor: default;\n    pointer-events: none;\n  }\n\n  [data-slot=\"rating-item\"][data-disabled] > [role=\"radio\"] {\n    cursor: not-allowed;\n  }\n\n  /* Default layered star icon supporting whole, half, and arbitrary decimal fills */\n  [data-slot=\"rating-star\"] {\n    position: relative;\n    display: inline-flex;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n  }\n\n  [data-slot=\"rating-star-empty\"],\n  [data-slot=\"rating-star-filled\"] {\n    display: block;\n    width: 100%;\n    height: 100%;\n  }\n\n  [data-slot=\"rating-star-empty\"] {\n    color: var(--rating-empty-color);\n  }\n\n  [data-slot=\"rating-star-filled\"] {\n    position: absolute;\n    inset: 0;\n    color: var(--rating-fill-color);\n    stroke: var(--rating-fill-stroke);\n    clip-path: inset(0 calc((1 - var(--rating-fill, 0)) * 100%) 0 0);\n  }\n\n  :dir(rtl) [data-slot=\"rating-star-filled\"] {\n    clip-path: inset(0 0 0 calc((1 - var(--rating-fill, 0)) * 100%));\n  }\n\n  /* Custom SVG children passed directly into RatingItem */\n  [data-slot=\"rating-item\"] > svg {\n    display: block;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n  }\n\n  [data-slot=\"rating-item\"][data-filled] > svg {\n    color: var(--rating-fill-color);\n    fill: currentColor;\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"rating-item\"] {\n      transition: none;\n    }\n\n    [data-slot=\"rating-item\"][data-highlighted] {\n      transform: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "vue",
+    "uiSdkPackage": "@ui-sdk/vue/rating"
+  }
+}

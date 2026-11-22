@@ -1,0 +1,314 @@
+/*
+ * 1:1 port of opencode's Switch (`@opencode/ui/switch`, MIT):
+ * packages/ui/src/forms/switch/switch.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream's root is a
+ * row that also holds the label, description and error; ui-sdk renders the
+ * control itself as the root (the label stays outside, wrapped around it), so
+ * the control's rules move onto the root:
+ *
+ *   [data-component="switch"]                       →  [data-slot="switch"]
+ *   [data-component="switch"] [data-slot="switch-control"]
+ *                                                   →  [data-slot="switch"]
+ *   [data-slot="switch-thumb"]                      →  same name
+ *   [data-slot="switch-input"]:focus-visible ~ [data-slot="switch-control"]
+ *                                                   →  [data-slot="switch"]:focus-visible
+ *       ~ [data-slot="switch-control"]                 (ui-sdk focuses the button, not the hidden input)
+ *   [data-appearance="standard"] …                  →  same name
+ *   [data-checked] / [data-disabled] / [data-readonly]  →  same names (ui-sdk sets them)
+ *   [data-invalid]                                  →  same name, from Kitsaas' `invalid` prop
+ *
+ * Both appearances upstream ships are here: `compact` (its default) is the
+ * base rule set and `standard` overrides it, exactly as the two blocks are
+ * ordered upstream. Every state upstream styles is kept: rest, hover, checked,
+ * checked hover, focus-visible, disabled, invalid and read-only. Upstream has
+ * no pressed, expanded or pending state for a switch, and no [data-color-
+ * scheme="dark"] block: the --v2-* tokens it reads already flip by scheme.
+ *
+ * Not ported, because those parts live outside ui-sdk's roots: the row layout
+ * (position, gap 8px), the hidden input rule (ui-sdk hides its own), and the
+ * label / description / error slots (`switch-label`, `-description`,
+ * `-error`). Wrap a `<Switch>` and its text in a `<label>`; upstream's label
+ * is 13px/16px, colour --text-base (#6f6f6f light).
+ *
+ * Upstream's `standard` block reads four OC-1 alias tokens Kitsaas doesn't
+ * carry. Each is mapped below to the --v2-* token that equals it, or the
+ * nearest one, noted at the use. `--surface-hover` and `--surface-disabled`
+ * are not defined anywhere upstream, so the declarations that use them drop
+ * and the control keeps its base fill; that is what the rules below do.
+ */
+
+@layer components {
+  /* ---------------------------------------------------------------- */
+  /* Compact (upstream's default)                                     */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="switch"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 24px;
+    height: 16px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 2px;
+    border: none;
+    border-radius: 4px;
+    background:
+      linear-gradient(180deg, var(--v2-alpha-light-0) 0%, var(--v2-alpha-light-20) 100%),
+      var(--v2-background-bg-layer-04);
+    box-shadow: var(--v2-elevation-switch-off);
+    color: inherit;
+    font: inherit;
+    cursor: default;
+    outline: none;
+    transition:
+      background 90ms ease-out,
+      opacity 90ms ease-out,
+      outline-color 90ms ease-out;
+  }
+
+  [data-slot="switch-thumb"] {
+    box-sizing: border-box;
+    width: 12px;
+    height: 12px;
+    transform: translateX(0);
+    border-radius: 2px;
+    border: 0.5px solid var(--v2-overlay-gradient-depth-overlay-depth-top);
+    background:
+      linear-gradient(
+        180deg,
+        var(--v2-overlay-gradient-depth-overlay-depth-top) 0%,
+        var(--v2-overlay-gradient-depth-overlay-depth-bot) 100%
+      ),
+      var(--v2-grey-200);
+    box-shadow: var(--v2-elevation-elements);
+    transition:
+      transform 90ms ease-out,
+      width 90ms ease-out,
+      border-radius 90ms,
+      background 90ms;
+  }
+
+  /* Upstream hovers its root row, label included; the label is outside here,
+     so hovering it previews the switch the way `label:hover > *` does for
+     radio. */
+  [data-slot="switch"]:is(:hover, :where(label:hover > *)):not(
+      [data-disabled],
+      [data-readonly]
+    ) {
+    background:
+      linear-gradient(0deg, var(--v2-overlay-simple-overlay-hover), var(--v2-overlay-simple-overlay-hover)),
+      linear-gradient(180deg, var(--v2-alpha-light-0) 0%, var(--v2-alpha-light-20) 100%),
+      var(--v2-background-bg-layer-04);
+  }
+
+  [data-slot="switch"]:is(:hover, :where(label:hover > *)):not(
+      [data-disabled],
+      [data-readonly]
+    )
+    [data-slot="switch-thumb"] {
+    width: 13px;
+    border-radius: 3px;
+  }
+
+  [data-slot="switch"]:not([data-readonly]):focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  [data-slot="switch"][data-checked] {
+    background:
+      linear-gradient(180deg, var(--v2-alpha-light-0) 0%, var(--v2-alpha-light-10) 100%),
+      var(--v2-background-bg-accent);
+    box-shadow: var(--v2-elevation-switch-on);
+  }
+
+  [data-slot="switch"][data-checked] [data-slot="switch-thumb"] {
+    transform: translateX(8px);
+    border-radius: 2px;
+    background:
+      linear-gradient(
+        180deg,
+        var(--v2-overlay-gradient-depth-overlay-depth-top) 0%,
+        var(--v2-overlay-gradient-depth-overlay-depth-bot) 100%
+      ),
+      var(--v2-grey-300);
+  }
+
+  [data-slot="switch"]:dir(rtl)[data-checked] [data-slot="switch-thumb"] {
+    transform: translateX(-8px);
+  }
+
+  [data-slot="switch"][data-checked]:is(:hover, :where(label:hover > *)):not(
+      [data-disabled],
+      [data-readonly]
+    ) {
+    background:
+      linear-gradient(
+        0deg,
+        var(--v2-overlay-simple-overlay-contrast-hover),
+        var(--v2-overlay-simple-overlay-contrast-hover)
+      ),
+      linear-gradient(180deg, var(--v2-alpha-light-0) 0%, var(--v2-alpha-light-10) 100%),
+      var(--v2-background-bg-accent);
+  }
+
+  [data-slot="switch"][data-checked]:is(:hover, :where(label:hover > *)):not(
+      [data-disabled],
+      [data-readonly]
+    )
+    [data-slot="switch-thumb"] {
+    transform: translateX(7px);
+  }
+
+  [data-slot="switch"]:dir(rtl)[data-checked]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly])
+    [data-slot="switch-thumb"] {
+    transform: translateX(-7px);
+  }
+
+  [data-slot="switch"][data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Upstream sets `border-color` on a borderless compact track, so the invalid
+     state is invisible there; the standard block below is where it shows. */
+  [data-slot="switch"][data-invalid] {
+    border-color: var(--v2-state-border-danger);
+  }
+
+  [data-slot="switch"][data-readonly] {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Standard                                                         */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="switch"][data-appearance="standard"] {
+    padding: 0;
+    width: 28px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid var(--v2-border-border-base);
+    /* upstream --surface-base, black 3.1% over the page; layer-01 is #fafafa
+       light / #242424 dark, the nearest token that flips */
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: none;
+    transition:
+      background-color 150ms,
+      border-color 150ms;
+  }
+
+  [data-slot="switch"][data-appearance="standard"] [data-slot="switch-thumb"] {
+    box-sizing: content-box;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid var(--v2-border-border-strong);
+    /* exact match for upstream --icon-invert-base (#ffffff / #161616) */
+    background: var(--v2-icon-icon-inverse);
+    box-shadow:
+      0 1px 2px -1px rgba(19, 16, 16, 0.04),
+      0 1px 2px 0 rgba(19, 16, 16, 0.06),
+      0 1px 3px 0 rgba(19, 16, 16, 0.08);
+    transform: translateX(-1px);
+    transition:
+      transform 150ms,
+      background-color 150ms;
+  }
+
+  /* Upstream also sets `background: var(--surface-hover)`, a token it never
+     defines, so the fill stays the base one and the border is the change. */
+  [data-slot="switch"][data-appearance="standard"]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly]) {
+    border-color: var(--v2-border-border-strong);
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  /* A no-op in standard, which is already 14px with a 2px radius at rest. */
+  [data-slot="switch"][data-appearance="standard"]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly])
+    [data-slot="switch-thumb"] {
+    width: 14px;
+    border-radius: 2px;
+  }
+
+  /* Upstream rings the control with `--shadow-xs-border-focus`, an OC-1
+     shadow Kitsaas doesn't carry; this uses the --v2 focus ring instead. */
+  [data-slot="switch"][data-appearance="standard"]:not([data-readonly]):focus-visible {
+    border-color: var(--v2-border-border-focus);
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  [data-slot="switch"][data-appearance="standard"][data-checked] {
+    /* upstream --icon-strong-base (#171717 / #ededed); text-base flips
+       #161616 / #fafafa, the nearest pair */
+    border-color: var(--v2-text-text-base);
+    background: var(--v2-text-text-base);
+    box-shadow: none;
+  }
+
+  [data-slot="switch"][data-appearance="standard"][data-checked] [data-slot="switch-thumb"],
+  [data-slot="switch"][data-appearance="standard"][data-checked]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly])
+    [data-slot="switch-thumb"] {
+    width: 14px;
+    border: none;
+    border-radius: 2px;
+    transform: translateX(12px);
+    background: var(--v2-icon-icon-inverse);
+  }
+
+  [data-slot="switch"][data-appearance="standard"]:dir(rtl)[data-checked]
+    [data-slot="switch-thumb"],
+  [data-slot="switch"][data-appearance="standard"]:dir(rtl)[data-checked]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly])
+    [data-slot="switch-thumb"] {
+    transform: translateX(-12px);
+  }
+
+  /* Upstream: `background: var(--surface-hover)` (undefined), so the checked
+     fill stays and the border is the change. */
+  [data-slot="switch"][data-appearance="standard"][data-checked]:is(
+      :hover,
+      :where(label:hover > *)
+    ):not([data-disabled], [data-readonly]) {
+    border-color: var(--v2-border-border-strong);
+    background: var(--v2-text-text-base);
+  }
+
+  /* Upstream: `background: var(--surface-disabled)` (undefined), so the track
+     keeps its base fill and only the border reads as disabled. */
+  [data-slot="switch"][data-appearance="standard"][data-disabled] {
+    border-color: var(--v2-border-border-muted);
+    background: var(--v2-background-bg-layer-01);
+    opacity: 1;
+  }
+
+  /* upstream --icon-disabled (#c7c7c7 / #3e3e3e) composites to about
+     #cccccc / #434343, which is what border-border-strong paints */
+  [data-slot="switch"][data-appearance="standard"][data-disabled]
+    [data-slot="switch-thumb"] {
+    background: var(--v2-border-border-strong);
+  }
+
+  [data-slot="switch"][data-appearance="standard"][data-invalid] {
+    border-color: var(--v2-state-border-danger);
+  }
+}

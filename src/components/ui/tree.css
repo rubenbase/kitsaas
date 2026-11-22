@@ -1,0 +1,164 @@
+@layer components {
+  [data-slot="tree"] {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    width: 100%;
+    min-width: 0;
+    font-family: var(--font-family-sans);
+    font-size: 13px;
+    color: var(--v2-text-text-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [data-slot="tree"][data-disabled] {
+    opacity: 0.55;
+  }
+
+  [data-slot="tree-item"] {
+    outline: none;
+  }
+
+  [data-slot="tree-item"]:focus-visible > [data-slot="tree-label"] {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: -2px;
+  }
+
+  [data-slot="tree-label"] {
+    --tree-indent: calc((var(--tree-level, 1) - 1) * 16px);
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    height: 28px;
+    padding-inline: calc(8px + var(--tree-indent)) 8px;
+    border-radius: 4px;
+    color: var(--v2-text-text-base);
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 16px;
+    letter-spacing: -0.04px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    transition: background-color 85ms ease-out;
+  }
+
+  /* Indent leaves cleanly under sibling branch labels when branches carry an indicator */
+  [data-slot="tree"]:has([data-slot="tree-indicator"])
+    [data-slot="tree-label"]:not([data-branch]) {
+    padding-inline-start: calc(8px + 22px + var(--tree-indent));
+  }
+
+  @media (hover: hover) {
+    [data-slot="tree-label"]:hover:not([data-disabled]) {
+      background: var(--v2-overlay-simple-overlay-hover);
+    }
+  }
+
+  [data-slot="tree-label"]:is([data-selected], [data-current]) {
+    background: var(--v2-background-bg-layer-02);
+    font-weight: 530;
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="tree-label"][data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-slot="tree-label"] > svg {
+    flex: none;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="tree-label"]:is([data-selected], [data-current]) > svg {
+    color: var(--v2-icon-icon-base);
+  }
+
+  [data-slot="tree-label"] > span:not([data-slot]) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Disclose chevron */
+  [data-slot="tree-indicator"] {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    color: var(--v2-icon-icon-muted);
+    transition: transform 140ms ease-out;
+  }
+
+  [data-slot="tree-indicator"][data-expanded] {
+    transform: rotate(90deg);
+  }
+
+  :dir(rtl) [data-slot="tree-indicator"] {
+    transform: rotate(180deg);
+  }
+
+  :dir(rtl) [data-slot="tree-indicator"][data-expanded] {
+    transform: rotate(90deg);
+  }
+
+  /* Nested branch group with smooth height animation */
+  [data-slot="tree-group"] {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 1px;
+    height: var(--tree-group-height);
+    overflow: hidden;
+    transition: height 150ms ease-out;
+  }
+
+  [data-slot="tree-group"]:is([data-starting-style], [data-ending-style]) {
+    height: 0;
+  }
+
+  /* Optional tri-state checkbox */
+  [data-slot="tree-checkbox"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--v2-background-bg-base);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-strong);
+    color: var(--v2-text-text-contrast);
+    transition:
+      background-color 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="tree-checkbox"]:is([data-checked], [data-indeterminate]) {
+    background: var(--v2-background-bg-contrast);
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :is(
+        [data-slot="tree-label"],
+        [data-slot="tree-indicator"],
+        [data-slot="tree-group"],
+        [data-slot="tree-checkbox"]
+      ) {
+      transition: none;
+    }
+  }
+}

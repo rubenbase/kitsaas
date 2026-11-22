@@ -1,0 +1,684 @@
+@layer components {
+  /* ========================================================================
+   * Internal Documentation Primitives (NOT public src/components/ui/*)
+   * Styled with Kitsaas's --v2-* design tokens so light/dark stay in lockstep.
+   * ======================================================================== */
+
+  .doc-frame {
+    border: 1px solid var(--v2-border-border-base);
+    border-radius: 10px;
+    background-color: var(--v2-background-bg-layer-01);
+    min-inline-size: 0;
+  }
+
+  .doc-frame[data-surface="base"] {
+    background-color: var(--v2-background-bg-base);
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Section headings                                                       */
+  /* ---------------------------------------------------------------------- */
+  .doc-section {
+    scroll-margin-block-start: 28px;
+    outline: none;
+  }
+
+  .doc-section:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  .doc-heading-h2 {
+    margin-block-start: 40px;
+    margin-block-end: 14px;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: -0.015em;
+    font-weight: 530;
+    color: var(--v2-text-text-base);
+  }
+
+  .doc-heading-h3 {
+    margin-block-start: 28px;
+    margin-block-end: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+    font-weight: 530;
+    color: var(--v2-text-text-base);
+  }
+
+  .doc-heading-link {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .doc-heading-link:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--v2-border-border-strong);
+    text-underline-offset: 4px;
+  }
+
+  .doc-heading-link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Right-hand "On this page" TOC with native scrollspy + fallback         */
+  /* ---------------------------------------------------------------------- */
+  .doc-toc-list {
+    scroll-target-group: auto;
+    display: flex;
+    flex-direction: column;
+    border-inline-start: 1px solid var(--v2-border-border-muted);
+  }
+
+  .doc-toc-link {
+    position: relative;
+    display: block;
+    margin-inline-start: -1px;
+    border-inline-start: 1.5px solid transparent;
+    padding-block: 4px;
+    padding-inline-start: 14px;
+    padding-inline-end: 6px;
+    font-size: 12.5px;
+    line-height: 18px;
+    color: var(--v2-text-text-faint);
+    text-decoration: none;
+    transition: color 120ms ease, border-color 120ms ease;
+    outline: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .doc-toc-link[data-depth="3"] {
+    padding-inline-start: 26px;
+    font-size: 12px;
+  }
+
+  .doc-toc-link:hover {
+    color: var(--v2-text-text-base);
+  }
+
+  .doc-toc-link:focus-visible {
+    color: var(--v2-text-text-base);
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+
+  /* Combine native :target-current with JS fallback class via :is() so older
+     browsers do not discard the rule. */
+  .doc-toc-link:is(:target-current, .target-current) {
+    border-inline-start-color: var(--v2-text-text-base);
+    color: var(--v2-text-text-base);
+    font-weight: 530;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Copy button (Invoker Commands + accessible role="status" bubble)       */
+  /* ---------------------------------------------------------------------- */
+  .doc-copy {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+  }
+
+  .doc-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-inline-size: 28px;
+    min-block-size: 28px;
+    padding-inline: 6px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--v2-text-text-faint);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease,
+      opacity 140ms ease;
+    outline: none;
+  }
+
+  .doc-copy-btn[data-has-label] {
+    padding-inline: 9px;
+    border-color: var(--v2-border-border-muted);
+    background-color: var(--v2-background-bg-base);
+    color: var(--v2-text-text-muted);
+  }
+
+  .doc-copy-btn:hover {
+    background-color: var(--v2-overlay-simple-overlay-hover);
+    color: var(--v2-text-text-base);
+  }
+
+  .doc-copy-btn:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  .doc-copy-btn[data-copied] {
+    color: var(--v2-state-fg-success);
+  }
+
+  .doc-copy-btn[data-failed] {
+    color: var(--v2-state-fg-danger);
+  }
+
+  .doc-copy-btn .doc-copy-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .doc-copy-btn .doc-copy-check {
+    display: none;
+    align-items: center;
+  }
+
+  .doc-copy-btn[data-copied] .doc-copy-icon {
+    display: none;
+  }
+
+  .doc-copy-btn[data-copied] .doc-copy-check {
+    display: inline-flex;
+  }
+
+  /* Live-region bubble kept in accessibility tree using opacity only */
+  .doc-copy-tip {
+    pointer-events: none;
+    position: absolute;
+    inset-block-end: calc(100% + 6px);
+    inset-inline-end: 0;
+    z-index: 20;
+    white-space: nowrap;
+    border-radius: 5px;
+    border: 1px solid var(--v2-border-border-base);
+    background-color: var(--v2-background-bg-inverse);
+    color: var(--v2-text-text-inverse);
+    padding: 2px 7px;
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 140ms ease, transform 140ms ease;
+  }
+
+  .doc-copy-btn[data-copied] + .doc-copy-tip,
+  .doc-copy-btn[data-failed] + .doc-copy-tip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Floating copy button over untitled code blocks: always in flow on touch,
+     hover/focus-within revealed on pointer devices. */
+  .doc-copyable {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .doc-copyable > .doc-code-scroll {
+    flex: 1 1 0%;
+    min-inline-size: 0;
+  }
+
+  .doc-copyable > .doc-copy-float {
+    flex: none;
+    order: 1;
+    padding: 8px 8px 0 0;
+  }
+
+  @media (hover: hover) {
+    .doc-copyable {
+      display: block;
+      position: relative;
+    }
+
+    .doc-copyable > .doc-copy-float {
+      position: absolute;
+      inset-block-start: 8px;
+      inset-inline-end: 8px;
+      padding: 0;
+    }
+
+    .doc-copyable > .doc-copy-float .doc-copy-btn {
+      background-color: color-mix(
+        in srgb,
+        var(--v2-background-bg-base) 90%,
+        transparent
+      );
+      border-color: var(--v2-border-border-base);
+      opacity: 0;
+    }
+
+    .doc-copyable:hover > .doc-copy-float .doc-copy-btn,
+    .doc-copyable:focus-within > .doc-copy-float .doc-copy-btn,
+    .doc-copyable > .doc-copy-float .doc-copy-btn:focus-visible,
+    .doc-copyable > .doc-copy-float .doc-copy-btn[data-copied],
+    .doc-copyable > .doc-copy-float .doc-copy-btn[data-failed] {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .doc-copy-tip,
+    .doc-copy-btn,
+    .doc-toc-link {
+      transition: opacity 100ms linear;
+      transform: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Code blocks & syntax tokens                                            */
+  /* ---------------------------------------------------------------------- */
+  .doc-code-pre {
+    margin: 0;
+    overflow: auto;
+    overscroll-behavior-x: contain;
+    padding: 14px 16px;
+    padding-inline-end: 44px;
+    font-family: var(--font-family-mono);
+    font-size: 12.5px;
+    line-height: 20px;
+    color: var(--v2-text-text-base);
+    background-color: var(--v2-background-bg-base);
+    tab-size: 2;
+    outline: none;
+  }
+
+  .doc-code-pre:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--v2-border-border-focus);
+  }
+
+  .doc-code-pre[data-clamped="true"] {
+    max-block-size: 360px;
+  }
+
+  .doc-code-line {
+    display: inline;
+  }
+
+  /* Inline framework selector inside DocInstallTerminal tabbar */
+  .doc-fw-select-trigger[data-slot="select-trigger"][data-appearance="inline"] {
+    align-items: center;
+    block-size: 26px;
+    gap: 6px;
+    padding-block: 0;
+    padding-inline: 7px 4px;
+    border-radius: 6px;
+  }
+
+  .doc-fw-select-trigger[data-slot="select-trigger"][data-appearance="inline"]
+    [data-slot="select-value"] {
+    font-size: 12px;
+    font-weight: 530;
+  }
+
+  .doc-fw-icon {
+    flex: none;
+  }
+
+  .doc-fw-icon[data-fw="solid"] { color: var(--v2-blue-600); }
+  .doc-fw-icon[data-fw="react"] { color: var(--v2-cyan-700); }
+  .doc-fw-icon[data-fw="vue"] { color: var(--v2-green-700); }
+  .doc-fw-icon[data-fw="svelte"] { color: var(--v2-orange-700); }
+  .doc-fw-icon[data-fw="web"] { color: var(--v2-text-text-muted); }
+
+  [data-color-scheme="dark"] .doc-fw-icon[data-fw="solid"] { color: var(--v2-blue-400); }
+  [data-color-scheme="dark"] .doc-fw-icon[data-fw="react"] { color: var(--v2-cyan-400); }
+  [data-color-scheme="dark"] .doc-fw-icon[data-fw="vue"] { color: var(--v2-green-500); }
+  [data-color-scheme="dark"] .doc-fw-icon[data-fw="svelte"] { color: var(--v2-orange-400); }
+  [data-color-scheme="dark"] .doc-fw-icon[data-fw="web"] { color: var(--v2-text-text-muted); }
+
+  /* Light theme syntax tokens */
+  .doc-tok-comment { color: var(--v2-grey-600); font-style: italic; }
+  .doc-tok-string { color: var(--v2-green-900); }
+  .doc-tok-keyword { color: var(--v2-purple-800); }
+  .doc-tok-type { color: var(--v2-blue-800); }
+  .doc-tok-number { color: var(--v2-orange-800); }
+  .doc-tok-tag { color: var(--v2-blue-700); }
+  .doc-tok-attr { color: var(--v2-cyan-800); }
+  .doc-tok-fn { color: var(--v2-purple-700); }
+  .doc-tok-var { color: var(--v2-cyan-900); }
+  .doc-tok-punct { color: var(--v2-grey-600); }
+
+  /* Dark theme syntax tokens */
+  [data-color-scheme="dark"] .doc-tok-comment { color: var(--v2-grey-600); }
+  [data-color-scheme="dark"] .doc-tok-string { color: var(--v2-green-400); }
+  [data-color-scheme="dark"] .doc-tok-keyword { color: var(--v2-purple-400); }
+  [data-color-scheme="dark"] .doc-tok-type { color: var(--v2-blue-400); }
+  [data-color-scheme="dark"] .doc-tok-number { color: var(--v2-orange-400); }
+  [data-color-scheme="dark"] .doc-tok-tag { color: var(--v2-blue-300); }
+  [data-color-scheme="dark"] .doc-tok-attr { color: var(--v2-cyan-400); }
+  [data-color-scheme="dark"] .doc-tok-fn { color: var(--v2-purple-300); }
+  [data-color-scheme="dark"] .doc-tok-var { color: var(--v2-cyan-300); }
+  [data-color-scheme="dark"] .doc-tok-punct { color: var(--v2-grey-500); }
+
+  /* ---------------------------------------------------------------------- */
+  /* Internal Doc Tab Bar (Preview / Code, File tabs, PM tabs)              */
+  /* ---------------------------------------------------------------------- */
+  .doc-tabbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-inline-size: 0;
+    border-block-end: 1px solid var(--v2-border-border-muted);
+    background-color: var(--v2-background-bg-layer-01);
+    padding: 6px 8px;
+  }
+
+  .doc-tablist {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    min-inline-size: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .doc-tablist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .doc-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    block-size: 26px;
+    padding-inline: 10px;
+    border-radius: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--v2-text-text-faint);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 120ms ease, color 120ms ease;
+    outline: none;
+  }
+
+  .doc-tab:hover {
+    color: var(--v2-text-text-base);
+    background-color: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  .doc-tab[data-selected] {
+    background-color: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+    font-weight: 530;
+  }
+
+  .doc-tab:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: -2px;
+  }
+
+  .doc-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 28px;
+    min-block-size: 28px;
+    border-radius: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--v2-text-text-faint);
+    cursor: pointer;
+    transition: background-color 120ms ease, color 120ms ease;
+    outline: none;
+  }
+
+  .doc-icon-btn:hover {
+    background-color: var(--v2-overlay-simple-overlay-hover);
+    color: var(--v2-text-text-base);
+  }
+
+  .doc-icon-btn:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Preview stage + interactive Console terminal                           */
+  /* ---------------------------------------------------------------------- */
+  .doc-preview-stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-block-size: 132px;
+    padding: 28px 24px;
+    background-color: var(--v2-background-bg-base);
+    overflow-x: auto;
+  }
+
+  .doc-console {
+    border-block-start: 1px solid var(--v2-border-border-muted);
+    background-color: var(--v2-background-bg-layer-01);
+    font-size: 12px;
+  }
+
+  .doc-console-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-block-end: 1px solid var(--v2-border-border-muted);
+    padding: 5px 12px;
+    color: var(--v2-text-text-faint);
+    font-size: 11px;
+    font-weight: 530;
+  }
+
+  .doc-console-list {
+    block-size: 104px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0;
+    padding: 4px 12px;
+    list-style: none;
+    font-family: var(--font-family-mono);
+    font-size: 11.5px;
+    line-height: 22px;
+    color: var(--v2-text-text-muted);
+  }
+
+  .doc-console-entry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-block-size: 22px;
+    border-block-end: 1px solid var(--v2-border-border-muted);
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Transform existing 55 Demo wrappers into vertical doc example stacks   */
+  /* ---------------------------------------------------------------------- */
+  .doc-examples-stack > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    padding: 0 !important;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Responsive Reference Table (modern-web-guidance: responsive-table)     */
+  /* ---------------------------------------------------------------------- */
+  .doc-table-wrap {
+    overflow: auto;
+    max-inline-size: 100%;
+    max-block-size: min(460px, 70vh);
+    container-type: inline-size;
+    border-radius: 10px;
+    border: 1px solid var(--v2-border-border-base);
+    background-color: var(--v2-background-bg-base);
+    outline: none;
+  }
+
+  .doc-table-wrap:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  .doc-table {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: start;
+    font-size: 12.5px;
+    line-height: 19px;
+  }
+
+  .doc-table thead {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    background-color: var(--v2-background-bg-layer-01);
+  }
+
+  .doc-table th {
+    border-block-end: 1px solid var(--v2-border-border-muted);
+    padding: 9px 14px;
+    font-size: 11px;
+    font-weight: 530;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--v2-text-text-faint);
+    white-space: nowrap;
+  }
+
+  .doc-table td {
+    border-block-end: 1px solid var(--v2-border-border-muted);
+    padding: 10px 14px;
+    vertical-align: top;
+    color: var(--v2-text-text-muted);
+  }
+
+  .doc-table tbody tr:last-child td {
+    border-block-end: 0;
+  }
+
+  @container (width < 460px) {
+    .doc-table,
+    .doc-table thead,
+    .doc-table tbody,
+    .doc-table tr,
+    .doc-table th,
+    .doc-table td {
+      display: block;
+    }
+
+    .doc-table thead {
+      display: none;
+    }
+
+    .doc-table tr {
+      border-block-end: 1px solid var(--v2-border-border-base);
+      padding: 8px 0;
+    }
+
+    .doc-table tr:last-child {
+      border-block-end: 0;
+    }
+
+    .doc-table td {
+      border: 0;
+      padding: 4px 14px;
+    }
+
+    .doc-table td[data-label]::before {
+      content: attr(data-label) ": ";
+      font-size: 11px;
+      font-weight: 530;
+      color: var(--v2-text-text-faint);
+    }
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Chart Code Viewer Slide-Over Sheet (built on @ui-sdk/solid/dialog)     */
+  /* ---------------------------------------------------------------------- */
+  .doc-sheet-backdrop[data-slot="dialog-backdrop"] {
+    position: fixed;
+    inset: 0;
+    background-color: var(--v2-overlay-simple-overlay-scrim);
+    opacity: 1;
+    transition: opacity 180ms ease;
+  }
+
+  .doc-sheet-backdrop[data-slot="dialog-backdrop"][data-starting-style],
+  .doc-sheet-backdrop[data-slot="dialog-backdrop"][data-ending-style] {
+    opacity: 0;
+  }
+
+  .doc-sheet-content[data-slot="dialog-content"] {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-inline-start: 1px solid var(--v2-border-border-base);
+    inline-size: min(680px, 100dvw);
+    block-size: 100dvh;
+    max-inline-size: 100dvw;
+    max-block-size: 100dvh;
+    background-color: var(--v2-background-bg-base);
+    color: var(--v2-text-text-base);
+    box-shadow: var(--v2-elevation-overlay);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateX(0);
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease;
+  }
+
+  .doc-sheet-content[data-slot="dialog-content"][data-starting-style],
+  .doc-sheet-content[data-slot="dialog-content"][data-ending-style] {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+
+  @media (max-width: 767px) {
+    .doc-sheet-content[data-slot="dialog-content"] {
+      inset-block-start: auto;
+      inset-block-end: 0;
+      inset-inline: 0;
+      inline-size: 100dvw;
+      block-size: min(86dvh, 720px);
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--v2-border-border-base);
+      border-radius: 14px 14px 0 0;
+      transform: translateY(0);
+    }
+
+    .doc-sheet-content[data-slot="dialog-content"][data-starting-style],
+    .doc-sheet-content[data-slot="dialog-content"][data-ending-style] {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .doc-sheet-backdrop[data-slot="dialog-backdrop"],
+    .doc-sheet-content[data-slot="dialog-content"] {
+      transition: opacity 100ms linear;
+      transform: none;
+    }
+  }
+}

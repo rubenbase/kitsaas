@@ -1,0 +1,98 @@
+/*
+ * 1:1 port of opencode's Textarea (`@opencode/ui`, MIT):
+ * packages/ui/src/forms/textarea/textarea.css (`textarea-v2`).
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream renders a
+ * wrapper div around a bare `<textarea>`; ui-sdk's Textarea is the native
+ * field itself, so the wrapper rules and the field rules meet on one element:
+ *
+ *   [data-component="textarea-v2"]            →  [data-slot="textarea"]
+ *   [data-slot="textarea-v2-textarea"]        →  [data-slot="textarea"]
+ *   :where(:focus-within)                     →  :focus
+ *   [data-disabled]                           →  same name (ui-sdk derives it
+ *                                                 from the field or its Field)
+ *
+ * Because the two boxes are now one, the wrapper's 2px end and bottom padding
+ * becomes the field's, so upstream's 8px field padding reads 8px 10px 10px 8px
+ * here. The wrapper's `display: flex`, its column direction and the field's
+ * `height: 100%` went with the nesting; `min-height: 80px` stays, now on the
+ * field. Border, radius, outline, background, elevation and the hover, focus
+ * and invalid rules are the same values as `input.css`.
+ *
+ * `data-surface` and `data-invalid` come from Kitsaas' props; `data-filled`,
+ * `data-disabled`, `data-readonly` and `data-required` come from ui-sdk.
+ * Upstream styles no read-only or filled state, so neither does this file. It
+ * has no [data-color-scheme="dark"] block either: upstream has none, and every
+ * --v2-* token it reads flips with the scheme.
+ */
+
+@layer components {
+  [data-slot="textarea"] {
+    box-sizing: border-box;
+    display: block;
+    width: 280px;
+    min-width: 0;
+    min-height: 80px;
+    padding: 8px 10px 10px 8px;
+    margin: 0;
+    border: 0;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-input);
+    resize: vertical;
+    flex: none;
+    align-self: stretch;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 1.35;
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+    transition:
+      background 85ms ease-out,
+      outline-color 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="textarea"][data-surface="layer-1"] {
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  @media (hover: hover) {
+    [data-slot="textarea"]:hover:not([data-disabled], [data-invalid]):not(:focus) {
+      box-shadow:
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),
+        var(--v2-elevation-input);
+    }
+  }
+
+  [data-slot="textarea"]:focus:not([data-disabled], [data-invalid]) {
+    outline-color: var(--v2-border-border-focus);
+    box-shadow: none;
+  }
+
+  /* Upstream's wrapper outline and field text, now on the same element. */
+  [data-slot="textarea"][data-invalid]:not([data-disabled]) {
+    outline-color: var(--v2-state-fg-danger);
+    box-shadow: none;
+    color: var(--v2-state-fg-danger);
+    caret-color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="textarea"][data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-slot="textarea"]::placeholder {
+    color: var(--v2-text-text-faint);
+  }
+
+  [data-slot="textarea"][data-invalid]:not([data-disabled])::placeholder {
+    color: var(--v2-state-fg-danger);
+    opacity: 1;
+  }
+}

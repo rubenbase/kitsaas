@@ -1,0 +1,394 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kitsaas",
+  "homepage": "https://kitsaas.dev",
+  "frameworks": {
+    "solid": {
+      "components": 58,
+      "overrides": 0,
+      "indexUrl": "https://kitsaas.dev/r/solid/registry.json",
+      "namespaceTemplate": "https://kitsaas.dev/r/solid/{name}.json"
+    },
+    "react": {
+      "components": 58,
+      "overrides": 4,
+      "indexUrl": "https://kitsaas.dev/r/react/registry.json",
+      "namespaceTemplate": "https://kitsaas.dev/r/react/{name}.json"
+    },
+    "vue": {
+      "components": 58,
+      "overrides": 2,
+      "indexUrl": "https://kitsaas.dev/r/vue/registry.json",
+      "namespaceTemplate": "https://kitsaas.dev/r/vue/{name}.json"
+    },
+    "svelte": {
+      "components": 58,
+      "overrides": 2,
+      "indexUrl": "https://kitsaas.dev/r/svelte/registry.json",
+      "namespaceTemplate": "https://kitsaas.dev/r/svelte/{name}.json"
+    },
+    "web": {
+      "components": 58,
+      "overrides": 2,
+      "indexUrl": "https://kitsaas.dev/r/web/registry.json",
+      "namespaceTemplate": "https://kitsaas.dev/r/web/{name}.json"
+    }
+  },
+  "items": [
+    {
+      "name": "theme",
+      "type": "registry:style",
+      "title": "Kitsaas Theme",
+      "description": "Kitsaas --v2-* design tokens (light and dark schemes) and Tailwind v4 @theme bindings.",
+      "files": [
+        {
+          "path": "src/theme.css",
+          "type": "registry:file",
+          "target": "~/src/theme.css"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Opens one section at a time unless multiple is set; every trigger stays in the tab order, disabled ones included."
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Asks for explicit confirmation before a critical or destructive action, supporting async confirm handlers and imperative confirm flows."
+    },
+    {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Suggests matching options while you type without restricting free-form input, with inline completion, highlighting, and live status updates."
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Shows initials until the image loads and keeps them if it fails, reporting the loading status on every part."
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Stays pending while an async action runs, handles disabled state, and renders as a link when given an href."
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Joins related buttons, inputs, and menus into one segmented control, with separators and nested groups."
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Picks a single date, multiple dates, or a continuous date range from a keyboard-navigable month grid."
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Pages through slides using native scroll snap, arrow controls, progress tracking, and pagination indicators."
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Reports checked, unchecked and mixed through ARIA, and keeps a hidden native input in sync, so it submits and resets with its form."
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Shows and hides one panel; the trigger stays focusable and keeps its contents only while it is open."
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Selects colors across a 2D area, hue and alpha sliders, CSS/channel inputs, swatches, and an optional eyedropper."
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Searches a list of options to choose one or several values, with selection chips, groups, select-all, and creatable entries."
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "Fuzzy-searches actions and grouped commands with keyboard shortcut hints and nested sub-views, inline or inside a dialog."
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "Date Input",
+      "description": "Edits dates and date-times one locale-ordered segment at a time with arrow-key stepping and native form submission."
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Combines a segmented date field with a floating calendar popover for single dates, ranges, and quick presets."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Opens a task in the top layer, traps focus, closes on Escape, a press outside or a close part, and returns focus to its trigger."
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Slides a draggable sheet in from any screen edge with snap points, a resize handle, and nested stacking."
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Ties a control to its label and description, and marks every part invalid once a submit finds a problem."
+    },
+    {
+      "name": "file-input",
+      "type": "registry:ui",
+      "title": "File Input",
+      "description": "Accepts dropped, pasted, or browsed files with validation, file list management, and form submission."
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover Card",
+      "description": "Previews a link on hover or keyboard focus, stays open while the pointer crosses the gap, and still follows the link on press."
+    },
+    {
+      "name": "image-cropper",
+      "type": "registry:ui",
+      "title": "Image Cropper",
+      "description": "Crops images by resizing a selection box or panning and zooming behind a fixed frame, with aspect-ratio, rotate, and flip controls."
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Reports typing, clearing and a form reset with their reasons, and clears from a group part that returns focus to the field."
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Names native inputs and custom controls alike, forwarding clicks to activate or focus the associated control."
+    },
+    {
+      "name": "listbox",
+      "type": "registry:ui",
+      "title": "Listbox",
+      "description": "Presents an always-visible option list with roving focus, typeahead, groups, and single or multi-range selection."
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "Opens a list of actions with the arrow keys, typeahead and Escape, keeping checked items in place and a submenu open under the pointer."
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Connects top-level application menus under a single tab stop so arrow keys and hover glide seamlessly between them."
+    },
+    {
+      "name": "meter",
+      "type": "registry:ui",
+      "title": "Meter",
+      "description": "Displays a bounded measurement such as storage or quota, classifying optimum, suboptimum, and critical ranges semantically."
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Groups site navigation links into floating disclosure panels with keyboard support and a sliding active indicator."
+    },
+    {
+      "name": "number-input",
+      "type": "registry:ui",
+      "title": "Number Input",
+      "description": "Formats locale-aware numbers, currencies, and units with stepper buttons, keyboard stepping, and scrubbable labels."
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "OTP Input",
+      "description": "Collects one-time verification codes across individual slots with paste handling, autofill, and native form validation."
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Navigates multi-page datasets with ellipsis collapsing, first/previous/next/last controls, and router-friendly links."
+    },
+    {
+      "name": "password-input",
+      "type": "registry:ui",
+      "title": "Password Input",
+      "description": "Enters secrets with an integrated visibility toggle button and full Field validation support."
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Opens a small task beside its trigger, moves focus in, flips and shifts to stay in view, and returns focus on close."
+    },
+    {
+      "name": "preferences",
+      "type": "registry:ui",
+      "title": "Preferences",
+      "description": "Applies storage-backed user preferences onto data attributes so CSS can adapt before hydration without flash."
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Reports how far a task has come through the progressbar role, and sweeps while the value is unknown."
+    },
+    {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio",
+      "description": "Keeps one value across the group, checks as the arrow keys move, and submits the checked option with its form."
+    },
+    {
+      "name": "rating",
+      "type": "registry:ui",
+      "title": "Rating",
+      "description": "Picks whole or half-star ratings with hover preview, arrow-key navigation, and read-only average displays."
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "Resizable",
+      "description": "Splits layouts into draggable, keyboard-resizable, and collapsible panels horizontally, vertically, or nested."
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "Pairs native scrolling with styled thin scrollbars, edge overflow fades, and stick-to-end streaming behavior."
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented Control",
+      "description": "Keeps one option checked with a single tab stop, moves the selection with the arrow keys, and slides its indicator to the checked item."
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Opens a listbox under the trigger, moves the highlight with the arrow keys and typeahead, and keeps the chosen value — or values, with multiple — in the form."
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Divides content with a horizontal or vertical hairline, announced to screen readers unless it is decorative."
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Composable application sidebar built on @ui-sdk/core with collapsible offcanvas and icon modes, floating and inset variants, groups, submenus, rail toggle, and mobile drawer support."
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Adjusts single values or multi-thumb ranges with pointer dragging, stepped marks, and keyboard controls."
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Turns a setting on and off in place, keeps a hidden native input in sync, and submits and resets with its form."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Switches panels with one tab selected at a time, moving focus and selection with the arrow keys and tying each tab to its panel."
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Reports typing, a form reset and a controller's changes with their reasons, and grows with its text when autoResize is set."
+    },
+    {
+      "name": "time-input",
+      "type": "registry:ui",
+      "title": "Time Input",
+      "description": "Edits 12-hour or 24-hour times segment by segment with optional seconds and min/max validation."
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Presents chronological events, changelogs, or workflow milestones with connectors, status markers, and arrow-key navigation."
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Stacks notifications in a live region, pauses its timer while hovered or focused, and closes on Escape, a swipe or its own duration."
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Keeps a button pressed or coordinates single and multi-select toggle groups with arrow-key navigation."
+    },
+    {
+      "name": "token-input",
+      "type": "registry:ui",
+      "title": "Token Input",
+      "description": "Mixes free text with removable inline tokens for tags, recipients, or references with keyboard selection and deletion."
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:ui",
+      "title": "Toolbar",
+      "description": "Groups buttons, toggles, inputs, menus, and separators under a single roving tab stop."
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Names or describes its trigger on hover and keyboard focus, flips to another side when there is no room, and closes on Escape without moving focus."
+    },
+    {
+      "name": "tree",
+      "type": "registry:ui",
+      "title": "Tree",
+      "description": "Navigates nested file hierarchies and expandable branches with arrow keys, typeahead, and single or tri-state selection."
+    },
+    {
+      "name": "trigger-menu",
+      "type": "registry:ui",
+      "title": "Trigger Menu",
+      "description": "Opens caret-anchored suggestions when typing trigger characters like @, /, or # inside an input or textarea."
+    },
+    {
+      "name": "waterfall",
+      "type": "registry:ui",
+      "title": "Waterfall",
+      "description": "Visualizes request traces and nested spans along a shared millisecond time axis with expandable rows and milestones."
+    }
+  ]
+}

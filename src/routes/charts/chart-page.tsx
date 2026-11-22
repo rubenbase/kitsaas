@@ -1,164 +1,166 @@
-import { For } from 'solid-js'
+import type { JSX } from '@solidjs/web'
+import { For, Show, createMemo } from 'solid-js'
 
-import { PageContent } from '#/components/app-shell'
-import { ArrowUpRightIcon } from '#/components/icons'
-import { Button } from '#/components/ui/button'
+import {
+  AreaChartIcon,
+  ChartsIcon,
+  LineChartIcon,
+  PieChartIcon,
+  RadarChartIcon,
+  RadialChartIcon,
+} from '#/components/icons'
+import { Tabs, TabsList, TabsPanel, TabsTab } from '#/components/ui/tabs'
+import {
+  DocArticle,
+  DocChartCard,
+  DocFrameworkSelect,
+  DocInstallTerminal,
+  DocSection,
+  useTargetFramework,
+} from '#/docs'
 
-import { ChartVisual, type ChartKind } from './chart-visuals'
-import { days, modelSeries, stats } from './data'
+import { chartCatalog, type ChartKind } from './chart-visuals'
 
-const range = '30d'
-
-const chartMeta: Record<
+const categoryMeta: Record<
   ChartKind,
-  { title: string; subtitle: (range: string) => string; total: string }
+  {
+    title: string
+    description: string
+    icon: () => JSX.Element
+  }
 > = {
   area: {
-    title: 'Spend over time',
-    subtitle: (range) => `Daily spend, last ${range}`,
-    total: '$4.82 total',
-  },
-  line: {
-    title: 'Spend over time',
-    subtitle: (range) => `Daily spend, last ${range}`,
-    total: '$4.82 total',
+    title: 'Area Charts',
+    description: 'Linear, monotone, stepped, stacked, and gradient area charts.',
+    icon: () => <AreaChartIcon />,
   },
   bar: {
-    title: 'Spend per day',
-    subtitle: (range) => `Daily spend, last ${range}`,
-    total: '$4.82 total',
+    title: 'Bar Charts',
+    description: 'Vertical, horizontal, grouped, stacked, and diverging bar charts.',
+    icon: () => <ChartsIcon />,
+  },
+  line: {
+    title: 'Line Charts',
+    description: 'Monotone, linear, stepped, multi-series, and annotated line charts.',
+    icon: () => <LineChartIcon />,
   },
   pie: {
-    title: 'Traffic share',
-    subtitle: (range) => `Requests by model, last ${range}`,
-    total: '18,204 requests',
+    title: 'Pie Charts',
+    description: 'Proportional pies, donuts, stacked rings, and interactive slices.',
+    icon: () => <PieChartIcon />,
   },
   radar: {
-    title: 'Model profile',
-    subtitle: (range) => `Relative strengths, last ${range}`,
-    total: '18,204 requests',
+    title: 'Radar Charts',
+    description: 'Multi-axis profiles with polygon or circular grids and series comparisons.',
+    icon: () => <RadarChartIcon />,
   },
   radial: {
-    title: 'Spend by model',
-    subtitle: (range) => `Cost share, last ${range}`,
-    total: '$4.82 total',
+    title: 'Radial Charts',
+    description: 'Progress rings, KPI gauges, half-arc meters, and concentric tracks.',
+    icon: () => <RadialChartIcon />,
   },
 }
 
+const chartOrder: ChartKind[] = ['area', 'bar', 'line', 'pie', 'radar', 'radial']
+
 export function ChartPage(props: { kind: ChartKind }) {
-  const meta = () => chartMeta[props.kind]
+  const [framework, setFramework] = useTargetFramework()
+  const meta = () => categoryMeta[props.kind]
+  const items = createMemo(() => chartCatalog[props.kind])
+  const hero = createMemo(() => items().find((item) => item.fullWidth))
+  const gridItems = createMemo(() => items().filter((item) => !item.fullWidth))
+
+  const pos = () => chartOrder.indexOf(props.kind)
+  const previous = () => {
+    const idx = pos()
+    if (idx <= 0) return undefined
+    const k = chartOrder[idx - 1]
+    return { label: categoryMeta[k].title, href: `/charts/${k}` }
+  }
+  const next = () => {
+    const idx = pos()
+    if (idx < 0 || idx >= chartOrder.length - 1) return undefined
+    const k = chartOrder[idx + 1]
+    return { label: categoryMeta[k].title, href: `/charts/${k}` }
+  }
 
   return (
-    <PageContent class="pt-5">
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <For each={stats}>
-          {(stat) => (
-            <div class="rounded-[10px] border border-border bg-surface p-4">
-              <p class="text-[11px] uppercase tracking-[0.08em] text-faint">
-                {stat.label}
-              </p>
-              <p class="mt-1 text-[20px] leading-6 tracking-[-0.02em] tabular-nums [font-weight:530]">
-                {stat.value}
-              </p>
-              <p class="mt-0.5 text-[11px] text-muted">{stat.hint}</p>
-            </div>
-          )}
-        </For>
-      </div>
+    <DocArticle
+      variant="wide"
+      title={meta().title}
+      description={meta().description}
+      previous={previous()}
+      next={next()}
+      pageKey={`charts-${props.kind}`}
+    >
+      <Show when={hero()}>
+        {(item) => (
+          <DocSection title="Interactive">
+            <DocChartCard
+              id={item().id}
+              title={item().title}
+              description={item().description}
+              icon={meta().icon()}
+              code={item().code}
+              fullWidth
+            >
+              {item().render()}
+            </DocChartCard>
+          </DocSection>
+        )}
+      </Show>
 
-      <div class="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <section class="rounded-[10px] border border-border bg-surface p-5">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h2 class="[font-weight:530]">{meta().title}</h2>
-              <p class="mt-0.5 text-[12px] text-muted">
-                {meta().subtitle(range)}
-              </p>
-            </div>
-            <span class="text-[12px] text-muted tabular-nums">
-              {meta().total}
-            </span>
-          </div>
-
-          <ChartVisual kind={props.kind} />
-        </section>
-
-        <section class="rounded-[10px] border border-border bg-surface p-5">
-          <h2 class="[font-weight:530]">Requests by model</h2>
-          <p class="mt-0.5 text-[12px] text-muted">
-            Share of the {range} window
-          </p>
-
-          <ul class="mt-4 space-y-3">
-            <For each={modelSeries}>
-              {(model) => (
-                <li>
-                  <div class="flex items-center justify-between gap-3 text-[12px]">
-                    <span class="truncate">{model.name}</span>
-                    <span class="text-muted tabular-nums">
-                      {model.requests.toLocaleString('en-US')}
-                    </span>
-                  </div>
-                  <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-3">
-                    <div
-                      class="h-full rounded-full"
-                      style={{
-                        width: `${model.share}%`,
-                        background: model.color,
-                      }}
-                    />
-                  </div>
-                </li>
-              )}
-            </For>
-          </ul>
-        </section>
-      </div>
-
-      <section class="mt-4 rounded-[10px] border border-border bg-surface">
-        <div class="flex items-center justify-between border-b border-border-muted px-5 py-4">
-          <div>
-            <h2 class="[font-weight:530]">Daily breakdown</h2>
-            <p class="mt-0.5 text-[12px] text-muted">Last 8 days</p>
-          </div>
-          <Button size="small" variant="ghost">
-            View all
-            <ArrowUpRightIcon />
-          </Button>
+      <DocSection title="Examples">
+        <div class="grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <For each={gridItems()}>
+            {(chart) => (
+              <DocChartCard
+                id={chart.id}
+                title={chart.title}
+                description={chart.description}
+                icon={meta().icon()}
+                code={chart.code}
+              >
+                {chart.render()}
+              </DocChartCard>
+            )}
+          </For>
         </div>
+      </DocSection>
 
-        <table class="w-full text-[12px]">
-          <thead>
-            <tr class="border-b border-border-muted text-left text-[11px] uppercase tracking-[0.06em] text-faint">
-              <th class="px-5 py-2 [font-weight:inherit]">Date</th>
-              <th class="px-5 py-2 text-right [font-weight:inherit]">
-                Requests
-              </th>
-              <th class="px-5 py-2 text-right [font-weight:inherit]">Tokens</th>
-              <th class="px-5 py-2 text-right [font-weight:inherit]">Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            <For each={days}>
-              {(day) => (
-                <tr class="border-b border-border-muted last:border-b-0">
-                  <td class="px-5 py-2.5">{day.date}</td>
-                  <td class="px-5 py-2.5 text-right tabular-nums">
-                    {day.requests.toLocaleString('en-US')}
-                  </td>
-                  <td class="px-5 py-2.5 text-right text-muted tabular-nums">
-                    {day.tokens}
-                  </td>
-                  <td class="px-5 py-2.5 text-right tabular-nums">
-                    {day.cost}
-                  </td>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-      </section>
-    </PageContent>
+      <DocSection title="Installation">
+        <Tabs defaultValue="registry" variant="normal">
+          <TabsList aria-label="Installation method" class="!px-0">
+            <TabsTab value="registry">Registry</TabsTab>
+            <TabsTab value="package">Package</TabsTab>
+          </TabsList>
+
+          <TabsPanel value="registry" class="pt-3">
+            <DocInstallTerminal
+              leading={
+                <DocFrameworkSelect
+                  value={framework()}
+                  onChange={setFramework}
+                />
+              }
+              exec={`shadcn@latest add https://kitsaas.dev/r/${framework()}/chart.json`}
+            />
+          </TabsPanel>
+
+          <TabsPanel value="package" class="pt-3">
+            <DocInstallTerminal
+              leading={
+                <DocFrameworkSelect
+                  value={framework()}
+                  onChange={setFramework}
+                />
+              }
+              packages="@tanstack/charts"
+            />
+          </TabsPanel>
+        </Tabs>
+      </DocSection>
+    </DocArticle>
   )
 }
 

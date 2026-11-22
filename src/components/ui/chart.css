@@ -1,0 +1,310 @@
+/*
+ * Kitsaas Chart — opencode console & stats aesthetic on top of @tanstack/charts.
+ *
+ * Attribute-driven CSS shared across Solid, React, Vue, Svelte, and Web
+ * Components. Styles the chart surface, TanStack's native `.ts-chart-tooltip`
+ * via `--ts-chart-tooltip-*` tokens, glowing focus rings, crosshair guides,
+ * hairline legends, and vertical pill-track sparkbars.
+ */
+
+@layer components {
+  :root {
+    --chart-1: var(--v2-green-600);
+    --chart-2: var(--v2-blue-600);
+    --chart-3: var(--v2-purple-500);
+    --chart-4: var(--v2-cyan-600);
+    --chart-5: var(--v2-orange-500);
+    --chart-forecast: var(--v2-orange-400);
+  }
+
+  [data-color-scheme="dark"] {
+    --chart-1: var(--v2-green-500);
+    --chart-2: var(--v2-blue-400);
+    --chart-3: var(--v2-purple-400);
+    --chart-4: var(--v2-cyan-400);
+    --chart-5: var(--v2-orange-400);
+    --chart-forecast: #e5c07b;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Chart Host & Surface                                             */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="chart"] {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    color: var(--v2-text-text-base);
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Map TanStack Charts native tooltip variables to opencode's matte popover */
+    --ts-chart-tooltip-max-width: min(20rem, 85%);
+    --ts-chart-tooltip-padding: 10px 14px;
+    --ts-chart-tooltip-border: 1px solid var(--v2-border-border-base);
+    --ts-chart-tooltip-border-radius: 10px;
+    --ts-chart-tooltip-background: color-mix(
+      in srgb,
+      var(--v2-background-bg-layer-01) 96%,
+      transparent
+    );
+    --ts-chart-tooltip-color: var(--v2-text-text-base);
+    --ts-chart-tooltip-shadow:
+      0 0 0 0.5px color-mix(in srgb, var(--v2-border-border-strong) 35%, transparent),
+      0 12px 28px rgb(0 0 0 / 0.28),
+      0 4px 10px rgb(0 0 0 / 0.18);
+    --ts-chart-tooltip-font: 440 12px/18px var(--font-family-sans);
+    --ts-chart-tooltip-active-row-font-weight: 530;
+    --ts-chart-tooltip-active-row-background: transparent;
+    --ts-chart-tooltip-active-row-border-radius: 4px;
+    --ts-chart-tooltip-active-row-shadow: none;
+  }
+
+  [data-slot="chart"] .ts-chart-surface {
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  [data-slot="chart"] .ts-chart-surface svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Crisp tabular axis labels & subtle hover transitions */
+  [data-slot="chart"] svg text {
+    font-family: var(--font-family-sans);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+  }
+
+  [data-slot="chart"] svg path,
+  [data-slot="chart"] svg rect,
+  [data-slot="chart"] svg circle,
+  [data-slot="chart"] svg polygon {
+    transition:
+      fill 120ms ease,
+      stroke 120ms ease,
+      opacity 120ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="chart"] svg path,
+    [data-slot="chart"] svg rect,
+    [data-slot="chart"] svg circle,
+    [data-slot="chart"] svg polygon {
+      transition: none;
+    }
+  }
+
+  /* Opencode clean axes: hide heavy axis spine & tick stubs */
+  [data-slot="chart"] svg .ts-chart__axis-line,
+  [data-slot="chart"] svg .ts-chart__tick-line {
+    stroke: transparent !important;
+  }
+
+  /* Opencode hollow dots: keep `fill: var(--chart-*)` in mark options so
+     TanStack's focusRing inherits the bright series color on hover, while CSS
+     paints the dark hollow center at rest. */
+  [data-slot="chart"] svg circle[stroke-width="2"][fill^="var(--chart-"],
+  [data-slot="chart"] svg circle[stroke-width="1.75"][fill^="var(--chart-"] {
+    fill: var(--v2-background-bg-base);
+  }
+
+  /* Opencode glowing endpoint & focus dots */
+  [data-slot="chart"] svg circle[stroke="var(--chart-1)"] {
+    filter: drop-shadow(0 0 6px var(--chart-1));
+  }
+
+  [data-slot="chart"] svg circle[stroke="var(--chart-2)"] {
+    filter: drop-shadow(0 0 6px var(--chart-2));
+  }
+
+  [data-slot="chart"] svg circle[stroke="var(--chart-3)"] {
+    filter: drop-shadow(0 0 6px var(--chart-3));
+  }
+
+  [data-slot="chart"] svg circle[stroke="var(--chart-4)"] {
+    filter: drop-shadow(0 0 6px var(--chart-4));
+  }
+
+  [data-slot="chart"] svg circle[stroke="var(--chart-5)"] {
+    filter: drop-shadow(0 0 6px var(--chart-5));
+  }
+
+  [data-slot="chart"] svg circle[stroke="var(--chart-forecast)"] {
+    filter: drop-shadow(0 0 6px var(--chart-forecast));
+  }
+
+  /* Opencode-style stable, smooth-gliding tooltip */
+  [data-slot="chart"] .ts-chart-tooltip {
+    backdrop-filter: blur(10px);
+    min-width: 176px;
+    transition:
+      left 140ms cubic-bezier(0.22, 1, 0.36, 1),
+      top 140ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 110ms ease;
+    will-change: left, top, transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="chart"] .ts-chart-tooltip {
+      transition: opacity 80ms linear;
+    }
+  }
+
+  [data-slot="chart"] .ts-chart-tooltip__title {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--v2-text-text-muted);
+    letter-spacing: -0.01em;
+    padding-bottom: 6px;
+    margin-bottom: 6px !important;
+  }
+
+  [data-slot="chart"] .ts-chart-tooltip__rows {
+    display: grid;
+    gap: 5px;
+  }
+
+  [data-slot="chart"] .ts-chart-tooltip__row {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--v2-text-text-muted);
+    column-gap: 10px !important;
+    grid-template-columns: 3px minmax(0, 1fr) auto !important;
+  }
+
+  [data-slot="chart"] .ts-chart-tooltip__row[data-active="true"] {
+    color: var(--v2-text-text-base);
+    font-weight: 530;
+  }
+
+  [data-slot="chart"] .ts-chart-tooltip__swatch {
+    width: 2.5px !important;
+    height: 12px !important;
+    border-radius: 1.5px !important;
+    box-shadow: none !important;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Opencode Console Hairline Legend (`| Usage   | Forecast`)        */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="chart-legend"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    font-size: 11.5px;
+    line-height: 16px;
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="chart-legend-item"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  [data-slot="chart-legend-swatch"] {
+    display: inline-block;
+    width: 2.5px;
+    height: 10px;
+    border-radius: 1.5px;
+    flex: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Opencode Pill X-Axis Strip (`NOV 1   NOV 10   NOV 20   NOV 30`)  */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="chart-axis-strip"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background-color: var(--v2-background-bg-layer-01);
+    font-family: var(--font-family-mono);
+    font-size: 10.5px;
+    line-height: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--v2-text-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Opencode Vertical Pill-Track Sparkbar (`Logs` / `My usage`)      */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="chart-sparkbar"] {
+    display: flex;
+    align-items: stretch;
+    gap: 3px;
+    width: 100%;
+    height: 44px;
+    user-select: none;
+  }
+
+  [data-slot="chart-sparkbar-item"] {
+    position: relative;
+    flex: 1 1 0%;
+    min-width: 3px;
+    display: flex;
+    align-items: flex-end;
+    border-radius: 2px;
+    background-color: var(--v2-background-bg-layer-02);
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-color 120ms ease;
+    border: 0;
+    padding: 0;
+    outline: none;
+  }
+
+  [data-slot="chart-sparkbar-item"]:hover,
+  [data-slot="chart-sparkbar-item"][data-active="true"] {
+    background-color: var(--v2-background-bg-layer-03);
+  }
+
+  [data-slot="chart-sparkbar-item"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  [data-slot="chart-sparkbar-fill"] {
+    width: 100%;
+    border-radius: 2px;
+    background-color: var(--v2-text-text-faint);
+    opacity: 0.55;
+    transition:
+      height 180ms ease,
+      opacity 120ms ease,
+      background-color 120ms ease;
+  }
+
+  [data-slot="chart-sparkbar-item"][data-tone="accent"] [data-slot="chart-sparkbar-fill"] {
+    background-color: var(--chart-1);
+    opacity: 0.95;
+  }
+
+  [data-slot="chart-sparkbar-item"][data-tone="muted"] [data-slot="chart-sparkbar-fill"] {
+    background-color: var(--v2-text-text-faint);
+    opacity: 0.35;
+  }
+
+  [data-slot="chart-sparkbar-item"]:hover [data-slot="chart-sparkbar-fill"],
+  [data-slot="chart-sparkbar-item"][data-active="true"] [data-slot="chart-sparkbar-fill"] {
+    opacity: 1;
+  }
+}

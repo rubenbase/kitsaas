@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter",
+  "type": "registry:ui",
+  "title": "Meter",
+  "description": "Displays a bounded measurement such as storage or quota, classifying optimum, suboptimum, and critical ranges semantically.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/vue"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/vue/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/vue/ui/meter.ts",
+      "type": "registry:ui",
+      "target": "components/ui/meter.ts",
+      "content": "import './meter.css'\n\nexport {\n  Meter,\n  MeterIndicator,\n  MeterLabel,\n  MeterTrack,\n  MeterValue,\n} from '@ui-sdk/vue/meter'\nexport type {\n  MeterLabelDetails,\n  MeterOptions,\n  MeterPrimitive,\n  MeterState,\n  MeterValueState,\n  NumberFormat,\n} from '@ui-sdk/vue/meter'\n\nexport type MeterStatus = 'optimum' | 'suboptimum' | 'even-less-good'\n"
+    },
+    {
+      "path": "src/components/ui/meter.css",
+      "type": "registry:ui",
+      "target": "components/ui/meter.css",
+      "content": "/*\n * Meter styles for Kitsaas, matching progress.css track / header / label /\n * value grammar on top of @ui-sdk/solid/meter, plus semantic status fills for\n * optimum, suboptimum and even-less-good thresholds.\n *\n * All rules are attribute-driven (`data-status`) and read semantic `--v2-*`\n * tokens that flip automatically with `[data-color-scheme=\"dark\"]`.\n */\n\n@layer components {\n  [data-slot=\"meter\"] {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n    width: 100%;\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-header\"] {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 8px;\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-label\"],\n  [data-slot=\"meter\"] [data-slot=\"meter-value\"] {\n    font-family: var(--font-family-sans);\n    font-size: var(--font-size-small);\n    font-weight: var(--font-weight-regular);\n    line-height: var(--line-height-large);\n    letter-spacing: var(--letter-spacing-normal);\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-label\"] {\n    color: var(--v2-text-text-muted);\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-value\"] {\n    color: var(--v2-text-text-faint);\n    font-variant-numeric: tabular-nums;\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-track\"] {\n    position: relative;\n    width: 100%;\n    height: 8px;\n    overflow: hidden;\n    border-radius: 999px;\n    border: 1px solid var(--v2-border-border-base);\n    background-color: var(--v2-background-bg-layer-01);\n  }\n\n  [data-slot=\"meter\"] [data-slot=\"meter-indicator\"] {\n    height: 100%;\n    border-radius: inherit;\n    background-color: var(--v2-icon-icon-base);\n    transition:\n      width 200ms ease,\n      background-color 150ms ease;\n  }\n\n  [data-slot=\"meter\"][data-status=\"optimum\"] [data-slot=\"meter-indicator\"] {\n    background-color: var(--v2-state-fg-success);\n  }\n\n  [data-slot=\"meter\"][data-status=\"suboptimum\"] [data-slot=\"meter-indicator\"] {\n    background-color: var(--v2-state-fg-warning);\n  }\n\n  [data-slot=\"meter\"][data-status=\"even-less-good\"] [data-slot=\"meter-indicator\"] {\n    background-color: var(--v2-state-fg-danger);\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"meter\"] [data-slot=\"meter-indicator\"] {\n      transition: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "vue",
+    "uiSdkPackage": "@ui-sdk/vue/meter"
+  }
+}

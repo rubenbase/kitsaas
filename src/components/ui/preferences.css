@@ -1,0 +1,98 @@
+@layer components {
+  /*
+   * Attribute-driven density and view styles for regions wrapped in
+   * `<Preferences>`. Custom properties cascade into any descendant without
+   * adding extra layout boxes (`Preferences` renders `display: contents`).
+   */
+  [data-density="compact"] {
+    --preferences-gap: 4px;
+    --preferences-item-pad-y: 5px;
+    --preferences-item-pad-x: 10px;
+    --preferences-item-font-size: 12px;
+  }
+
+  [data-density="comfortable"] {
+    --preferences-gap: 8px;
+    --preferences-item-pad-y: 9px;
+    --preferences-item-pad-x: 12px;
+    --preferences-item-font-size: 13px;
+  }
+
+  [data-density="spacious"] {
+    --preferences-gap: 12px;
+    --preferences-item-pad-y: 13px;
+    --preferences-item-pad-x: 14px;
+    --preferences-item-font-size: 13px;
+  }
+
+  [data-slot="preferences-collection"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--preferences-gap, 8px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  [data-view="grid"] [data-slot="preferences-collection"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  [data-slot="preferences-item"] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: var(--preferences-item-pad-y, 9px)
+      var(--preferences-item-pad-x, 12px);
+    border-radius: 6px;
+    background: var(--v2-background-bg-base);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-muted);
+    color: var(--v2-text-text-base);
+    font-size: var(--preferences-item-font-size, 13px);
+    font-weight: 440;
+    line-height: 18px;
+    letter-spacing: -0.04px;
+    font-variant-numeric: tabular-nums;
+    transition:
+      padding 140ms ease-out,
+      background-color 110ms ease-out;
+  }
+
+  [data-view="grid"] [data-slot="preferences-item"] {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  @media (hover: hover) {
+    [data-slot="preferences-item"]:hover {
+      background: var(--v2-background-bg-layer-01);
+    }
+  }
+
+  /* Scoped code-size preference helper */
+  [data-code-size="sm"] [data-slot="preferences-code"] {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  [data-code-size="md"] [data-slot="preferences-code"] {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  [data-code-size="lg"] [data-slot="preferences-code"] {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="preferences-item"] {
+      transition: none;
+    }
+  }
+}

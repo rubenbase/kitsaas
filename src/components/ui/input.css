@@ -1,0 +1,226 @@
+/*
+ * 1:1 port of opencode's TextInput (`@opencode/ui`, MIT):
+ * packages/ui/src/forms/text-input/text-input.css (`text-input-v2`).
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream renders one
+ * container that holds the value row, the leading icon, the field and its icon
+ * button; ui-sdk splits that into `input-group`, `input` and `input-clear`, so
+ * the container's rules move onto the group:
+ *
+ *   [data-component="text-input-v2"]           →  [data-slot="input-group"]
+ *   [data-slot="text-input-v2-value"]          →  the input's flex rules
+ *                                                 ([data-slot="input-group"] [data-slot="input"])
+ *   [data-slot="text-input-v2-input"]          →  [data-slot="input"]
+ *   [data-slot="text-input-v2-leading-icon"]   →  [data-slot="input-leading-icon"]
+ *   [data-slot="text-input-v2-icon-button"]    →  [data-slot="input-clear"]
+ *   :where(:focus-within)                      →  :has([data-slot="input"]:focus)
+ *                                                 (upstream's focus-within also matched its
+ *                                                 icon button; ui-sdk's clear button carries
+ *                                                 its own focus ring instead)
+ *   [data-disabled]                            →  same name (ui-sdk derives it from the field)
+ *
+ * `data-appearance`, `data-surface`, `data-invalid`, `data-numeric` and
+ * `data-leading-icon` come from Kitsaas' props; `data-filled`, `data-disabled`
+ * and `data-readonly` come from ui-sdk. Upstream styles no read-only state, so
+ * neither does this file. It has no [data-color-scheme="dark"] block either:
+ * every --v2-* token it reads flips with the scheme.
+ *
+ * The leading icon's -2px end margin stands in for the 6px gap of upstream's
+ * value row, which ui-sdk has no part for: the group's 8px gap minus 2px is the
+ * same 6px between the icon and the text. Upstream's trailing wrapper (8px gap,
+ * -4px end margin) has no ui-sdk part either; put trailing content straight in
+ * the group.
+ *
+ * Not ported: `components/text-field.css`. That is the settings `Field`
+ * wrapper — a label, a bordered wrapper, a copy button and an error around the
+ * control, in the older OC-1 tokens — and ui-sdk's `Field` already owns the
+ * label, description and error.
+ */
+
+@layer components {
+  [data-slot="input-group"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding-block: 0;
+    padding-inline: 0 8px;
+    gap: 8px;
+    width: 280px;
+    height: 28px;
+    border: 0;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-input);
+    flex: none;
+    align-self: stretch;
+    transition:
+      background 85ms ease-out,
+      outline-color 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="input-group"][data-appearance="small"] {
+    height: 24px;
+  }
+
+  [data-slot="input-group"][data-appearance="large"] {
+    height: 32px;
+  }
+
+  [data-slot="input-group"][data-surface="layer-1"] {
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  [data-slot="input-group"][data-surface="invisible"] {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  @media (hover: hover) {
+    [data-slot="input-group"]:hover:not([data-disabled], [data-invalid], [data-surface="invisible"]):not(
+        :has([data-slot="input"]:focus)
+      ) {
+      box-shadow:
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),
+        var(--v2-elevation-input);
+    }
+
+    [data-slot="input-group"][data-surface="invisible"]:hover:not([data-disabled], [data-invalid]):not(
+        :has([data-slot="input"]:focus)
+      ) {
+      background: var(--v2-overlay-simple-overlay-hover);
+    }
+  }
+
+  [data-slot="input-group"]:has([data-slot="input"]:focus):not([data-disabled], [data-invalid]) {
+    outline-color: var(--v2-border-border-focus);
+    box-shadow: none;
+  }
+
+  [data-slot="input-group"][data-invalid]:not([data-disabled]) {
+    outline-color: var(--v2-state-fg-danger);
+    box-shadow: none;
+  }
+
+  [data-slot="input-group"][data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Upstream's value row, whose flex layout the input takes over. */
+  [data-slot="input-group"] [data-slot="input"] {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    padding-block: 0;
+    padding-inline: 8px 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="input-group"][data-leading-icon] [data-slot="input"] {
+    padding-inline-start: 0;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-leading-icon"] {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding-inline-start: 8px;
+    margin-inline-end: -2px;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="input-group"] > [data-slot="input-leading-icon"] :is(svg, [data-slot="icon-svg"]) {
+    display: block;
+    flex: none;
+  }
+
+  [data-slot="input-group"] [data-slot="input"]::placeholder {
+    color: var(--v2-text-text-faint);
+    user-select: none;
+  }
+
+  [data-slot="input-group"] [data-slot="input"][type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+
+  [data-slot="input-group"][data-numeric] [data-slot="input"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    gap: 3px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--v2-icon-icon-muted);
+    cursor: pointer;
+    outline: none;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"]:is(:hover, [data-state="hover"]):not(:disabled) {
+    background-color: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"]:is(:active, [data-state="pressed"]):not(:disabled) {
+    background-color: var(--v2-overlay-simple-overlay-pressed);
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"]:focus {
+    outline: none;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  [data-slot="input-group"][data-disabled] > [data-slot="input-clear"] {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-clear"] [data-slot="icon-svg"] {
+    display: block;
+    flex: none;
+    color: currentColor;
+  }
+
+  [data-slot="input-group"][data-invalid]:not([data-disabled]) [data-slot="input"] {
+    color: var(--v2-state-fg-danger);
+    caret-color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="input-group"][data-invalid]:not([data-disabled]) [data-slot="input"]::placeholder {
+    color: var(--v2-state-fg-danger);
+    opacity: 1;
+  }
+}

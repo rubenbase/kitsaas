@@ -2,13 +2,7 @@ import type { JSX } from '@solidjs/web'
 import { useLocation } from '@solidjs/router'
 import { For, createEffect, createSignal, onSettled } from 'solid-js'
 
-import {
-  ChartsIcon,
-  ChevronDownIcon,
-  CoinIcon,
-  ComponentsIcon,
-  SearchIcon,
-} from '#/components/icons'
+import { KitsaasMark } from '#/components/logo'
 import { Button } from '#/components/ui/button'
 
 /**
@@ -37,6 +31,16 @@ export function AppShell(props: { children: JSX.Element }) {
  *
  * `tabs` is either a plain `true` for an empty strip, or the page tabs to show
  * in the window chrome (Area Charts, Bar Charts, …).
+ *
+ * `main` is the only scroller. It is `relative` on purpose: ui-sdk renders a
+ * control's hidden native input as a sibling (the checkbox, radio and switch
+ * inputs are children of the surrounding label), and those inputs are
+ * `position: absolute` with no inline offsets. Without a positioned ancestor
+ * they lay out against the initial containing block, escape this scroll
+ * container and grow the document's scroll height, so the page keeps scrolling
+ * past its content. `overscroll-contain` keeps a scroll at the end from
+ * chaining to the document, and `overflow-x-hidden` keeps wide content from
+ * adding a sideways scrollbar.
  */
 export function PageLayout(props: {
   tabs?: boolean | PageTab[]
@@ -48,7 +52,7 @@ export function PageLayout(props: {
     <>
       {props.tabs && <TabBar items={tabs()} />}
 
-      <main class="m-0 min-h-0 min-w-0 w-full max-w-none flex-1 self-stretch overflow-y-auto outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <main class="relative m-0 min-h-0 min-w-0 w-full max-w-none flex-1 self-stretch overflow-y-auto overflow-x-hidden overscroll-contain outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {props.children}
       </main>
     </>
@@ -80,60 +84,25 @@ function Header() {
   return (
     <header class="sticky top-0 z-20 shrink-0 py-2 max-md:py-1">
       <div class="flex h-7 w-full items-center gap-1 px-2">
-        <a
-          href="/"
-          class="relative flex shrink-0 items-center gap-3 text-foreground"
-        >
-          <span class="flex h-4 items-center justify-center rounded-[4px] bg-grey-800 px-1 text-[9px] leading-none tracking-[0.01em] text-grey-500 [font-weight:530]">
-            kitsaas
-          </span>
-        </a>
-
-        <span class="mx-1 h-3 w-px shrink-0 bg-[var(--v2-border-border-strong)]" />
-
-        <div class="min-w-0 text-[0.8125rem]">
-          <button
-            type="button"
-            class="flex h-7 max-w-full items-center gap-2 rounded-[6px] py-1 pl-1.5 pr-2 text-[0.8125rem] text-muted transition-colors hover:bg-[var(--console-nav-hover)] hover:text-foreground"
-          >
-            <span class="flex shrink-0 items-center">
-              <span class="flex size-4 items-center justify-center rounded-[4px] bg-grey-800 text-[11px] leading-none text-grey-500 [font-weight:530]">
-                D
-              </span>
-            </span>
-            <span class="truncate [font-weight:530]">Default</span>
-            <ChevronDownIcon class="size-4 text-[var(--v2-icon-icon-muted)]" />
-          </button>
-        </div>
+        <Button href="/" variant="nav" aria-label="Kitsaas home">
+          <KitsaasMark class="!text-[var(--v2-text-text-base)]" />
+        </Button>
 
         <span class="mx-1 h-3 w-px shrink-0 bg-[var(--v2-border-border-strong)] max-md:hidden" />
 
         <nav
           aria-label="Main"
-          class="hidden min-w-0 items-center gap-0.5 md:flex"
+          class="hidden min-w-0 items-center gap-1 md:flex"
         >
-          <Button href="/components" variant="nav" icon={<ComponentsIcon />}>
+          <Button href="/components" variant="nav">
             <span class="truncate">Components</span>
           </Button>
-          <Button href="/charts" variant="nav" icon={<ChartsIcon />}>
+          <Button href="/charts" variant="nav">
             <span class="truncate">Charts</span>
           </Button>
         </nav>
 
         <div class="ml-auto flex items-center">
-          <span class="flex h-7 items-center gap-1.5 rounded-[6px] py-1 pl-2 pr-[11px] text-[0.8125rem] text-yellow-500 [font-weight:530]">
-            <CoinIcon class="size-4" />
-            <span class="leading-5">$4.82 left</span>
-          </span>
-
-          <button
-            type="button"
-            class="inline-flex h-7 shrink-0 items-center gap-[3px] rounded-[6px] px-2 text-[0.8125rem] leading-none tracking-[-0.04px] text-faint transition-colors hover:bg-[var(--console-nav-hover)] hover:text-foreground [font-weight:530]"
-          >
-            <SearchIcon class="size-4 text-[var(--v2-icon-icon-muted)]" />
-            <kbd class="px-[3px] font-[inherit] max-md:hidden">⌘K</kbd>
-          </button>
-
           <button
             type="button"
             class="inline-flex size-7 items-center justify-center rounded-[6px] transition-colors hover:bg-[var(--console-nav-hover)]"

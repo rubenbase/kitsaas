@@ -1,0 +1,223 @@
+/*
+ * 1:1 port of opencode's Dialog (`@opencode/ui`, MIT):
+ * packages/ui/src/overlays/dialog/dialog.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so the scrim, the box, the three sizes, `fit`, the header, footer,
+ * body and the close button match `data-component="dialog-v2"`:
+ *
+ *   [data-component="dialog-overlay"]        →  [data-slot="dialog-backdrop"]
+ *   [data-component="dialog-v2"]
+ *     + [data-slot="dialog-container"]       →  [data-slot="dialog-content"]
+ *   [data-slot="dialog-content"] (scroll)    →  also [data-slot="dialog-content"]
+ *   [data-slot="dialog-header"]              →  same (a plain wrapper the
+ *                                               author adds)
+ *   [data-slot="dialog-title-group"]         →  same (a plain wrapper)
+ *   [data-slot="dialog-header-title"]        →  no counterpart; see below
+ *   [data-slot="dialog-title"]               →  same
+ *   [data-slot="dialog-description"]         →  same
+ *   [data-slot="dialog-close-button"]        →  [data-slot="dialog-close"]
+ *   [data-slot="dialog-footer"]              →  same (a plain wrapper)
+ *   [data-slot="dialog-body"]                →  same (a plain wrapper)
+ *   [data-component="dialog-trigger"]        →  [data-slot="dialog-trigger"]
+ *   data-size / data-fit / data-hide-close   →  same
+ *
+ * Upstream nests three elements: the fixed `dialog-v2` wrapper centres the
+ * `dialog-container` box, and the container holds the scrolling
+ * `dialog-content` column. ui-sdk renders one element in the browser's top
+ * layer, which plays the wrapper's and the container's part at once, so the
+ * fixed centring, the width and height per size, the surface, the shadow, the
+ * 12px radius and the scroll rules all land on `dialog-content`. The parts
+ * that upstream's components rendered — header, title group, body, footer —
+ * stay plain wrappers the author writes, exactly as upstream `DialogHeader`,
+ * `DialogTitleGroup`, `DialogBody` and `DialogFooter` did.
+ *
+ * Upstream's `dialog-header-title` (13px, a title with no description) and
+ * `dialog-title` (15px, a title inside a title group) are two slots for one
+ * kind of text. ui-sdk has a single title part, `data-slot="dialog-title"`, so
+ * it takes the 15px `dialog-title` rule; the 13px variant is not carried over.
+ *
+ * `data-size` and `data-fit` reach the content from `DialogContent`'s props;
+ * `data-hide-close` goes on the author's header wrapper, like upstream's
+ * `DialogHeader` prop. The close button is scoped to the header, as upstream's
+ * rule is nested there, so a `DialogClose` rendered as a footer Button keeps
+ * the button's own box.
+ *
+ * Kitsaas glue, not upstream: the content's `border: 0`, `padding: 0` and
+ * `inset: 0` / `margin: auto`, which the top layer needs and upstream's
+ * wrapper and app reset supplied; and the header close button's padding,
+ * border and background reset, because this app does not load ui-sdk's
+ * `web.css`.
+ *
+ * dialog.css has no [data-color-scheme="dark"] block: the --v2-* tokens flip
+ * with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  /* upstream [data-component="dialog-overlay"] */
+  [data-slot="dialog-backdrop"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background-color: var(--v2-overlay-simple-overlay-scrim);
+  }
+
+  /* upstream [data-component="dialog-v2"] + [data-slot="dialog-container"] */
+  [data-slot="dialog-content"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: min(calc(100vw - 32px), 480px);
+    --dialog-height: min(calc(100vh - 32px), 368px);
+    height: var(--dialog-height);
+    max-height: calc(100vh - 32px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-overlay);
+    border-radius: 12px;
+    overflow: auto;
+    pointer-events: auto;
+
+    /* upstream's scrolling dialog-content column */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  [data-slot="dialog-content"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-slot="dialog-content"]:focus-visible {
+    outline: none;
+  }
+
+  [data-slot="dialog-header"] {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    gap: 0;
+    padding: 16px;
+    flex-shrink: 0;
+  }
+
+  [data-slot="dialog-title-group"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  [data-slot="dialog-title"] {
+    margin: 0;
+    flex: none;
+    flex-grow: 0;
+    user-select: none;
+    font-weight: 530;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.13px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="dialog-description"] {
+    margin: 0;
+    flex: none;
+    flex-grow: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    user-select: none;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-muted);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="dialog-header"] [data-slot="dialog-close"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    margin-top: -2px;
+    margin-inline-end: -2px;
+    margin-inline-start: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="dialog-header"] [data-slot="dialog-close"]:hover {
+    background: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="dialog-header"][data-hide-close] [data-slot="dialog-close"] {
+    display: none;
+  }
+
+  [data-slot="dialog-footer"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 8px;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+
+  [data-slot="dialog-body"] {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  [data-slot="dialog-body"]:focus-visible {
+    outline: none;
+  }
+
+  /* upstream's large sizes: top edge fixed, box grows down from it */
+  [data-slot="dialog-content"]:is([data-size="large"], [data-size="x-large"]) {
+    --dialog-height: min(calc(100vh - 96px), 600px);
+    width: min(calc(100vw - 32px), 680px);
+    max-height: var(--dialog-height);
+    margin: calc((100vh - var(--dialog-height)) / 2) auto auto;
+    background: var(--v2-background-bg-base);
+  }
+
+  [data-slot="dialog-content"][data-size="x-large"] {
+    --dialog-height: min(calc(100vh - 96px), 680px);
+    width: min(calc(100vw - 32px), 880px);
+  }
+
+  /*
+   * upstream's fit: height follows the content, up to the size's height. The
+   * content is the top-layer element itself, so `fit-content` keeps it from
+   * stretching between its fixed top and bottom edges the way `auto` would.
+   */
+  [data-slot="dialog-content"][data-fit] {
+    height: fit-content;
+  }
+}

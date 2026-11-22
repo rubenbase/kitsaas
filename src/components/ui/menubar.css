@@ -1,0 +1,109 @@
+@import "./menu.css";
+
+@layer components {
+  [data-slot="menubar"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 6px;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-muted);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+
+  [data-slot="menubar"][data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+    width: fit-content;
+    min-width: 140px;
+  }
+
+  [data-slot="menubar"][data-disabled] {
+    opacity: 0.5;
+  }
+
+  /* Top-level menubar triggers (excludes submenu triggers inside menu-content). */
+  [data-slot="menubar"] > [data-slot="menu-trigger"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 24px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--v2-text-text-base);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 530;
+    line-height: 16px;
+    letter-spacing: -0.04px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    user-select: none;
+    cursor: default;
+    outline: none;
+    transition:
+      background-color 100ms ease-out,
+      color 100ms ease-out;
+  }
+
+  [data-slot="menubar"][data-orientation="vertical"]
+    > [data-slot="menu-trigger"] {
+    justify-content: flex-start;
+    height: 28px;
+    padding: 0 10px;
+  }
+
+  @media (hover: hover) {
+    [data-slot="menubar"]
+      > [data-slot="menu-trigger"]:hover:not([data-open]):not([data-disabled]):not(
+        [aria-disabled="true"]
+      ) {
+      background: var(--v2-overlay-simple-overlay-hover);
+    }
+  }
+
+  [data-slot="menubar"]
+    > [data-slot="menu-trigger"]:active:not([data-disabled]):not(
+      [aria-disabled="true"]
+    ) {
+    background: var(--v2-overlay-simple-overlay-pressed);
+  }
+
+  [data-slot="menubar"] > [data-slot="menu-trigger"][data-open] {
+    background: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="menubar"] > [data-slot="menu-trigger"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  [data-slot="menubar"]
+    > [data-slot="menu-trigger"]:is([data-disabled], [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Ensure popover resets stay clean for menus opened from a menubar. */
+  [data-slot="menubar"] [data-slot="menu-content"] {
+    border: 0;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="menubar"] > [data-slot="menu-trigger"] {
+      transition: none;
+    }
+  }
+}

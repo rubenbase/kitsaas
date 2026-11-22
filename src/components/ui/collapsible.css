@@ -1,0 +1,166 @@
+/*
+ * 1:1 port of opencode's Collapsible (`@opencode/ui`, MIT):
+ * packages/ui/src/components/collapsible.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so rest / hover / focus-visible / open / disabled / variant all
+ * match `data-component="collapsible"`:
+ *
+ *   [data-component="collapsible"]        →  [data-slot="collapsible"]
+ *   [data-slot="collapsible-trigger"]     →  same (ui-sdk's trigger slot)
+ *   [data-slot="collapsible-arrow"]       →  same (upstream's own slot; render it
+ *                                             inside the trigger)
+ *   [data-slot="collapsible-arrow-icon"]  →  same (upstream's own slot)
+ *   [data-slot="collapsible-content"]     →  [data-slot="collapsible-panel"]
+ *   [aria-expanded="true"]                →  [data-open]
+ *   [data-expanded]                       →  [data-open]
+ *   [data-disabled]                       →  same (ui-sdk's attribute)
+ *   [data-variant="ghost"]                →  same (forwarded from the root prop)
+ *   [data-hide-details="true"]            →  same (forwarded from the trigger prop)
+ *
+ * Upstream's `.tool-collapsible` gap hook is a class the app adds, and its
+ * `@keyframes slideDown / slideUp` read Kobalte's
+ * `--kb-collapsible-content-height` and are never applied (the animation
+ * lines in the file are commented out), so neither is carried over. ui-sdk
+ * exposes `--collapsible-panel-height` for a panel animation instead.
+ *
+ * Two OC-1 alias tokens Kitsaas doesn't carry are mapped to the --v2-* token
+ * that is nearest, noted at each use: --text-base and
+ * --surface-raised-base-hover. Upstream's --icon-weaker is declared nowhere,
+ * so the arrow icon inherits `currentColor`; no color is set here either.
+ *
+ * collapsible.css has no [data-color-scheme="dark"] block: the --v2-* tokens
+ * flip with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="collapsible"] {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    border: none;
+    transition: background-color 0.15s ease;
+    border-radius: var(--radius-md);
+    overflow: visible;
+  }
+
+  [data-slot="collapsible"] [data-slot="collapsible-trigger"] {
+    width: 100%;
+    display: flex;
+    height: 32px;
+    padding: 0;
+    align-items: center;
+    align-self: stretch;
+    cursor: default;
+    user-select: none;
+    /* upstream --text-base (#6f6f6f light); grey-700 is the nearest token */
+    color: var(--v2-text-text-muted);
+
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-small);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-large);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"]
+    [data-slot="collapsible-arrow"] {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"]
+    [data-slot="collapsible-arrow-icon"] {
+    display: inline-flex;
+    transform: translateZ(0) rotate(-90deg);
+    transition: transform 0.15s ease;
+    will-change: transform;
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"]:hover
+    [data-slot="collapsible-arrow"] {
+    opacity: 1;
+  }
+
+  [data-slot="collapsible"] [data-slot="collapsible-trigger"]:focus-visible {
+    outline: none;
+    /* upstream --surface-raised-base-hover (black 5.1% light); the hover
+       overlay (4%) is the nearest token */
+    background-color: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"][data-disabled] {
+    cursor: not-allowed;
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"][data-hide-details="true"] {
+    height: auto;
+    align-items: stretch;
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"]
+    [data-slot="collapsible-arrow"] {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"][data-open]
+    [data-slot="collapsible-arrow"] {
+    opacity: 1;
+  }
+
+  [data-slot="collapsible"]
+    [data-slot="collapsible-trigger"][data-open]
+    [data-slot="collapsible-arrow-icon"] {
+    transform: translateZ(0) rotate(0deg);
+  }
+
+  [data-slot="collapsible"] [data-slot="collapsible-panel"] {
+    overflow: hidden;
+  }
+
+  [data-slot="collapsible"] [data-slot="collapsible-panel"][data-open] {
+    overflow: visible;
+  }
+
+  [data-slot="collapsible"][data-variant="ghost"] {
+    background-color: transparent;
+    border: none;
+  }
+
+  [data-slot="collapsible"][data-variant="ghost"]
+    > [data-slot="collapsible-trigger"] {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  [data-slot="collapsible"][data-variant="ghost"]
+    > [data-slot="collapsible-trigger"]:focus-visible {
+    outline: none;
+    background-color: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="collapsible"][data-variant="ghost"]
+    > [data-slot="collapsible-trigger"][data-disabled] {
+    cursor: not-allowed;
+  }
+}

@@ -9,7 +9,12 @@ import {
   RadarChartsPage,
   RadialChartsPage,
 } from '#/routes/charts/chart-page'
-import { ComponentsPage } from '#/routes/components'
+import {
+  componentChildRoutes,
+  ComponentNotFound,
+  ComponentsIndex,
+  ComponentsLayout,
+} from '#/routes/components'
 import { NotFoundPage } from '#/routes/not-found'
 import { UsagePage } from '#/routes/usage'
 
@@ -28,7 +33,15 @@ const routes = defineRoutes([
       { path: '/radial', component: RadialChartsPage },
     ],
   },
-  { path: '/components', component: ComponentsPage },
+  {
+    path: '/components',
+    component: ComponentsLayout,
+    children: [
+      { path: '/', component: ComponentsIndex },
+      ...componentChildRoutes,
+      { path: '*404', component: ComponentNotFound },
+    ],
+  },
   { path: '*404', component: NotFoundPage },
 ])
 
