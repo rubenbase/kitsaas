@@ -92,6 +92,31 @@
       ]
     },
     {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Keeps its content at a fixed width-to-height ratio with native CSS aspect-ratio; images and video inside fill and cover the box.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/aspect-ratio.ts",
+          "type": "registry:ui",
+          "target": "components/ui/aspect-ratio.ts"
+        },
+        {
+          "path": "src/components/ui/aspect-ratio.css",
+          "type": "registry:ui",
+          "target": "components/ui/aspect-ratio.css"
+        }
+      ]
+    },
+    {
       "name": "autocomplete",
       "type": "registry:ui",
       "title": "Autocomplete",
@@ -243,6 +268,31 @@
       ]
     },
     {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "opencode console's dashboard card with shadcn parts: header with title, description and action, content, footer, plus the console's inset tile and label/value facts. A link in the title makes the whole card clickable.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/card.ts",
+          "type": "registry:ui",
+          "target": "components/ui/card.ts"
+        },
+        {
+          "path": "src/components/ui/card.css",
+          "type": "registry:ui",
+          "target": "components/ui/card.css"
+        }
+      ]
+    },
+    {
       "name": "carousel",
       "type": "registry:ui",
       "title": "Carousel",
@@ -377,7 +427,8 @@
         "@ui-sdk/vue"
       ],
       "registryDependencies": [
-        "https://kitsaas.dev/r/vue/theme.json"
+        "https://kitsaas.dev/r/vue/theme.json",
+        "https://kitsaas.dev/r/vue/kbd.json"
       ],
       "files": [
         {
@@ -490,6 +541,31 @@
           "path": "src/components/ui/drawer.css",
           "type": "registry:ui",
           "target": "components/ui/drawer.css"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "A centred empty state for a list or panel: icon, title, description and actions.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/empty.ts",
+          "type": "registry:ui",
+          "target": "components/ui/empty.ts"
+        },
+        {
+          "path": "src/components/ui/empty.css",
+          "type": "registry:ui",
+          "target": "components/ui/empty.css"
         }
       ]
     },
@@ -615,6 +691,62 @@
           "path": "src/components/ui/input.css",
           "type": "registry:ui",
           "target": "components/ui/input.css"
+        }
+      ]
+    },
+    {
+      "name": "item",
+      "type": "registry:ui",
+      "title": "Item",
+      "description": "A row with media, a title, a description and actions, like the console's settings and billing lists. ItemGroup can rove focus across link rows with the arrow keys.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json",
+        "https://kitsaas.dev/r/vue/separator.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/item.ts",
+          "type": "registry:ui",
+          "target": "components/ui/item.ts"
+        },
+        {
+          "path": "src/components/ui/item-primitive.ts",
+          "type": "registry:lib",
+          "target": "components/ui/item-primitive.ts"
+        },
+        {
+          "path": "src/components/ui/item.css",
+          "type": "registry:ui",
+          "target": "components/ui/item.css"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "A key cap for keyboard shortcuts, ported from opencode: neutral, ghost or outline, grouped into combinations, with ⌘ on Mac and Ctrl elsewhere from a single shortcut string.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/kbd.ts",
+          "type": "registry:ui",
+          "target": "components/ui/kbd.ts"
+        },
+        {
+          "path": "src/components/ui/kbd.css",
+          "type": "registry:ui",
+          "target": "components/ui/kbd.css"
         }
       ]
     },
@@ -1133,6 +1265,7 @@
         "https://kitsaas.dev/r/vue/theme.json",
         "https://kitsaas.dev/r/vue/drawer.json",
         "https://kitsaas.dev/r/vue/separator.json",
+        "https://kitsaas.dev/r/vue/skeleton.json",
         "https://kitsaas.dev/r/vue/tooltip.json"
       ],
       "files": [
@@ -1150,6 +1283,31 @@
           "path": "src/components/ui/sidebar.css",
           "type": "registry:ui",
           "target": "components/ui/sidebar.css"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "opencode console's loading placeholder: a faint bar with a slow shimmer, faded in after 120ms. Decorative by default; reduced motion drops the sweep.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/skeleton.ts",
+          "type": "registry:ui",
+          "target": "components/ui/skeleton.ts"
+        },
+        {
+          "path": "src/components/ui/skeleton.css",
+          "type": "registry:ui",
+          "target": "components/ui/skeleton.css"
         }
       ]
     },
@@ -1179,6 +1337,36 @@
       ]
     },
     {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "opencode's Loader ring, the one the console shows while loading: 16px, a third of the ring turning every 900ms, with role=status and a Loading label.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/spinner.ts",
+          "type": "registry:ui",
+          "target": "components/ui/spinner.ts"
+        },
+        {
+          "path": "src/components/ui/spinner-primitive.ts",
+          "type": "registry:lib",
+          "target": "components/ui/spinner-primitive.ts"
+        },
+        {
+          "path": "src/components/ui/spinner.css",
+          "type": "registry:ui",
+          "target": "components/ui/spinner.css"
+        }
+      ]
+    },
+    {
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
@@ -1200,6 +1388,31 @@
           "path": "src/components/ui/switch.css",
           "type": "registry:ui",
           "target": "components/ui/switch.css"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "opencode console's data tables on native table elements with shadcn parts: the members table (header pill, row hover) or the framed data table. Numeric columns, footer totals, caption, selected rows and aria-sort headers.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/table.ts",
+          "type": "registry:ui",
+          "target": "components/ui/table.ts"
+        },
+        {
+          "path": "src/components/ui/table.css",
+          "type": "registry:ui",
+          "target": "components/ui/table.css"
         }
       ]
     },
@@ -1475,6 +1688,31 @@
           "path": "src/components/ui/trigger-menu.css",
           "type": "registry:ui",
           "target": "components/ui/trigger-menu.css"
+        }
+      ]
+    },
+    {
+      "name": "typography",
+      "type": "registry:ui",
+      "title": "Typography",
+      "description": "opencode console's prose with shadcn's Typography parts: headings, paragraph, lead, large, small, muted, blockquote, list and inline code, plus a container that spaces them or rendered markdown, in default or compact size.",
+      "dependencies": [
+        "@ui-sdk/core",
+        "@ui-sdk/vue"
+      ],
+      "registryDependencies": [
+        "https://kitsaas.dev/r/vue/theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/overrides/vue/typography.ts",
+          "type": "registry:ui",
+          "target": "components/ui/typography.ts"
+        },
+        {
+          "path": "src/components/ui/typography.css",
+          "type": "registry:ui",
+          "target": "components/ui/typography.css"
         }
       ]
     },

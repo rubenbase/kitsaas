@@ -18,6 +18,7 @@ import { usePart, usePrimitive, type PartProps } from '@ui-sdk/react/primitive'
 
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerTitle } from './drawer'
 import { Separator, type SeparatorProps } from './separator'
+import { Skeleton } from './skeleton'
 import {
   createSidebarController,
   matchesShortcut,
@@ -493,9 +494,9 @@ export function SidebarMenuSkeleton({
       }}
     >
       {showIcon ? (
-        <span data-slot="sidebar-menu-skeleton-icon" aria-hidden="true" />
+        <Skeleton data-sidebar-skeleton="icon" />
       ) : null}
-      <span data-slot="sidebar-menu-skeleton-text" aria-hidden="true" />
+      <Skeleton data-sidebar-skeleton="text" />
     </div>
   )
 }

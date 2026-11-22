@@ -9,8 +9,10 @@
  *   box   →  8px × 12px padding, 6px radius, no border; 13px / 20px text at
  *            weight 440, the same body type as the Toast description.
  *
- * `neutral` is the Kitsaas addition for an uncoloured note: a layer-02 fill
- * with base text. Every colour is a token, so both schemes follow
+ * The console's rule is `.billing-notice` (6px radius, 8px × 12px padding)
+ * with `data-tone` warning, danger or neutral. Its neutral tone is a layer-03
+ * fill with inherited (base) text; info and success are Kitsaas additions on
+ * the same state tokens. Every colour is a token, so both schemes follow
  * [data-color-scheme] with no dark block here.
  *
  * Layout is a grid so an optional leading icon (a direct <svg> child) and a
@@ -21,7 +23,7 @@
 
 @layer components {
   [data-slot="alert"] {
-    --alert-bg: var(--v2-background-bg-layer-02);
+    --alert-bg: var(--v2-background-bg-layer-03);
     --alert-fg: var(--v2-text-text-base);
 
     box-sizing: border-box;

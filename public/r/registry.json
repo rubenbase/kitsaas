@@ -4,32 +4,32 @@
   "homepage": "https://kitsaas.dev",
   "frameworks": {
     "solid": {
-      "components": 60,
+      "components": 69,
       "overrides": 0,
       "indexUrl": "https://kitsaas.dev/r/solid/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/solid/{name}.json"
     },
     "react": {
-      "components": 60,
-      "overrides": 6,
+      "components": 69,
+      "overrides": 15,
       "indexUrl": "https://kitsaas.dev/r/react/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/react/{name}.json"
     },
     "vue": {
-      "components": 60,
-      "overrides": 4,
+      "components": 69,
+      "overrides": 13,
       "indexUrl": "https://kitsaas.dev/r/vue/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/vue/{name}.json"
     },
     "svelte": {
-      "components": 60,
-      "overrides": 4,
+      "components": 69,
+      "overrides": 13,
       "indexUrl": "https://kitsaas.dev/r/svelte/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/svelte/{name}.json"
     },
     "web": {
-      "components": 60,
-      "overrides": 4,
+      "components": 69,
+      "overrides": 13,
       "indexUrl": "https://kitsaas.dev/r/web/registry.json",
       "namespaceTemplate": "https://kitsaas.dev/r/web/{name}.json"
     }
@@ -67,6 +67,12 @@
       "description": "Asks for explicit confirmation before a critical or destructive action, supporting async confirm handlers and imperative confirm flows."
     },
     {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Keeps its content at a fixed width-to-height ratio with native CSS aspect-ratio; images and video inside fill and cover the box."
+    },
+    {
       "name": "autocomplete",
       "type": "registry:ui",
       "title": "Autocomplete",
@@ -101,6 +107,12 @@
       "type": "registry:ui",
       "title": "Calendar",
       "description": "Picks a single date, multiple dates, or a continuous date range from a keyboard-navigable month grid."
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "opencode console's dashboard card with shadcn parts: header with title, description and action, content, footer, plus the console's inset tile and label/value facts. A link in the title makes the whole card clickable."
     },
     {
       "name": "carousel",
@@ -163,6 +175,12 @@
       "description": "Slides a draggable sheet in from any screen edge with snap points, a resize handle, and nested stacking."
     },
     {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "A centred empty state for a list or panel: icon, title, description and actions."
+    },
+    {
       "name": "field",
       "type": "registry:ui",
       "title": "Field",
@@ -191,6 +209,18 @@
       "type": "registry:ui",
       "title": "Input",
       "description": "Reports typing, clearing and a form reset with their reasons, and clears from a group part that returns focus to the field."
+    },
+    {
+      "name": "item",
+      "type": "registry:ui",
+      "title": "Item",
+      "description": "A row with media, a title, a description and actions, like the console's settings and billing lists. ItemGroup can rove focus across link rows with the arrow keys."
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "A key cap for keyboard shortcuts, ported from opencode: neutral, ghost or outline, grouped into combinations, with ⌘ on Mac and Ctrl elsewhere from a single shortcut string."
     },
     {
       "name": "label",
@@ -319,16 +349,34 @@
       "description": "Composable application sidebar built on @ui-sdk/core with collapsible offcanvas and icon modes, floating and inset variants, groups, submenus, rail toggle, and mobile drawer support."
     },
     {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "opencode console's loading placeholder: a faint bar with a slow shimmer, faded in after 120ms. Decorative by default; reduced motion drops the sweep."
+    },
+    {
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",
       "description": "Adjusts single values or multi-thumb ranges with pointer dragging, stepped marks, and keyboard controls."
     },
     {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "opencode's Loader ring, the one the console shows while loading: 16px, a third of the ring turning every 900ms, with role=status and a Loading label."
+    },
+    {
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
       "description": "Turns a setting on and off in place, keeps a hidden native input in sync, and submits and resets with its form."
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "opencode console's data tables on native table elements with shadcn parts: the members table (header pill, row hover) or the framed data table. Numeric columns, footer totals, caption, selected rows and aria-sort headers."
     },
     {
       "name": "tabs",
@@ -395,6 +443,12 @@
       "type": "registry:ui",
       "title": "Trigger Menu",
       "description": "Opens caret-anchored suggestions when typing trigger characters like @, /, or # inside an input or textarea."
+    },
+    {
+      "name": "typography",
+      "type": "registry:ui",
+      "title": "Typography",
+      "description": "opencode console's prose with shadcn's Typography parts: headings, paragraph, lead, large, small, muted, blockquote, list and inline code, plus a container that spaces them or rendered markdown, in default or compact size."
     },
     {
       "name": "waterfall",

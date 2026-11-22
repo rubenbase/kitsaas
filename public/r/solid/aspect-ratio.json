@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "type": "registry:ui",
+  "title": "Aspect Ratio",
+  "description": "Keeps its content at a fixed width-to-height ratio with native CSS aspect-ratio; images and video inside fill and cover the box.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/solid"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/solid/theme.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/aspect-ratio.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/aspect-ratio.tsx",
+      "content": "import type { JSX } from \"@solidjs/web\";\nimport { omit } from \"solid-js\";\n\nimport \"./aspect-ratio.css\";\n\n/**\n * AspectRatio, shadcn's AspectRatio: shows its content at a fixed width to\n * height ratio, whatever width it is given.\n *\n *   <AspectRatio ratio={16 / 9}>\n *     <img src=\"/cover.png\" alt=\"Dashboard cover\" />\n *   </AspectRatio>\n *\n * shadcn's is Radix's padding-bottom wrapper; this one is a single element\n * with CSS `aspect-ratio` (see `aspect-ratio.css`). ui-sdk has no aspect-ratio\n * or media primitive (its only `aspect` options are on resize handles and\n * ImageCropper's crop box), and there is no behaviour, so it is plain markup.\n */\n\nexport type AspectRatioProps = JSX.HTMLAttributes<HTMLDivElement> & {\n  /** Width over height, like `16 / 9`. Defaults to 1. */\n  ratio?: number;\n};\n\nexport function AspectRatio(props: AspectRatioProps) {\n  const rest = omit(props, \"ratio\", \"style\");\n\n  const style = (): JSX.CSSProperties | string => {\n    const ratio = String(props.ratio ?? 1);\n    const own = props.style;\n\n    return typeof own === \"string\"\n      ? `${own};--aspect-ratio:${ratio}`\n      : { ...own, \"--aspect-ratio\": ratio };\n  };\n\n  return <div {...rest} data-slot=\"aspect-ratio\" style={style()} />;\n}\n"
+    },
+    {
+      "path": "src/components/ui/aspect-ratio.css",
+      "type": "registry:ui",
+      "target": "components/ui/aspect-ratio.css",
+      "content": "/*\n * Aspect Ratio. Neither opencode's console nor @opencode/ui has one: the\n * console's stylesheet has a single Tailwind utility (`.aspect-[2/1]`) and\n * @opencode/ui only sets `aspect-ratio` inside other components (logo,\n * spinner, checkbox), so this is built from scratch.\n *\n * shadcn's AspectRatio is Radix's, which reserves the height with the old\n * padding-bottom hack and an absolutely positioned inner wrapper. Every\n * browser Kitsaas targets supports CSS `aspect-ratio`, so this is one element\n * with the native property. The ratio comes in as `--aspect-ratio` (set by the\n * `ratio` prop, or by a class like `[--aspect-ratio:2]`).\n *\n * `min-height: 0` keeps the box at its ratio when its content is taller\n * (otherwise `aspect-ratio` lets the min-content height win), matching Radix,\n * whose content never resizes the box. Like shadcn's it is unstyled: rounding,\n * borders and fills are left to the caller.\n *\n * Kitsaas addition: a direct <img>, <video>, <iframe>, <canvas>, <svg> or\n * <picture> child fills the box, with `object-fit: cover` on images and\n * video, which is what shadcn's examples do with `h-full w-full object-cover`.\n */\n\n@layer components {\n  [data-slot=\"aspect-ratio\"] {\n    position: relative;\n    width: 100%;\n    min-height: 0;\n    aspect-ratio: var(--aspect-ratio, 1);\n  }\n\n  [data-slot=\"aspect-ratio\"] > :is(img, video, iframe, canvas, svg, picture) {\n    display: block;\n    width: 100%;\n    height: 100%;\n  }\n\n  [data-slot=\"aspect-ratio\"] > :is(img, video) {\n    object-fit: cover;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "solid",
+    "uiSdkPackage": "@ui-sdk/solid/aspect-ratio"
+  }
+}

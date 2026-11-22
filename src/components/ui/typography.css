@@ -1,0 +1,298 @@
+/*
+ * Typography, ported from opencode console's prose: `.changelog-markdown`,
+ * the rendered markdown on the console's changelog. The console is hosted and
+ * its source is not in the opencode checkout, so the rules were read from its
+ * live stylesheet and renamed to Kitsaas slots:
+ *
+ *   .changelog-markdown                     →  [data-slot="typography"]
+ *   .changelog-markdown[data-size=compact]  →  [data-slot="typography"][data-size="compact"]
+ *   .changelog-markdown <el>                →  [data-slot="typography"] :where(<el>)
+ *   :root[data-color-scheme=dark] …         →  [data-color-scheme="dark"] …
+ *
+ * The descendant element selectors are wrapped in :where() so they weigh the
+ * same as the part rules below, which come later and so win where they set
+ * a font (a TypographyH1 inside Typography keeps its size but takes the flow
+ * margins). Every colour in the source is already a --v2-* token.
+ *
+ * Not ported: `.changelog-screenshot*` and `.changelog-cover` (the
+ * changelog's own zoomable figure markup). The console's `.changelog-markdown`
+ * styles only bare markdown, so the standalone parts take their sizes from the
+ * console's other text rules:
+ *
+ *   TypographyH1     .activity-dashboard h1 (21px / 530 / 24px)
+ *   TypographyH2     .changelog-markdown h1–h6 (1.25rem / 530, line-height
+ *                    resolved to the container's 1.75rem)
+ *   TypographyH3     .activity-dashboard h2 (15px / 530 / 20px), which is
+ *                    also the compact changelog heading
+ *   TypographyP      .changelog-markdown body (0.9375rem / 1.75rem, muted)
+ *   TypographyMuted  .activity-dashboard body (13px / 440 / 20px) in
+ *                    .activity-caption's --oc-text-secondary
+ *                    →  --v2-text-text-muted
+ *   TypographySmall  .changelog-screenshot figcaption (0.75rem / 1.25rem)
+ *
+ * Kitsaas additions, marked below:
+ *
+ *   - from opencode's chat markdown (packages/session-ui/src/components/
+ *     markdown.css, MIT), where the changelog has nothing: the inline code
+ *     chip (mono, 530, 0 4px padding, 4px radius, 8% text-base fill), the
+ *     blockquote's 0.5px start rule and the muted list marker;
+ *   - built from src/theme.css's typography scale, since neither source has
+ *     them: TypographyH4 (--font-size-base / --font-weight-medium /
+ *     --line-height-base), TypographyLead (--font-size-x-large, muted) and
+ *     TypographyLarge (--font-size-large / --font-weight-medium).
+ *
+ * Tailwind's preflight (which the console also ships) zeroes margins, sets
+ * headings to `font-size: inherit` and removes list markers; these rules are
+ * written against it. `@tailwindcss/typography` is a devDependency but no
+ * stylesheet loads it, so there is no `.prose` to conflict with; these rules
+ * key off data-slot only.
+ */
+
+@layer components {
+  /* .changelog-markdown */
+  [data-slot="typography"] {
+    color: var(--v2-text-text-muted);
+    overflow-wrap: anywhere;
+    font-size: 0.9375rem;
+    line-height: 1.75rem;
+  }
+
+  [data-slot="typography"] > * + * {
+    margin-top: 1rem;
+  }
+
+  [data-slot="typography"] :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--v2-text-text-base);
+    font-size: 1.25rem;
+    font-weight: 530;
+    line-height: inherit;
+    margin-top: 3rem;
+    scroll-margin-top: 2rem;
+  }
+
+  [data-slot="typography"] > :first-child,
+  [data-slot="typography"][data-size="compact"] > :first-child {
+    margin-top: 0;
+  }
+
+  [data-slot="typography"] :where(h1, h2, h3, h4, h5, h6) + :where(p) {
+    margin-top: 0.75rem;
+  }
+
+  [data-slot="typography"] :where(strong) {
+    color: var(--v2-text-text-base);
+    font-weight: 530;
+  }
+
+  [data-slot="typography"] :where(a) {
+    color: inherit;
+    text-decoration: underline;
+    -webkit-text-decoration-color: var(--v2-border-border-base);
+    text-decoration-color: var(--v2-border-border-base);
+  }
+
+  [data-slot="typography"] :where(a):hover {
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="typography"] :where(ul, ol) {
+    padding-left: 1.5rem;
+  }
+
+  [data-slot="typography"] :where(ul) {
+    list-style: outside;
+  }
+
+  [data-slot="typography"] :where(ol) {
+    list-style: decimal;
+  }
+
+  [data-slot="typography"] :where(li + li) {
+    margin-top: 0.25rem;
+  }
+
+  [data-slot="typography"] :where(pre) {
+    border: 1px solid var(--v2-border-border-muted);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+
+  [data-slot="typography"] :where(blockquote) {
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="typography"][data-size="compact"] {
+    color: var(--v2-text-text-base);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+  }
+
+  [data-color-scheme="dark"] [data-slot="typography"][data-size="compact"] {
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="typography"][data-size="compact"] > * + * {
+    margin-top: 0.75rem;
+  }
+
+  [data-slot="typography"][data-size="compact"] :where(h1, h2, h3, h4, h5, h6) {
+    margin-top: 2rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+  }
+
+  /* The console repeats `pre` here; kept as written, so pre is 0.5rem 1rem. */
+  [data-slot="typography"] :where(pre) {
+    padding-block: 0.5rem;
+    overflow-x: auto;
+  }
+
+  [data-slot="typography"] :where(code) {
+    color: var(--v2-text-text-base);
+    font-size: 0.8125rem;
+  }
+
+  [data-slot="typography"] :where(img) {
+    border: 1px solid var(--v2-border-border-muted);
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  [data-slot="typography"] :where(table) {
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+
+  [data-slot="typography"] :where(th, td) {
+    border: 1px solid var(--v2-border-border-muted);
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Kitsaas additions from session-ui's markdown.css: inline code, quote rule, list marker. */
+  [data-slot="typography"] :where(:not(pre) > code),
+  [data-slot="typography-inline-code"] {
+    font-family: var(--font-family-mono);
+    font-feature-settings: var(--font-family-mono--font-feature-settings);
+    color: var(--v2-text-text-base);
+    font-weight: var(--font-weight-medium);
+    padding: 0 4px;
+    border-radius: 4px;
+    background: color-mix(in oklch, var(--v2-text-text-base) 8%, transparent);
+  }
+
+  [data-slot="typography"] :where(blockquote),
+  [data-slot="typography-blockquote"] {
+    border-inline-start: 0.5px solid var(--v2-border-border-base);
+    padding-inline-start: 0.5rem;
+    font-style: normal;
+  }
+
+  [data-slot="typography"] :where(li)::marker,
+  [data-slot="typography-list"] > li::marker {
+    color: var(--v2-text-text-muted);
+  }
+
+  /* Standalone parts (shadcn's Typography set). They set a font, not margins:
+     wrap them in Typography for the console's flow spacing. */
+  [data-slot="typography-h1"] {
+    color: var(--v2-text-text-base);
+    font-size: 21px;
+    font-weight: 530;
+    line-height: 24px;
+    scroll-margin-top: 2rem;
+  }
+
+  [data-slot="typography-h2"] {
+    color: var(--v2-text-text-base);
+    font-size: 1.25rem;
+    font-weight: 530;
+    line-height: 1.75rem;
+    scroll-margin-top: 2rem;
+  }
+
+  [data-slot="typography-h3"] {
+    color: var(--v2-text-text-base);
+    font-size: 15px;
+    font-weight: 530;
+    line-height: 20px;
+    scroll-margin-top: 2rem;
+  }
+
+  /* Kitsaas addition: from the theme scale. */
+  [data-slot="typography-h4"] {
+    color: var(--v2-text-text-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-base);
+    scroll-margin-top: 2rem;
+  }
+
+  [data-slot="typography-p"],
+  [data-slot="typography-blockquote"],
+  [data-slot="typography-list"] {
+    color: var(--v2-text-text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.75rem;
+  }
+
+  /* Inside Typography, body parts follow the container (and its compact size). */
+  [data-slot="typography"] :is(
+      [data-slot="typography-p"],
+      [data-slot="typography-blockquote"],
+      [data-slot="typography-list"]
+    ) {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  [data-slot="typography"] [data-slot="typography-blockquote"] {
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="typography-list"] {
+    padding-left: 1.5rem;
+    list-style: outside;
+  }
+
+  [data-slot="typography-list"] > li + li {
+    margin-top: 0.25rem;
+  }
+
+  [data-slot="typography-inline-code"] {
+    font-size: 0.8125rem;
+  }
+
+  /* Kitsaas addition: from the theme scale. */
+  [data-slot="typography-lead"] {
+    color: var(--v2-text-text-muted);
+    font-size: var(--font-size-x-large);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.75rem;
+  }
+
+  /* Kitsaas addition: from the theme scale. */
+  [data-slot="typography-large"] {
+    color: var(--v2-text-text-base);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-large);
+  }
+
+  [data-slot="typography-small"] {
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.25rem;
+  }
+
+  [data-slot="typography-muted"] {
+    color: var(--v2-text-text-muted);
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 20px;
+  }
+}

@@ -157,6 +157,150 @@ upstream's `neutral` (default), `accent`, `subtle` and `danger`, plus `info`,
 `data-high-contrast` to strengthen the neutral border. `SidebarMenuBadge` stays
 the count pinned to a sidebar row; use `Badge` everywhere else.
 
+`Card` is opencode console's dashboard card (the My usage / Leaderboard /
+Billing row) with shadcn's part names. A link in `CardTitle` makes the whole
+card clickable, with the console's hover fill:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle><a href="/usage">My usage</a></CardTitle>
+    <CardDescription>Your requests, cost and limit</CardDescription>
+    <CardAction><ChevronRightIcon /></CardAction>
+  </CardHeader>
+  <CardFooter>
+    <CardFacts>
+      <CardFact label="Requests">2,624</CardFact>
+    </CardFacts>
+  </CardFooter>
+</Card>
+```
+
+`CardInset` is the console's raised tile (`variant` `neutral`, `warning` or
+`danger`) and `CardFacts` its label/value list. `CardFooter` sits at the bottom
+of the card, so footers line up across a row.
+
+`Kbd` is a port of opencode's Keybind (`@opencode/ui/keybind`), the console's
+key cap. `shortcut` takes ui-sdk's shortcut syntax and shows the right keys per
+platform (⌘ on Mac, Ctrl elsewhere); `KbdGroup` sets caps side by side:
+
+```tsx
+<Kbd>Esc</Kbd>
+<Kbd shortcut="mod+k" />
+<KbdGroup shortcut="mod+shift+p" />
+```
+
+`variant` is `neutral` (default), `ghost` or `outline`. `CommandShortcut`
+draws its keys as a Kbd. Kbd only displays keys:
+register them with `useShortcut` and put `aria-keyshortcuts` on the control.
+
+`Skeleton` is the console's loading placeholder: a faint bar with a slow
+shimmer, faded in after 120ms so a fast load never flashes it. It is 0.7em tall
+with no width of its own, and hidden from screen readers, so mark the region
+`aria-busy` instead:
+
+```tsx
+<div aria-busy="true">
+  <Skeleton class="w-[160px]" />
+</div>
+```
+
+`Spinner` is a port of opencode's Loader (`@opencode/ui`, `feedback/loader`),
+the 16px ring the console shows while loading, with `role="status"` and
+`aria-label="Loading"`. Every spinner on screen turns in step, and one out of
+view pauses (opencode's `syncSpinPhase`, ported onto `@ui-sdk/core` in
+`spinner-primitive.ts`). Inside something already busy, pass `aria-hidden`:
+
+```tsx
+<Spinner />
+<Button variant="loading" icon={<Spinner aria-hidden="true" />}>Saving</Button>
+```
+
+`Empty` is the console's empty list state (`.control-empty`) with shadcn's part
+names. `EmptyMedia variant="icon"` puts the icon on the console's raised 32px
+tile. When it replaces a list after a user action, pass `role="status"` or call
+`announce()` from `@ui-sdk/core`:
+
+```tsx
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon"><TerminalIcon /></EmptyMedia>
+    <EmptyTitle>No API keys yet</EmptyTitle>
+    <EmptyDescription>Create a key to call the API.</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button size="small">Create key</Button>
+  </EmptyContent>
+</Empty>
+```
+
+`Item` is the console's list row (Controls rows, the Activity log, Billing's
+"One-time credits") with shadcn's part names. `variant` is `default`, `outline`
+or `muted`; `size` is `default` or `sm` (the log row); `href` makes the row a
+link. `ItemGroup roving` makes its link rows one Tab stop with the arrow keys,
+from ui-sdk's roving focus:
+
+```tsx
+<ItemGroup>
+  <Item variant="outline">
+    <ItemMedia variant="icon"><CoinIcon /></ItemMedia>
+    <ItemContent>
+      <ItemTitle>One-time credits</ItemTitle>
+      <ItemDescription>Purchase additional workspace credits</ItemDescription>
+    </ItemContent>
+    <ItemActions><Button size="small">Add credits</Button></ItemActions>
+  </Item>
+</ItemGroup>
+```
+
+`Table` is the console's data table on native table elements with shadcn's
+part names. The default is the console's members table (a header pill, rows
+that highlight on hover); `variant="framed"` is its framed data table. Mark
+number columns `numeric`:
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Member</TableHead>
+      <TableHead numeric>Spent</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ada</TableCell>
+      <TableCell numeric>$7.90</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+For a sortable column, set `aria-sort` on `TableHead` with a `<button>` inside.
+For row selection, wrap the table in ui-sdk's `CheckboxGroup` and pass
+`selected` to each `TableRow`.
+
+`Typography` is the console's prose (the changelog's rendered markdown) with
+shadcn's Typography parts. The parts set a font; wrap them, or rendered
+markdown, in `Typography` for the console's spacing between blocks:
+
+```tsx
+<Typography>
+  <TypographyH1>Shared budgets</TypographyH1>
+  <TypographyLead>Workspaces can now pool credit.</TypographyLead>
+  <TypographyP>Set a limit with <TypographyInlineCode>limit</TypographyInlineCode>.</TypographyP>
+</Typography>
+<Typography size="compact" innerHTML={renderedMarkdown} />
+```
+
+`AspectRatio` keeps its content at `ratio` (width over height) with native CSS
+`aspect-ratio`; a direct image or video child fills and covers the box:
+
+```tsx
+<AspectRatio ratio={16 / 9} class="overflow-hidden rounded-[6px]">
+  <img src="/cover.png" alt="Dashboard cover" />
+</AspectRatio>
+```
+
 ## Routing
 
 Pages are defined in `src/router.tsx` with

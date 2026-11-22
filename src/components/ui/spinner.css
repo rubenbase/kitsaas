@@ -1,0 +1,72 @@
+/*
+ * 1:1 port of opencode's Loader (`@opencode/ui`, MIT):
+ * packages/ui/src/feedback/loader/loader.css. The console renders this exact
+ * ring (its button chunk ships `[data-component="loader-v2"]`): a 16px circle
+ * with a 20% track and a third of the ring in full colour, turning every 900ms.
+ *
+ * Only the selectors changed:
+ *
+ *   [data-component="loader-v2"]          →  [data-slot="spinner"]
+ *   [data-slot="loader-v2-background"]    →  [data-slot="spinner-track"]
+ *   [data-slot="loader-v2-progress"]      →  [data-slot="spinner-indicator"]
+ *   @keyframes loader-v2-spin             →  spinner-spin
+ *   :root[data-motion="reduce"] { … }     →  unnested, plus the OS preference
+ *
+ * The `color` fallback (#808080) is dropped: --v2-icon-icon-muted always
+ * exists, so the colour stays a token. Inside a Button, button.css sets svg
+ * colour to currentColor, so the ring takes the label's colour there, as
+ * upstream's icon slot does.
+ *
+ * Not ported: `components/spinner.{tsx,css}`, the "Soft Radar" dot grid that
+ * opencode's app shows for AI activity. The console does not ship it.
+ *
+ * Kitsaas addition, marked below: `prefers-reduced-motion` stops the turn too,
+ * like `:root[data-motion="reduce"]`. The ring stays, frozen with its arc at
+ * the top, so it still reads as a loading indicator.
+ */
+
+@layer components {
+  [data-slot="spinner"] {
+    --_duration: 900ms;
+    display: block;
+    flex-shrink: 0;
+    color: var(--v2-icon-icon-muted);
+    animation: spinner-spin var(--_duration) linear infinite;
+    transform-origin: center;
+  }
+
+  [data-slot="spinner"] [data-slot="spinner-track"] {
+    stroke: currentColor;
+    opacity: 0.2;
+  }
+
+  [data-slot="spinner"] [data-slot="spinner-indicator"] {
+    stroke: currentColor;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+
+  @keyframes spinner-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  :root[data-motion="reduce"] [data-slot="spinner"] {
+    animation: none;
+  }
+
+  /* Kitsaas addition: the OS preference as well as the app-level switch. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="spinner"] {
+      animation: none;
+    }
+  }
+
+  /* Kitsaas addition: pause while out of view (spinner-primitive.ts sets
+     data-offscreen), as upstream does for its dot spinner. */
+  [data-slot="spinner"][data-offscreen] {
+    animation-play-state: paused;
+  }
+}

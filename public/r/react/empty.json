@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty",
+  "type": "registry:ui",
+  "title": "Empty",
+  "description": "A centred empty state for a list or panel: icon, title, description and actions.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/react"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.dev/r/react/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/overrides/react/empty.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/empty.tsx",
+      "content": "import type { ComponentProps } from \"react\";\n\nimport \"./empty.css\";\n\n/**\n * Empty, opencode console's empty list state with shadcn's part names. There\n * is no behaviour, so the parts are plain markup styled by `empty.css`. Pass\n * `role=\"status\"` to Empty when it replaces a list after a user action.\n */\n\nexport function Empty(props: ComponentProps<\"div\">) {\n  return <div {...props} data-slot=\"empty\" />;\n}\n\nexport function EmptyHeader(props: ComponentProps<\"div\">) {\n  return <div {...props} data-slot=\"empty-header\" />;\n}\n\nexport type EmptyMediaVariant = \"default\" | \"icon\";\n\nexport function EmptyMedia({\n  variant = \"default\",\n  ...props\n}: ComponentProps<\"div\"> & { variant?: EmptyMediaVariant }) {\n  return <div {...props} data-slot=\"empty-media\" data-variant={variant} />;\n}\n\nexport function EmptyTitle(props: ComponentProps<\"p\">) {\n  return <p {...props} data-slot=\"empty-title\" />;\n}\n\nexport function EmptyDescription(props: ComponentProps<\"p\">) {\n  return <p {...props} data-slot=\"empty-description\" />;\n}\n\nexport function EmptyContent(props: ComponentProps<\"div\">) {\n  return <div {...props} data-slot=\"empty-content\" />;\n}\n"
+    },
+    {
+      "path": "src/components/ui/empty.css",
+      "type": "registry:ui",
+      "target": "components/ui/empty.css",
+      "content": "/*\n * Empty, ported from opencode console's empty list state (`.control-empty`,\n * the \"nothing here yet\" panel on the console's control lists, read from its\n * live stylesheet; the console's source is not in the opencode checkout). The\n * rules are the console's, with the selectors renamed to Kitsaas slots:\n *\n *   .control-empty                          →  [data-slot=\"empty\"]\n *   .control-empty-content                  →  [data-slot=\"empty-header\"]\n *   .control-empty-text                     →  (no wrapper; see below)\n *   .control-empty p                        →  empty-title / empty-description\n *   .control-empty [data-component=\"button-v2\"]  →  a [data-slot=\"button\"] in it\n *   .control-list-icon (≤760px, extensions) →  empty-media[data-variant=\"icon\"]\n *\n * `.control-empty` sets no colours or weights for its text, so those come from\n * the console's other empty states:\n *\n *   title weight 530    .policy-members-empty p:first-child (console builder)\n *   title colour, description colour, letter-spacing, 360px description\n *   measure and the muted icon colour:\n *     session-ui v2's empty review panel (packages/session-ui/src/v2/\n *     components/session-review-v2.css, `session-review-v2-empty-no-git-*`)\n *\n * Every token is already --v2-*, so there is no --oc-* or legacy mapping.\n *\n * Kitsaas additions, marked below: shadcn puts EmptyMedia, EmptyTitle and\n * EmptyDescription straight in EmptyHeader, so the console's 8px icon-to-text\n * gap and 4px title-to-description gap become a 4px header gap plus 4px under\n * the media; EmptyContent (shadcn's action row) is a centred 8px-gap flex row;\n * `margin: 0` on the text, since Kitsaas does not rely on preflight inside\n * components; and the default media's 20px icon size.\n */\n\n@layer components {\n  [data-slot=\"empty\"] {\n    box-sizing: border-box;\n    background: var(--v2-background-bg-layer-01);\n    min-height: 200px;\n    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-muted);\n    text-align: center;\n    border-radius: 6px;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n    gap: 16px;\n    padding: 32px;\n    display: flex;\n    min-width: 0;\n    color: var(--v2-text-text-base);\n    font-family: var(--v2-font-family-sans, inherit);\n  }\n\n  [data-slot=\"empty-header\"] {\n    flex-direction: column;\n    align-items: center;\n    /* Kitsaas: .control-empty-text's 4px, since there is no text wrapper. */\n    gap: 4px;\n    display: flex;\n  }\n\n  [data-slot=\"empty-title\"],\n  [data-slot=\"empty-description\"] {\n    margin: 0; /* Kitsaas */\n    font-size: 13px;\n    line-height: 20px;\n    letter-spacing: -0.04px;\n  }\n\n  [data-slot=\"empty-title\"] {\n    font-weight: 530;\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"empty-description\"] {\n    max-width: 360px;\n    font-weight: 440;\n    color: var(--v2-text-text-muted);\n    text-wrap: pretty;\n  }\n\n  [data-slot=\"empty-description\"] a {\n    color: inherit;\n    text-decoration: underline;\n    text-underline-offset: 2px;\n  }\n\n  [data-slot=\"empty-description\"] a:hover {\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"empty-media\"] {\n    flex: none;\n    justify-content: center;\n    align-items: center;\n    display: flex;\n    color: var(--v2-icon-icon-muted);\n    /* Kitsaas: with .control-empty-text's 4px, the console's 8px to the text. */\n    margin-bottom: 4px;\n  }\n\n  /* Kitsaas: the session-ui empty panel's 20px icon. */\n  [data-slot=\"empty-media\"][data-variant=\"default\"] > svg {\n    width: 20px;\n    height: 20px;\n  }\n\n  /* The console's raised icon tile, at its 32px extensions size. */\n  [data-slot=\"empty-media\"][data-variant=\"icon\"] {\n    background: var(--v2-background-bg-base);\n    width: 32px;\n    height: 32px;\n    box-shadow: var(--v2-elevation-raised);\n    border-radius: 6px;\n  }\n\n  [data-slot=\"empty-media\"][data-variant=\"icon\"] > svg {\n    width: 16px;\n    height: 16px;\n  }\n\n  /* Kitsaas: shadcn's action row. */\n  [data-slot=\"empty-content\"] {\n    flex-wrap: wrap;\n    justify-content: center;\n    align-items: center;\n    gap: 8px;\n    display: flex;\n    min-width: 0;\n    max-width: 100%;\n  }\n\n  [data-slot=\"empty\"] [data-slot=\"button\"] {\n    height: 24px;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "react",
+    "uiSdkPackage": "@ui-sdk/react/empty"
+  }
+}

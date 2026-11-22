@@ -1,6 +1,14 @@
 import type { JSX } from '@solidjs/web'
 
 import { AccordionDemo } from './demos/accordion'
+import { AspectRatioDemo } from './demos/aspect-ratio'
+import { EmptyDemo } from './demos/empty'
+import { ItemDemo } from './demos/item'
+import { KbdDemo } from './demos/kbd'
+import { SkeletonDemo } from './demos/skeleton'
+import { SpinnerDemo } from './demos/spinner'
+import { TableDemo } from './demos/table'
+import { TypographyDemo } from './demos/typography'
 import { AlertDemo } from './demos/alert'
 import { AlertDialogDemo } from './demos/alert-dialog'
 import { AutocompleteDemo } from './demos/autocomplete'
@@ -9,6 +17,7 @@ import { BadgeDemo } from './demos/badge'
 import { ButtonDemo } from './demos/button'
 import { ButtonGroupDemo } from './demos/button-group'
 import { CalendarDemo } from './demos/calendar'
+import { CardDemo } from './demos/card'
 import { CarouselDemo } from './demos/carousel'
 import { CheckboxDemo } from './demos/checkbox'
 import { CollapsibleDemo } from './demos/collapsible'
@@ -66,6 +75,8 @@ export type ComponentEntry = {
   description: string
   packageName: string
   note?: string
+  /** Overrides the anatomy tree that the docs page guesses from part names. */
+  anatomy?: string
   Demo: () => JSX.Element
 }
 
@@ -93,6 +104,14 @@ export const componentCatalog: ComponentEntry[] = [
       'Asks for explicit confirmation before a critical or destructive action, supporting async confirm handlers and imperative confirm flows.',
     packageName: '@ui-sdk/solid/alert-dialog',
     Demo: AlertDialogDemo,
+  },
+  {
+    slug: 'aspect-ratio',
+    name: 'Aspect Ratio',
+    description:
+      'Keeps its content at a fixed width-to-height ratio with native CSS aspect-ratio; images and video inside fill and cover the box.',
+    packageName: '@ui-sdk/solid',
+    Demo: AspectRatioDemo,
   },
   {
     slug: 'autocomplete',
@@ -141,6 +160,26 @@ export const componentCatalog: ComponentEntry[] = [
       'Picks a single date, multiple dates, or a continuous date range from a keyboard-navigable month grid.',
     packageName: '@ui-sdk/solid/calendar',
     Demo: CalendarDemo,
+  },
+  {
+    slug: 'card',
+    name: 'Card',
+    description:
+      "opencode console's dashboard card with shadcn parts: header with title, description and action, content, footer, plus the console's inset tile and label/value facts. A link in the title makes the whole card clickable.",
+    packageName: '@ui-sdk/solid',
+    anatomy: [
+      'Card',
+      '├── CardHeader',
+      '│   ├── CardTitle',
+      '│   ├── CardDescription',
+      '│   └── CardAction',
+      '├── CardContent',
+      '│   └── CardInset',
+      '└── CardFooter',
+      '    └── CardFacts',
+      '        └── CardFact',
+    ].join('\n'),
+    Demo: CardDemo,
   },
   {
     slug: 'carousel',
@@ -223,6 +262,22 @@ export const componentCatalog: ComponentEntry[] = [
     Demo: DrawerDemo,
   },
   {
+    slug: 'empty',
+    name: 'Empty',
+    description:
+      'A centred empty state for a list or panel: icon, title, description and actions.',
+    packageName: '@ui-sdk/solid',
+    anatomy: [
+      'Empty',
+      '├── EmptyHeader',
+      '│   ├── EmptyMedia',
+      '│   ├── EmptyTitle',
+      '│   └── EmptyDescription',
+      '└── EmptyContent',
+    ].join('\n'),
+    Demo: EmptyDemo,
+  },
+  {
     slug: 'field',
     name: 'Field',
     description:
@@ -261,6 +316,35 @@ export const componentCatalog: ComponentEntry[] = [
       'Reports typing, clearing and a form reset with their reasons, and clears from a group part that returns focus to the field.',
     packageName: '@ui-sdk/solid/input',
     Demo: InputDemo,
+  },
+  {
+    slug: 'item',
+    name: 'Item',
+    description:
+      "A row with media, a title, a description and actions, like the console's settings and billing lists. ItemGroup can rove focus across link rows with the arrow keys.",
+    packageName: '@ui-sdk/solid',
+    anatomy: [
+      'ItemGroup',
+      '├── Item',
+      '│   ├── ItemHeader',
+      '│   ├── ItemMedia',
+      '│   ├── ItemContent',
+      '│   │   ├── ItemTitle',
+      '│   │   └── ItemDescription',
+      '│   ├── ItemActions',
+      '│   └── ItemFooter',
+      '└── ItemSeparator',
+    ].join('\n'),
+    Demo: ItemDemo,
+  },
+  {
+    slug: 'kbd',
+    name: 'Kbd',
+    description:
+      'A key cap for keyboard shortcuts, ported from opencode: neutral, ghost or outline, grouped into combinations, with ⌘ on Mac and Ctrl elsewhere from a single shortcut string.',
+    packageName: '@ui-sdk/solid/shortcuts',
+    anatomy: ['KbdGroup', '└── Kbd'].join('\n'),
+    Demo: KbdDemo,
   },
   {
     slug: 'label',
@@ -433,6 +517,14 @@ export const componentCatalog: ComponentEntry[] = [
     Demo: SidebarDemo,
   },
   {
+    slug: 'skeleton',
+    name: 'Skeleton',
+    description:
+      "opencode console's loading placeholder: a faint bar with a slow shimmer, faded in after 120ms. Decorative by default; reduced motion drops the sweep.",
+    packageName: '@ui-sdk/solid',
+    Demo: SkeletonDemo,
+  },
+  {
     slug: 'slider',
     name: 'Slider',
     description:
@@ -441,12 +533,41 @@ export const componentCatalog: ComponentEntry[] = [
     Demo: SliderDemo,
   },
   {
+    slug: 'spinner',
+    name: 'Spinner',
+    description:
+      "opencode's Loader ring, the one the console shows while loading: 16px, a third of the ring turning every 900ms, with role=status and a Loading label.",
+    packageName: '@ui-sdk/solid',
+    Demo: SpinnerDemo,
+  },
+  {
     slug: 'switch',
     name: 'Switch',
     description:
       'Turns a setting on and off in place, keeps a hidden native input in sync, and submits and resets with its form.',
     packageName: '@ui-sdk/solid/switch',
     Demo: SwitchDemo,
+  },
+  {
+    slug: 'table',
+    name: 'Table',
+    description:
+      "opencode console's data tables on native table elements with shadcn parts: the members table (header pill, row hover) or the framed data table. Numeric columns, footer totals, caption, selected rows and aria-sort headers.",
+    packageName: '@ui-sdk/solid',
+    anatomy: [
+      'Table',
+      '├── TableCaption',
+      '├── TableHeader',
+      '│   └── TableRow',
+      '│       └── TableHead',
+      '├── TableBody',
+      '│   └── TableRow',
+      '│       └── TableCell',
+      '└── TableFooter',
+      '    └── TableRow',
+      '        └── TableCell',
+    ].join('\n'),
+    Demo: TableDemo,
   },
   {
     slug: 'tabs',
@@ -536,6 +657,26 @@ export const componentCatalog: ComponentEntry[] = [
       'Opens caret-anchored suggestions when typing trigger characters like @, /, or # inside an input or textarea.',
     packageName: '@ui-sdk/solid/trigger-menu',
     Demo: TriggerMenuDemo,
+  },
+  {
+    slug: 'typography',
+    name: 'Typography',
+    description:
+      "opencode console's prose with shadcn's Typography parts: headings, paragraph, lead, large, small, muted, blockquote, list and inline code, plus a container that spaces them or rendered markdown, in default or compact size.",
+    packageName: '@ui-sdk/solid',
+    anatomy: [
+      'Typography',
+      '├── TypographyH1 … TypographyH4',
+      '├── TypographyLead',
+      '├── TypographyP',
+      '│   └── TypographyInlineCode',
+      '├── TypographyBlockquote',
+      '├── TypographyList',
+      '├── TypographyLarge',
+      '├── TypographySmall',
+      '└── TypographyMuted',
+    ].join('\n'),
+    Demo: TypographyDemo,
   },
   {
     slug: 'waterfall',

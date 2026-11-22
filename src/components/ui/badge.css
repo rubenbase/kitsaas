@@ -1,6 +1,8 @@
 /*
  * 1:1 port of opencode's Badge (`@opencode/ui/badge`,
- * packages/ui/src/data-display/badge/badge.css, MIT). The rules are upstream's,
+ * packages/ui/src/data-display/badge/badge.css, MIT). The console renders this
+ * exact chip (the "Default" tag on Billing's payment method measures 16px,
+ * 11px / 530, 0.5px border, 2px radius, 0 4px padding). The rules are upstream's,
  * with the selectors renamed to Kitsaas's slot:
  *
  *   [data-component="tag"]  →  [data-slot="badge"]

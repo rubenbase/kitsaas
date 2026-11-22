@@ -26,6 +26,7 @@ import {
   CommandShortcut,
   createCommandController,
 } from '#/components/ui/command'
+import { Kbd } from '#/components/ui/kbd'
 import {
   Dialog,
   DialogBackdrop,
@@ -209,14 +210,14 @@ export function CommandDemo() {
             </CommandList>
             <CommandFooter>
               <span class="inline-flex items-center gap-1.5">
-                <kbd>↑</kbd>
-                <kbd>↓</kbd>
+                <Kbd>↑</Kbd>
+                <Kbd>↓</Kbd>
                 <span>Navigate</span>
               </span>
               <span class="inline-flex items-center gap-1.5">
-                <kbd>↵</kbd>
+                <Kbd>↵</Kbd>
                 <span>Run</span>
-                <kbd>Esc</kbd>
+                <Kbd>Esc</Kbd>
                 <span>Clear</span>
               </span>
             </CommandFooter>
@@ -341,9 +342,7 @@ export function CommandDemo() {
                     icon={<SearchIcon />}
                   >
                     <span>Open command palette</span>
-                    <kbd class="ml-2 rounded border border-border-muted bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-faint">
-                      ⌘K
-                    </kbd>
+                    <Kbd shortcut="mod+k" aria-hidden="true" class="ml-2" />
                   </Button>
                 )}
               />
@@ -413,7 +412,7 @@ export function CommandDemo() {
                   <CommandFooter>
                     <span>Press Esc to dismiss</span>
                     <span class="inline-flex items-center gap-1.5">
-                      <kbd>↵</kbd>
+                      <Kbd>↵</Kbd>
                       <span>Select</span>
                     </span>
                   </CommandFooter>

@@ -1,0 +1,97 @@
+/*
+ * Skeleton, ported from opencode console's loading placeholder. The console is
+ * hosted and its source is not in the opencode checkout, so the rules were
+ * read from its live stylesheet and renamed to Kitsaas slots:
+ *
+ *   .console-skeleton           →  [data-slot="skeleton"]
+ *   .console-skeleton-fade      →  [data-slot="skeleton-fade"]
+ *   @keyframes console-skeleton-in / -shimmer  →  skeleton-in / skeleton-shimmer
+ *
+ * The console's two scheme variables are set on :root and
+ * :root[data-color-scheme="dark"]. Here they are set on any
+ * [data-color-scheme] element (and :root), so a nested region rethemes:
+ *
+ *   --console-skeleton        →  --skeleton-bg
+ *                                (light --v2-alpha-dark-6, dark --v2-alpha-light-6)
+ *   --console-skeleton-shine  →  --skeleton-shine
+ *                                (light --v2-alpha-light-50, dark --v2-alpha-light-4)
+ *
+ * The shimmer is a viewport-wide gradient on a `fixed` background, so every
+ * skeleton on the page shows the same sweep at the same moment. Reduced motion
+ * keeps the 0.36s fade-in and drops the sweep, as upstream does.
+ *
+ * Kitsaas addition, marked below: `:root[data-motion="reduce"]` gets the same
+ * reduced-motion rule as the OS preference, as in tooltip.css and spinner.css.
+ *
+ * Not ported: `.activity-chart-skeleton-*` (Activity's chart placeholder, a
+ * 28px button bar and an opacity pulse on an SVG curve); it is chart-specific.
+ */
+
+@layer components {
+  :root,
+  [data-color-scheme="light"] {
+    --skeleton-bg: var(--v2-alpha-dark-6);
+    --skeleton-shine: var(--v2-alpha-light-50);
+  }
+
+  [data-color-scheme="dark"] {
+    --skeleton-bg: var(--v2-alpha-light-6);
+    --skeleton-shine: var(--v2-alpha-light-4);
+  }
+
+  [data-slot="skeleton"] {
+    background: var(--skeleton-bg)
+      linear-gradient(100deg, transparent 30%, var(--skeleton-shine) 50%, transparent 70%)
+      no-repeat fixed;
+    background-position: -100vw 0;
+    background-size: 100vw 100%;
+    border-radius: 4px;
+    max-width: 100%;
+    height: 0.7em;
+    animation:
+      0.36s ease-out 0.12s both skeleton-in,
+      2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite skeleton-shimmer;
+    display: inline-block;
+  }
+
+  /* Fades a stack of skeleton rows out over its last 9rem. */
+  [data-slot="skeleton-fade"] {
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 9rem), #0000);
+    mask-image: linear-gradient(#000 calc(100% - 9rem), #0000);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="skeleton"] {
+      background-image: none;
+      animation: 0.36s ease-out 0.12s both skeleton-in;
+    }
+  }
+
+  /* Kitsaas addition: the app-level reduced-motion switch. */
+  :root[data-motion="reduce"] [data-slot="skeleton"] {
+    background-image: none;
+    animation: 0.36s ease-out 0.12s both skeleton-in;
+  }
+
+  @media (forced-colors: active) {
+    [data-slot="skeleton"] {
+      background: graytext;
+    }
+  }
+
+  @keyframes skeleton-in {
+    0% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: -100vw 0;
+    }
+
+    to {
+      background-position: 100vw 0;
+    }
+  }
+}

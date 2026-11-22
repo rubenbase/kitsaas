@@ -302,12 +302,15 @@ export function ComponentDetailPage(props: { entry: ComponentEntry }) {
   const meta = createMemo(() => {
     const loaded = sources()
     if (!loaded || loaded.slug !== props.entry.slug) return null
-    return extractComponentMeta(
+    const extracted = extractComponentMeta(
       loaded.uiTsx,
       loaded.uiCss,
       props.entry.slug,
       loaded.demoTsx,
     )
+    return props.entry.anatomy
+      ? { ...extracted, anatomy: props.entry.anatomy }
+      : extracted
   })
 
   const langForFile = (fileName: string): CodeLanguage => {

@@ -15,6 +15,10 @@ import {
 } from './sidebar-primitive'
 
 import './sidebar.css'
+// Loading rows are Skeletons: inside `sidebar-menu-skeleton`, render
+// `<span data-slot="skeleton" aria-hidden="true" data-sidebar-skeleton="icon">`
+// (optional) and `… data-sidebar-skeleton="text">`. sidebar.css only sizes them.
+import './skeleton'
 
 /**
  * Registers custom elements for Kitsaas's `@ui-sdk/core` Sidebar primitive:

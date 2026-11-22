@@ -19,6 +19,7 @@ import {
 
 import { Drawer, DrawerBackdrop, DrawerContent, DrawerTitle } from './drawer'
 import { Separator, type SeparatorProps } from './separator'
+import { Skeleton } from './skeleton'
 import {
   createSidebarController,
   matchesShortcut,
@@ -574,9 +575,9 @@ export function SidebarMenuSkeleton(props: SidebarMenuSkeletonProps) {
       }}
     >
       <Show when={props.showIcon}>
-        <span data-slot="sidebar-menu-skeleton-icon" aria-hidden="true" />
+        <Skeleton data-sidebar-skeleton="icon" />
       </Show>
-      <span data-slot="sidebar-menu-skeleton-text" aria-hidden="true" />
+      <Skeleton data-sidebar-skeleton="text" />
     </div>
   )
 }

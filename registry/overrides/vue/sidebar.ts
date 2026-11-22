@@ -2,6 +2,7 @@ import { createParts } from '@ui-sdk/vue/primitive'
 import { defineComponent, h, inject, onMounted, onUnmounted, provide, ref, type InjectionKey } from 'vue'
 
 import { Separator } from './separator'
+import { Skeleton } from './skeleton'
 import {
   createSidebarController,
   matchesShortcut,
@@ -224,8 +225,8 @@ export const SidebarMenuSkeleton = defineComponent({
     const w = ref(props.width)
     return () =>
       h('div', { 'data-slot': 'sidebar-menu-skeleton', style: { '--skeleton-width': w.value }, ...attrs }, [
-        props.showIcon ? h('span', { 'data-slot': 'sidebar-menu-skeleton-icon', 'aria-hidden': 'true' }) : null,
-        h('span', { 'data-slot': 'sidebar-menu-skeleton-text', 'aria-hidden': 'true' }),
+        props.showIcon ? h(Skeleton, { 'data-sidebar-skeleton': 'icon' }) : null,
+        h(Skeleton, { 'data-sidebar-skeleton': 'text' }),
       ])
   },
 })

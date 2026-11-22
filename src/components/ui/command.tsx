@@ -18,6 +18,8 @@ import {
 } from '@ui-sdk/solid/command'
 import { omit, Show } from 'solid-js'
 
+import { Kbd } from './kbd'
+
 import './command.css'
 
 type UiCommandProps = ComponentProps<typeof UiCommand>
@@ -145,11 +147,19 @@ export type CommandShortcutProps = Omit<
   render?: UiCommandShortcutProps['render']
 }
 
+/**
+ * The item's shortcut, formatted for the platform by ui-sdk, drawn as a Kbd
+ * cap. Pass `render` to draw something else.
+ */
 export function CommandShortcut(props: CommandShortcutProps) {
   const rest = omit(props, 'class', 'render')
 
   return (
-    <UiCommandShortcut {...rest} class={props.class} render={props.render} />
+    <UiCommandShortcut
+      {...rest}
+      class={props.class}
+      render={props.render ?? ((attrs) => <Kbd {...(attrs as object)} />)}
+    />
   )
 }
 

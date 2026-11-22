@@ -259,28 +259,13 @@
   /* Shortcut badge                                                   */
   /* ---------------------------------------------------------------- */
 
-  [data-slot="command-shortcut"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
+  /* CommandShortcut draws a Kbd cap (kbd.css); here it only sits at the end
+     of the row and hides while it has no keys. */
+  [data-slot="command-item"] > [data-slot="kbd"] {
     margin-inline-start: auto;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 4px;
-    background: var(--v2-background-bg-layer-02);
-    border: 1px solid var(--v2-border-border-muted);
-    font-family: var(--font-family-mono);
-    font-size: 11px;
-    font-weight: 530;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    color: var(--v2-text-text-faint);
-    white-space: nowrap;
-    user-select: none;
   }
 
-  [data-slot="command-shortcut"]:empty {
+  [data-slot="command-item"] > [data-slot="kbd"]:empty {
     display: none;
   }
 
@@ -327,22 +312,6 @@
     line-height: 14px;
     color: var(--v2-text-text-faint);
     user-select: none;
-  }
-
-  [data-slot="command-footer"] kbd {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
-    border-radius: 3px;
-    background: var(--v2-background-bg-layer-02);
-    border: 1px solid var(--v2-border-border-muted);
-    font-family: var(--font-family-mono);
-    font-size: 10px;
-    font-weight: 530;
-    color: var(--v2-text-text-muted);
   }
 
   @media (prefers-reduced-motion: reduce) {

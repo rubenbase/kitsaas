@@ -735,32 +735,18 @@
     border-radius: 6px;
   }
 
-  [data-slot="sidebar-menu-skeleton-icon"] {
+  /* The bars are Skeletons (skeleton.css: the console's fill, shimmer, fade-in
+     and reduced motion); the sidebar only sizes them. */
+  [data-slot="sidebar-menu-skeleton"] > [data-sidebar-skeleton="icon"] {
     width: 16px;
     height: 16px;
-    border-radius: 4px;
     flex-shrink: 0;
-    background: var(--v2-background-bg-layer-02);
-    animation: kitsaas-sidebar-pulse 1.5s ease-in-out infinite;
   }
 
-  [data-slot="sidebar-menu-skeleton-text"] {
+  [data-slot="sidebar-menu-skeleton"] > [data-sidebar-skeleton="text"] {
     height: 12px;
     flex: 1;
     max-width: var(--skeleton-width, 72%);
-    border-radius: 4px;
-    background: var(--v2-background-bg-layer-02);
-    animation: kitsaas-sidebar-pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes kitsaas-sidebar-pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.45;
-    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -877,11 +863,6 @@
     [data-slot="sidebar-menu-action"],
     [data-slot="sidebar-menu-sub-button"] {
       transition: none;
-    }
-
-    [data-slot="sidebar-menu-skeleton-icon"],
-    [data-slot="sidebar-menu-skeleton-text"] {
-      animation: none;
     }
   }
 }

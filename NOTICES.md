@@ -57,6 +57,7 @@ mappings are called out in each file's header.
 | `ui/field.css` | `forms/field/field.css` |
 | `ui/hover-card.css` | `components/hover-card.css` |
 | `ui/input.css` | `forms/text-input/text-input.css` |
+| `ui/kbd.css` | `data-display/keybind/keybind.css` |
 | `ui/menu.css` | `navigation/menu/menu.css` |
 | `ui/popover.css` | `components/popover.css` |
 | `ui/progress.css` | `components/progress.css` |
@@ -64,6 +65,7 @@ mappings are called out in each file's header.
 | `ui/segmented-control.css` | `navigation/segmented-control/segmented-control.css` |
 | `ui/select.css` | `forms/select/select.css` |
 | `ui/separator.css` | `layout/divider/divider.css` |
+| `ui/spinner.css` | `feedback/loader/loader.css` |
 | `ui/switch.css` | `forms/switch/switch.css` |
 | `ui/tabs.css` | `navigation/tabs/tabs-current.css` |
 | `ui/textarea.css` | `forms/textarea/textarea.css` |
@@ -71,3 +73,10 @@ mappings are called out in each file's header.
 | `ui/tooltip.css` | `overlays/tooltip/tooltip.css` |
 
 All upstream paths are relative to `packages/ui/src` in the opencode repo.
+
+Some values also come from session-ui (`packages/session-ui`, same MIT
+license): the framed variant of `ui/table.css` and the inline code, blockquote
+and list marker in `ui/typography.css` (from `src/components/markdown.css`), and
+the empty-state colours in `ui/empty.css` (from
+`src/v2/components/session-review-v2.css`). Kitsaas also follows opencode's
+hosted console; rules read from its stylesheet are named in each file's header.
