@@ -15,7 +15,9 @@ import {
   ComponentsIndex,
   ComponentsLayout,
 } from '#/routes/components'
+import { BlocksPage } from '#/routes/blocks'
 import { NotFoundPage } from '#/routes/not-found'
+import { PagesPage } from '#/routes/pages'
 import { UsagePage } from '#/routes/usage'
 
 const routes = defineRoutes([
@@ -42,6 +44,8 @@ const routes = defineRoutes([
       { path: '*404', component: ComponentNotFound },
     ],
   },
+  { path: '/pages', component: PagesPage },
+  { path: '/blocks', component: BlocksPage },
   { path: '*404', component: NotFoundPage },
 ])
 

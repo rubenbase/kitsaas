@@ -94,6 +94,12 @@ function Header() {
           aria-label="Main"
           class="hidden min-w-0 items-center gap-1 md:flex"
         >
+          <Button href="/pages" variant="nav">
+            <span class="truncate">Pages</span>
+          </Button>
+          <Button href="/blocks" variant="nav">
+            <span class="truncate">Blocks</span>
+          </Button>
           <Button href="/components" variant="nav">
             <span class="truncate">Components</span>
           </Button>
