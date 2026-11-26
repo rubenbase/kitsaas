@@ -6,7 +6,6 @@ import {
   dot,
   link,
   rect,
-  ruleX,
   ruleY,
   text,
   type ChartCurve,
@@ -21,6 +20,7 @@ import { For, Show, createMemo, createSignal } from 'solid-js'
 
 import { Chart, ChartLegend, opencodeTooltip } from '#/components/ui/chart'
 
+import { FunnelFlowChart, FunnelFlowVariantChart, funnelFlowSnippet } from './chart-funnel'
 import { CardShell, type ChartShowcaseItem } from './chart-visuals'
 
 /**
@@ -194,8 +194,6 @@ function ScatterInteractiveChart() {
           </For>
         </div>
       }
-      footerTitle="Cost rises about $1 per 100 ms of latency"
-      footerSub="Latency to first token (x) against blended cost per million tokens (y)"
     >
       <Chart
         definition={definition()}
@@ -209,7 +207,6 @@ function ScatterInteractiveChart() {
 function ScatterVariantChart(props: {
   title: string
   mode: 'default' | 'multiple' | 'bubble' | 'regression'
-  footerTitle: string
 }) {
   const definition = createMemo<DomChartDefinition<any, any, any>>(() => {
     if (props.mode === 'multiple') {
@@ -302,7 +299,7 @@ function ScatterVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart definition={definition()} height={176} ariaLabel={props.title} />
         <Show when={props.mode === 'multiple'}>
@@ -436,8 +433,6 @@ function HeatmapInteractiveChart() {
           </For>
         </div>
       }
-      footerTitle="Weekday usage up 2.1× since June"
-      footerSub="One cell per day, Jun 1 – Nov 29"
     >
       <div>
         <Chart definition={definition()} height={176} ariaLabel="Daily usage calendar heatmap" />
@@ -492,7 +487,6 @@ const uptimeDays = (() => {
 function HeatmapVariantChart(props: {
   title: string
   mode: 'matrix' | 'labeled' | 'status'
-  footerTitle: string
 }) {
   const definition = createMemo<DomChartDefinition<any, any, any>>(() => {
     if (props.mode === 'labeled') {
@@ -591,7 +585,7 @@ function HeatmapVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart
           definition={definition()}
@@ -659,122 +653,43 @@ const funnelTooltip = opencodeTooltip({
   },
 })
 
-function FunnelVariantChart(props: {
-  title: string
-  mode: 'centered' | 'bars' | 'compare'
-  footerTitle: string
-}) {
-  const definition = createMemo<DomChartDefinition<any, any, any>>(() => {
-    const yScale = {
-      scale: () => scaleBand<string>().domain(funnelOrder).padding(0.12),
-      axis: false as const,
-    }
-
-    if (props.mode === 'bars') {
-      return defineChart({
-        marks: [
-          barX(funnelStages, {
-            x: 'value',
-            y: 'stage',
-            fill: 'var(--chart-2)',
-            radius: { end: 4 },
-            states: focusDim,
-          }),
-          text(funnelStages, {
-            x: 'value',
-            y: 'stage',
-            text: (d) => pct(d.value),
-            anchor: 'start',
-            dx: 6,
-            fill: 'var(--v2-text-text-weak, var(--v2-text-text-base))',
-            fontSize: 11,
-          }),
-        ],
-        scales: {
-          x: { scale: scaleLinear().domain([0, funnelTop * 1.18]), axis: false },
-          y: { scale: yScale.scale },
-        },
-        layout: { margin: { top: 4, right: 4, bottom: 4, left: 62 } },
-        tooltip: funnelTooltip,
-      })
-    }
-
-    if (props.mode === 'compare') {
-      return defineChart({
-        marks: [
-          barX(funnelStages, {
-            x1: (d) => -d.previous / 2,
-            x2: (d) => d.previous / 2,
-            y: 'stage',
-            fill: 'var(--v2-border-border-strong)',
-            fillOpacity: 0.45,
-            radius: 3,
-          }),
-          barX(funnelStages, {
-            x1: (d) => -d.value / 2,
-            x2: (d) => d.value / 2,
-            y: 'stage',
-            fill: 'var(--chart-3)',
-            fillOpacity: 0.9,
-            radius: 3,
-            inset: 4,
-            states: focusDim,
-          }),
-        ],
-        scales: {
-          x: { scale: scaleLinear().domain([-funnelTop / 2, funnelTop / 2]), axis: false },
-          y: yScale,
-        },
-        layout: { margin: 4 },
-        tooltip: funnelTooltip,
-      })
-    }
-
-    return defineChart({
+/**
+ * Stages on a shared baseline. The flow funnel (chart-funnel.tsx) shows the
+ * shape; this one is for reading exact differences between stages.
+ */
+function FunnelBarsChart(props: { title: string }) {
+  const definition = createMemo<DomChartDefinition<any, any, any>>(() =>
+    defineChart({
       marks: [
-        ruleX([0], { stroke: 'var(--v2-border-border-muted)', strokeWidth: 1 }),
         barX(funnelStages, {
-          x1: (d) => -d.value / 2,
-          x2: (d) => d.value / 2,
+          x: 'value',
           y: 'stage',
-          fill: 'var(--chart-1)',
-          radius: 3,
+          fill: 'var(--chart-2)',
+          radius: { end: 4 },
           states: focusDim,
         }),
         text(funnelStages, {
-          x: () => 0,
+          x: 'value',
           y: 'stage',
-          text: (d) => `${d.stage} · ${pct(d.value)}`,
-          fill: (d) =>
-            d.value / funnelTop > 0.3 ? 'var(--v2-background-bg-base)' : 'var(--v2-text-text-base)',
+          text: (d) => pct(d.value),
+          anchor: 'start',
+          dx: 6,
+          fill: 'var(--v2-text-text-weak, var(--v2-text-text-base))',
           fontSize: 11,
-          fontWeight: 540,
         }),
       ],
       scales: {
-        x: { scale: scaleLinear().domain([-funnelTop / 2, funnelTop / 2]), axis: false },
-        y: yScale,
+        x: { scale: scaleLinear().domain([0, funnelTop * 1.18]), axis: false },
+        y: { scale: () => scaleBand<string>().domain(funnelOrder).padding(0.12) },
       },
-      layout: { margin: 4 },
+      layout: { margin: { top: 4, right: 4, bottom: 4, left: 62 } },
       tooltip: funnelTooltip,
-    })
-  })
+    }),
+  )
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
-      <div>
-        <Chart definition={definition()} height={184} ariaLabel={props.title} />
-        <Show when={props.mode === 'compare'}>
-          <div class="mt-2 flex justify-end">
-            <ChartLegend
-              items={[
-                { label: 'November', color: 'var(--chart-3)' },
-                { label: 'October', color: 'var(--v2-border-border-strong)' },
-              ]}
-            />
-          </div>
-        </Show>
-      </div>
+    <CardShell>
+      <Chart definition={definition()} height={184} ariaLabel={props.title} />
     </CardShell>
   )
 }
@@ -973,8 +888,6 @@ function SankeyInteractiveChart() {
           </For>
         </div>
       }
-      footerTitle="22% of traffic served from cache"
-      footerSub="Requests by client, through the cache and router, to each model"
     >
       <Chart definition={definition()} height={260} ariaLabel="Request routing Sankey diagram" />
     </CardShell>
@@ -984,7 +897,6 @@ function SankeyInteractiveChart() {
 function SankeyVariantChart(props: {
   title: string
   mode: 'budget' | 'compact'
-  footerTitle: string
 }) {
   const definition = createMemo(() =>
     props.mode === 'budget'
@@ -1002,7 +914,7 @@ function SankeyVariantChart(props: {
         }),
   )
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <Chart definition={definition()} height={184} ariaLabel={props.title} />
     </CardShell>
   )
@@ -1120,7 +1032,6 @@ function GaugeReadout(props: {
 function GaugeVariantChart(props: {
   title: string
   mode: 'default' | 'semi' | 'bands' | 'trio'
-  footerTitle: string
 }) {
   if (props.mode === 'trio') {
     const gauges = [
@@ -1129,7 +1040,7 @@ function GaugeVariantChart(props: {
       { label: 'GPU', value: 47, color: 'var(--chart-3)' },
     ]
     return (
-      <CardShell footerTitle={props.footerTitle}>
+      <CardShell>
         <div class="grid grid-cols-3 gap-2">
           <For each={gauges}>
             {(g) => (
@@ -1209,7 +1120,7 @@ function GaugeVariantChart(props: {
   const c = config[props.mode]
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div class="relative mx-auto w-full max-w-[220px]">
         {c.node()}
         <GaugeReadout
@@ -1278,26 +1189,17 @@ import { scaleBand } from '@tanstack/charts/scales/band'
 import { scaleLinear } from '@tanstack/charts/scales/linear'
 import { Chart } from '#/components/ui/chart'
 
-const top = stages[0].value
-
 const definition = defineChart({
   marks: [
-    // Center each stage on zero so the bars narrow like a funnel.
-    barX(stages, {
-      x1: (d) => -d.value / 2,
-      x2: (d) => d.value / 2,
-      y: 'stage',
-      fill: 'var(--chart-1)',
-      radius: 3,
-    }),
+    barX(stages, { x: 'value', y: 'stage', fill: 'var(--chart-2)', radius: { end: 4 } }),
   ],
   scales: {
-    x: { scale: scaleLinear().domain([-top / 2, top / 2]), axis: false },
-    y: { scale: () => scaleBand().padding(0.12), axis: false },
+    x: { scale: scaleLinear, nice: true, axis: false },
+    y: { scale: () => scaleBand().padding(0.12) },
   },
 })
 
-export function FunnelExample() {
+export function FunnelBarsExample() {
   return <Chart definition={definition} height={184} ariaLabel="Conversion funnel" />
 }`
 
@@ -1407,7 +1309,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <ScatterVariantChart
           title="Scatter Chart"
           mode="default"
-          footerTitle="Average cost $6.12 per million"
         />
       ),
       code: scatterSnippet,
@@ -1420,7 +1321,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <ScatterVariantChart
           title="Scatter Chart — Multiple"
           mode="multiple"
-          footerTitle="3 providers, 42 models"
         />
       ),
       code: scatterSnippet,
@@ -1433,7 +1333,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <ScatterVariantChart
           title="Scatter Chart — Bubble"
           mode="bubble"
-          footerTitle="Busiest models cluster under 500 ms"
         />
       ),
       code: scatterSnippet,
@@ -1446,7 +1345,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <ScatterVariantChart
           title="Scatter Chart — Regression"
           mode="regression"
-          footerTitle="Strong positive correlation"
         />
       ),
       code: scatterSnippet,
@@ -1470,7 +1368,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <HeatmapVariantChart
           title="Heatmap — Matrix"
           mode="matrix"
-          footerTitle="Peak 12:00–16:00 on weekdays"
         />
       ),
       code: heatmapSnippet,
@@ -1483,7 +1380,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <HeatmapVariantChart
           title="Heatmap — Labeled"
           mode="labeled"
-          footerTitle="Opus leads on every task"
         />
       ),
       code: heatmapSnippet,
@@ -1496,7 +1392,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <HeatmapVariantChart
           title="Heatmap — Status"
           mode="status"
-          footerTitle="99.2% uptime over 45 days"
         />
       ),
       code: heatmapSnippet,
@@ -1505,42 +1400,39 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
 
   funnel: [
     {
-      id: 'chart-funnel-centered',
-      title: 'Funnel Chart — Default',
-      description: 'Centered stages with share-of-visitors labels.',
-      render: () => (
-        <FunnelVariantChart
-          title="Funnel Chart"
-          mode="centered"
-          footerTitle="5.0% of visitors convert to paid"
-        />
-      ),
-      code: funnelSnippet,
+      id: 'chart-funnel-flow',
+      title: 'Funnel Chart — Flow',
+      description: 'One layer per channel, with stage totals and step conversion on the markers.',
+      fullWidth: true,
+      render: () => <FunnelFlowChart />,
+      code: funnelFlowSnippet,
     },
     {
-      id: 'chart-funnel-bars',
-      title: 'Funnel Chart — Bars',
-      description: 'Left-aligned stages on a shared baseline for precise reading.',
-      render: () => (
-        <FunnelVariantChart
-          title="Funnel Chart — Bars"
-          mode="bars"
-          footerTitle="Biggest drop after visit (−61%)"
-        />
-      ),
-      code: funnelSnippet,
+      id: 'chart-funnel-compact',
+      title: 'Funnel Chart — Compact',
+      description: 'Stage totals on the markers, sized for a card.',
+      render: () => <FunnelFlowVariantChart mode="compact" title="Funnel Chart — Compact" />,
+      code: funnelFlowSnippet,
+    },
+    {
+      id: 'chart-funnel-stages',
+      title: 'Funnel Chart — Stages',
+      description: 'Step-to-step conversion on each marker, stage names below.',
+      render: () => <FunnelFlowVariantChart mode="stages" title="Funnel Chart — Stages" />,
+      code: funnelFlowSnippet,
     },
     {
       id: 'chart-funnel-compare',
       title: 'Funnel Chart — Compare',
-      description: 'This month over last month at every stage.',
-      render: () => (
-        <FunnelVariantChart
-          title="Funnel Chart — Compare"
-          mode="compare"
-          footerTitle="Paid conversions up 32% month over month"
-        />
-      ),
+      description: 'This month filled, last month as a dashed outline.',
+      render: () => <FunnelFlowVariantChart mode="compare" title="Funnel Chart — Compare" />,
+      code: funnelFlowSnippet,
+    },
+    {
+      id: 'chart-funnel-bars',
+      title: 'Funnel Chart — Bars',
+      description: 'Stages on a shared baseline for precise reading.',
+      render: () => <FunnelBarsChart title="Funnel Chart — Bars" />,
       code: funnelSnippet,
     },
   ],
@@ -1559,7 +1451,7 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
       title: 'Sankey — Budget',
       description: 'Revenue split into costs and net margin.',
       render: () => (
-        <SankeyVariantChart title="Sankey — Budget" mode="budget" footerTitle="20% net margin" />
+        <SankeyVariantChart title="Sankey — Budget" mode="budget" />
       ),
       code: sankeySnippet,
     },
@@ -1571,7 +1463,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <SankeyVariantChart
           title="Sankey — Compact"
           mode="compact"
-          footerTitle="3 clients, 3 models"
         />
       ),
       code: sankeySnippet,
@@ -1584,7 +1475,7 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
       title: 'Gauge — Default',
       description: '270° gauge with a centered reading.',
       render: () => (
-        <GaugeVariantChart title="Gauge" mode="default" footerTitle="72% of monthly quota" />
+        <GaugeVariantChart title="Gauge" mode="default" />
       ),
       code: gaugeSnippet,
     },
@@ -1596,7 +1487,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <GaugeVariantChart
           title="Gauge — Semicircle"
           mode="semi"
-          footerTitle="Cache hit rate up 4 points"
         />
       ),
       code: gaugeSnippet,
@@ -1609,7 +1499,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <GaugeVariantChart
           title="Gauge — Thresholds"
           mode="bands"
-          footerTitle="In the warning band"
         />
       ),
       code: gaugeSnippet,
@@ -1622,7 +1511,6 @@ export const extraChartCatalog: Record<ExtraChartKind, ChartShowcaseItem[]> = {
         <GaugeVariantChart
           title="Gauge — Group"
           mode="trio"
-          footerTitle="All resources under 85%"
         />
       ),
       code: gaugeSnippet,

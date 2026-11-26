@@ -80,7 +80,7 @@ export const categoryMeta: Record<ChartKind, ChartCategoryMeta> = {
   },
   funnel: {
     title: 'Funnel Charts',
-    description: 'Centered, baseline, and period-over-period conversion funnels.',
+    description: 'Layered flow funnels with stage markers, plus a baseline bar funnel.',
     icon: () => <FunnelChartIcon />,
   },
   sankey: {

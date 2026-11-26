@@ -28,7 +28,6 @@ import { scaleLinear } from '@tanstack/charts/scales/linear'
 import { scalePoint } from '@tanstack/charts/scales/point'
 import { For, Show, createMemo, createSignal } from 'solid-js'
 
-import { TrendingUpIcon } from '#/components/icons'
 import {
   Chart,
   ChartAxisStrip,
@@ -74,12 +73,7 @@ export type ChartShowcaseItem = {
 /* Shared Card Shell & Datasets                                               */
 /* -------------------------------------------------------------------------- */
 
-export function CardShell(props: {
-  right?: JSX.Element
-  footerTitle?: string
-  footerSub?: string
-  children: JSX.Element
-}) {
+export function CardShell(props: { right?: JSX.Element; children: JSX.Element }) {
   return (
     <div class="flex h-full flex-col justify-between">
       <Show when={props.right}>
@@ -88,21 +82,7 @@ export function CardShell(props: {
         </div>
       </Show>
 
-      <div class="flex flex-1 flex-col justify-center px-5 py-4">
-        {props.children}
-      </div>
-
-      <Show when={props.footerTitle}>
-        <div class="border-t border-border-muted px-5 py-3 text-[12px]">
-          <div class="flex items-center gap-1.5 text-foreground [font-weight:500]">
-            <span>{props.footerTitle}</span>
-            <TrendingUpIcon class="size-3.5 text-success" />
-          </div>
-          <Show when={props.footerSub}>
-            <p class="mt-0.5 text-[11.5px] text-faint">{props.footerSub}</p>
-          </Show>
-        </div>
-      </Show>
+      <div class="flex flex-1 flex-col justify-center px-5 py-4">{props.children}</div>
     </div>
   )
 }
@@ -249,8 +229,6 @@ function AreaInteractiveChart() {
           <SegmentedControlItem value="7d">7d</SegmentedControlItem>
         </SegmentedControl>
       }
-      footerTitle="Trending up by 12.4% this period"
-      footerSub="Hover or focus points to inspect daily buckets"
     >
       <div>
         <Chart
@@ -365,7 +343,7 @@ function AreaForecastChart() {
   })
 
   return (
-    <CardShell footerTitle="On track for $6.85 this month">
+    <CardShell>
       <div>
         <Chart
           definition={definition}
@@ -389,7 +367,6 @@ function AreaForecastChart() {
 function AreaVariantChart(props: {
   title: string
   mode: 'default' | 'linear' | 'stacked' | 'gradient' | 'axes'
-  footerTitle: string
 }) {
   const definition = createMemo<DomChartDefinition<any, any, any>>(() => {
     if (props.mode === 'stacked') {
@@ -510,7 +487,7 @@ function AreaVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart definition={definition()} height={164} ariaLabel={props.title} />
         <Show when={props.mode === 'stacked'}>
@@ -618,8 +595,6 @@ function BarInteractiveChart() {
           </button>
         </div>
       }
-      footerTitle="Peak throughput reached on Nov 19"
-      footerSub="Hover any bar to inspect daily volume"
     >
       <div>
         <Chart
@@ -634,7 +609,6 @@ function BarInteractiveChart() {
 }
 
 function BarSparkbarChart() {
-  const [hovered, setHovered] = createSignal<string | null>(null)
   const sparkData = dailyTraffic.map((d, i) => ({
     label: d.date,
     value: d.desktop,
@@ -646,17 +620,11 @@ function BarSparkbarChart() {
   }))
 
   return (
-    <CardShell
-      footerTitle="2,623 requests · 329.4M tokens"
-      footerSub={hovered() ?? 'Hover a slot to inspect daily activity'}
-    >
+    <CardShell>
       <div class="flex flex-col gap-3 py-2">
         <ChartSparkbar
           data={sparkData}
           ariaLabel="Last 30 days request sparkbar"
-          onHover={(datum) =>
-            setHovered(datum ? `${datum.label}: ${datum.formatted}` : null)
-          }
         />
         <ChartAxisStrip labels={['Oct 21', 'Nov 4', 'Nov 19']} />
       </div>
@@ -667,7 +635,6 @@ function BarSparkbarChart() {
 function BarVariantChart(props: {
   title: string
   mode: 'default' | 'horizontal' | 'multiple' | 'stacked' | 'negative'
-  footerTitle: string
 }) {
   const definition = createMemo<DomChartDefinition<any, any, any>>(() => {
     if (props.mode === 'horizontal') {
@@ -793,7 +760,7 @@ function BarVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart definition={definition()} height={164} ariaLabel={props.title} />
         <Show when={props.mode === 'multiple' || props.mode === 'stacked'}>
@@ -897,8 +864,6 @@ function LineInteractiveChart() {
           <SegmentedControlItem value="mobile">Mobile</SegmentedControlItem>
         </SegmentedControl>
       }
-      footerTitle="Steady upward trajectory (+18.2%)"
-      footerSub="Hover to inspect synchronized crosshair & tooltips"
     >
       <div>
         <Chart
@@ -923,7 +888,6 @@ function LineInteractiveChart() {
 function LineVariantChart(props: {
   title: string
   mode: 'default' | 'dashed' | 'multiple' | 'dots' | 'label'
-  footerTitle: string
 }) {
   const definition = createMemo(() => {
     const marks = [
@@ -992,7 +956,7 @@ function LineVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart definition={definition()} height={164} ariaLabel={props.title} />
         <Show when={props.mode === 'multiple'}>
@@ -1094,7 +1058,6 @@ function PieInteractiveChart() {
           </SelectContent>
         </Select>
       }
-      footerTitle={`${selected().name} leads with ${selected().share}% share`}
     >
       <div class="relative mx-auto w-full max-w-[260px]">
         <Chart
@@ -1119,7 +1082,6 @@ function PieInteractiveChart() {
 function PieVariantChart(props: {
   title: string
   mode: 'simple' | 'donut' | 'donut-text' | 'legend' | 'stacked' | 'active'
-  footerTitle: string
 }) {
   const slices = pie(pieModels, { value: 'requests', gapAngle: 0.025 })
   const innerSlices = pie(pieModels, { value: 'share', gapAngle: 0.025 })
@@ -1181,7 +1143,7 @@ function PieVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <div class="relative mx-auto w-full max-w-[200px]">
           <Chart
@@ -1217,7 +1179,6 @@ function PieVariantChart(props: {
 function RadarVariantChart(props: {
   title: string
   mode: 'default' | 'dots' | 'multiple' | 'grid-circle' | 'lines-only' | 'legend'
-  footerTitle: string
 }) {
   const definition = createMemo(() => {
     const showMultiple = props.mode === 'multiple' || props.mode === 'legend'
@@ -1310,7 +1271,7 @@ function RadarVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div>
         <Chart definition={definition()} height={196} ariaLabel={props.title} />
         <Show when={props.mode === 'legend' || props.mode === 'multiple'}>
@@ -1335,7 +1296,6 @@ function RadarVariantChart(props: {
 function RadialVariantChart(props: {
   title: string
   mode: 'simple' | 'text' | 'stacked' | 'concentric' | 'label' | 'grid'
-  footerTitle: string
 }) {
   const definition = createMemo(() => {
     const isHalf = props.mode === 'stacked'
@@ -1398,7 +1358,7 @@ function RadialVariantChart(props: {
   })
 
   return (
-    <CardShell footerTitle={props.footerTitle}>
+    <CardShell>
       <div class="relative mx-auto w-full max-w-[210px]">
         <Chart definition={definition()} height={180} ariaLabel={props.title} />
         <Show when={props.mode === 'text' || props.mode === 'stacked'}>
@@ -1651,7 +1611,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <AreaVariantChart
           title="Area Chart"
           mode="default"
-          footerTitle="Trending up by 5.2% this month"
         />
       ),
       code: areaSnippet,
@@ -1664,7 +1623,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <AreaVariantChart
           title="Area Chart — Stacked"
           mode="stacked"
-          footerTitle="Combined volume up 9.1%"
         />
       ),
       code: areaSnippet,
@@ -1677,7 +1635,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <AreaVariantChart
           title="Area Chart — Accent"
           mode="gradient"
-          footerTitle="Peak 344k tokens in June"
         />
       ),
       code: areaSnippet,
@@ -1690,7 +1647,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <AreaVariantChart
           title="Area Chart — Axes"
           mode="axes"
-          footerTitle="Consistent weekly growth"
         />
       ),
       code: areaSnippet,
@@ -1721,7 +1677,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <BarVariantChart
           title="Bar Chart"
           mode="default"
-          footerTitle="Trending up by 5.2% this month"
         />
       ),
       code: barSnippet,
@@ -1734,7 +1689,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <BarVariantChart
           title="Bar Chart — Horizontal"
           mode="horizontal"
-          footerTitle="June reached highest volume"
         />
       ),
       code: barSnippet,
@@ -1747,7 +1701,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <BarVariantChart
           title="Bar Chart — Multiple"
           mode="multiple"
-          footerTitle="Desktop leads by 42%"
         />
       ),
       code: barSnippet,
@@ -1760,7 +1713,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <BarVariantChart
           title="Bar Chart — Stacked"
           mode="stacked"
-          footerTitle="558 total requests in June"
         />
       ),
       code: barSnippet,
@@ -1773,7 +1725,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <BarVariantChart
           title="Bar Chart — Negative"
           mode="negative"
-          footerTitle="Recovered +54% in June"
         />
       ),
       code: barSnippet,
@@ -1797,7 +1748,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <LineVariantChart
           title="Line Chart"
           mode="default"
-          footerTitle="Trending up by 5.2% this month"
         />
       ),
       code: lineSnippet,
@@ -1810,7 +1760,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <LineVariantChart
           title="Line Chart — Dashed"
           mode="dashed"
-          footerTitle="Forecasted steady rise"
         />
       ),
       code: lineSnippet,
@@ -1823,7 +1772,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <LineVariantChart
           title="Line Chart — Multiple"
           mode="multiple"
-          footerTitle="Both channels growing"
         />
       ),
       code: lineSnippet,
@@ -1836,7 +1784,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <LineVariantChart
           title="Line Chart — Dots"
           mode="dots"
-          footerTitle="6 reporting periods"
         />
       ),
       code: lineSnippet,
@@ -1849,7 +1796,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <LineVariantChart
           title="Line Chart — Label"
           mode="label"
-          footerTitle="Peak 344 in June"
         />
       ),
       code: lineSnippet,
@@ -1873,7 +1819,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <PieVariantChart
           title="Pie Chart"
           mode="simple"
-          footerTitle="4 active models"
         />
       ),
       code: pieSnippet,
@@ -1886,7 +1831,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <PieVariantChart
           title="Pie Chart — Donut"
           mode="donut"
-          footerTitle="DeepSeek leads at 48%"
         />
       ),
       code: pieSnippet,
@@ -1899,7 +1843,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <PieVariantChart
           title="Pie Chart — Donut Text"
           mode="donut-text"
-          footerTitle="31,684 total requests"
         />
       ),
       code: pieSnippet,
@@ -1912,7 +1855,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <PieVariantChart
           title="Pie Chart — Legend"
           mode="legend"
-          footerTitle="Top 4 providers shown"
         />
       ),
       code: pieSnippet,
@@ -1925,7 +1867,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <PieVariantChart
           title="Pie Chart — Stacked"
           mode="stacked"
-          footerTitle="Outer ring shows current share"
         />
       ),
       code: pieSnippet,
@@ -1941,7 +1882,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart"
           mode="default"
-          footerTitle="95% uptime score"
         />
       ),
       code: radarSnippet,
@@ -1954,7 +1894,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart — Dots"
           mode="dots"
-          footerTitle="6 evaluated dimensions"
         />
       ),
       code: radarSnippet,
@@ -1967,7 +1906,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart — Multiple"
           mode="multiple"
-          footerTitle="Side-by-side benchmark"
         />
       ),
       code: radarSnippet,
@@ -1980,7 +1918,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart — Circle Grid"
           mode="grid-circle"
-          footerTitle="Balanced throughput & cache"
         />
       ),
       code: radarSnippet,
@@ -1993,7 +1930,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart — Lines Only"
           mode="lines-only"
-          footerTitle="Minimalist outline"
         />
       ),
       code: radarSnippet,
@@ -2006,7 +1942,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadarVariantChart
           title="Radar Chart — Legend"
           mode="legend"
-          footerTitle="2 benchmarked models"
         />
       ),
       code: radarSnippet,
@@ -2022,7 +1957,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadialVariantChart
           title="Radial Chart"
           mode="simple"
-          footerTitle="74% of quota consumed"
         />
       ),
       code: radialSnippet,
@@ -2035,7 +1969,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadialVariantChart
           title="Radial Chart — Text"
           mode="text"
-          footerTitle="26% headroom remaining"
         />
       ),
       code: radialSnippet,
@@ -2048,7 +1981,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadialVariantChart
           title="Radial Chart — Half Arc"
           mode="stacked"
-          footerTitle="Within target threshold"
         />
       ),
       code: radialSnippet,
@@ -2061,7 +1993,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadialVariantChart
           title="Radial Chart — Concentric"
           mode="concentric"
-          footerTitle="4 concentric series"
         />
       ),
       code: radialSnippet,
@@ -2074,7 +2005,6 @@ export const chartCatalog: Record<ChartKind, ChartShowcaseItem[]> = {
         <RadialVariantChart
           title="Radial Chart — Grid"
           mode="grid"
-          footerTitle="Normalized 0–100 scale"
         />
       ),
       code: radialSnippet,
