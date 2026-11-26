@@ -8,7 +8,11 @@
     // Client-side routes (/charts/area, /components/button) fall back to index.html.
     "not_found_handling": "single-page-application"
   },
-  "routes": [{ "pattern": "kitsaas.com", "custom_domain": true }],
+  // www gets DNS and a certificate here; a zone redirect rule sends it to the apex.
+  "routes": [
+    { "pattern": "kitsaas.com", "custom_domain": true },
+    { "pattern": "www.kitsaas.com", "custom_domain": true }
+  ],
   "workers_dev": false,
   "preview_urls": false
 }
