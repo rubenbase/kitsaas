@@ -27,18 +27,17 @@ import {
 import { chartCatalog, type ChartKind as BaseChartKind } from './chart-visuals'
 import { extraChartCatalog, type ExtraChartKind } from './chart-visuals-extra'
 
-type ChartKind = BaseChartKind | ExtraChartKind
+export type ChartKind = BaseChartKind | ExtraChartKind
 
-const catalog = { ...chartCatalog, ...extraChartCatalog }
+export const catalog = { ...chartCatalog, ...extraChartCatalog }
 
-const categoryMeta: Record<
-  ChartKind,
-  {
-    title: string
-    description: string
-    icon: () => JSX.Element
-  }
-> = {
+export type ChartCategoryMeta = {
+  title: string
+  description: string
+  icon: () => JSX.Element
+}
+
+export const categoryMeta: Record<ChartKind, ChartCategoryMeta> = {
   area: {
     title: 'Area Charts',
     description: 'Linear, monotone, stepped, stacked, and gradient area charts.',
@@ -96,19 +95,17 @@ const categoryMeta: Record<
   },
 }
 
-const chartOrder: ChartKind[] = [
-  'area',
-  'bar',
-  'line',
-  'pie',
-  'radar',
-  'radial',
-  'scatter',
-  'heatmap',
-  'funnel',
-  'sankey',
-  'gauge',
+/**
+ * Sidebar groups. New chart categories go in a group here; the sidebar, the
+ * overview page and the previous/next links all read this list.
+ */
+export const chartGroups: { title: string; kinds: ChartKind[] }[] = [
+  { title: 'Cartesian', kinds: ['area', 'bar', 'line', 'scatter'] },
+  { title: 'Circular', kinds: ['pie', 'radar', 'radial', 'gauge'] },
+  { title: 'Flow & matrix', kinds: ['heatmap', 'funnel', 'sankey'] },
 ]
+
+const chartOrder: ChartKind[] = chartGroups.flatMap((group) => group.kinds)
 
 export function ChartPage(props: { kind: ChartKind }) {
   const [framework, setFramework] = useTargetFramework()
@@ -120,7 +117,8 @@ export function ChartPage(props: { kind: ChartKind }) {
   const pos = () => chartOrder.indexOf(props.kind)
   const previous = () => {
     const idx = pos()
-    if (idx <= 0) return undefined
+    if (idx < 0) return undefined
+    if (idx === 0) return { label: 'Overview', href: '/charts' }
     const k = chartOrder[idx - 1]
     return { label: categoryMeta[k].title, href: `/charts/${k}` }
   }
