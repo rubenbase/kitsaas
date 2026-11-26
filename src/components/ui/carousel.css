@@ -1,0 +1,247 @@
+@layer components {
+  [data-slot="carousel"] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [data-slot="carousel-viewport"] {
+    width: 100%;
+    min-width: 0;
+    border-radius: 8px;
+    scrollbar-width: none;
+    outline: none;
+  }
+
+  [data-slot="carousel-viewport"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-slot="carousel-viewport"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  [data-slot="carousel-viewport"][data-dragging] {
+    cursor: grabbing;
+  }
+
+  [data-slot="carousel-content"] {
+    display: flex;
+    flex-direction: row;
+    gap: var(--carousel-gap, 12px);
+    min-width: 0;
+  }
+
+  [data-slot="carousel-content"][data-orientation="vertical"] {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  [data-slot="carousel-item"] {
+    box-sizing: border-box;
+    flex: 0 0
+      calc(
+        (100% - (var(--carousel-slides, 1) - 1) * var(--carousel-gap, 12px)) /
+          var(--carousel-slides, 1)
+      );
+    min-width: 0;
+  }
+
+  [data-slot="carousel-item"][data-orientation="vertical"] {
+    flex-basis: calc(
+      (100% - (var(--carousel-slides, 1) - 1) * var(--carousel-gap, 12px)) /
+        var(--carousel-slides, 1)
+    );
+    min-height: 0;
+  }
+
+  /* Controls: previous, next, play toggle */
+  :is(
+      [data-slot="carousel-previous"],
+      [data-slot="carousel-next"],
+      [data-slot="carousel-play-toggle"]
+    ) {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 6px;
+    background-color: var(--v2-background-bg-button-neutral);
+    box-shadow: var(--v2-elevation-button-neutral);
+    color: var(--v2-text-text-base);
+    font-family: var(--font-family-sans);
+    font-size: 13px;
+    font-weight: 530;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    transition:
+      background-color 85ms ease-out,
+      opacity 120ms ease-out;
+  }
+
+  :is([data-slot="carousel-previous"], [data-slot="carousel-next"]):not(
+      :has(:not(svg))
+    ) {
+    width: 28px;
+    padding: 0;
+    color: var(--v2-icon-icon-base);
+  }
+
+  @media (hover: hover) {
+    :is(
+        [data-slot="carousel-previous"],
+        [data-slot="carousel-next"],
+        [data-slot="carousel-play-toggle"]
+      ):hover:not([data-disabled]) {
+      background-image:
+        linear-gradient(
+          90deg,
+          var(--v2-overlay-simple-overlay-hover) 0%,
+          var(--v2-overlay-simple-overlay-hover) 100%
+        ),
+        linear-gradient(
+          90deg,
+          var(--v2-background-bg-button-neutral) 0%,
+          var(--v2-background-bg-button-neutral) 100%
+        );
+    }
+  }
+
+  :is(
+      [data-slot="carousel-previous"],
+      [data-slot="carousel-next"],
+      [data-slot="carousel-play-toggle"]
+    ):active:not([data-disabled]) {
+    background-image:
+      linear-gradient(
+        90deg,
+        var(--v2-overlay-simple-overlay-pressed) 0%,
+        var(--v2-overlay-simple-overlay-pressed) 100%
+      ),
+      linear-gradient(
+        90deg,
+        var(--v2-background-bg-button-neutral) 0%,
+        var(--v2-background-bg-button-neutral) 100%
+      );
+  }
+
+  :is(
+      [data-slot="carousel-previous"],
+      [data-slot="carousel-next"],
+      [data-slot="carousel-play-toggle"]
+    ):focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  :is([data-slot="carousel-previous"], [data-slot="carousel-next"])[data-disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  [data-slot="carousel"][data-orientation="vertical"]
+    :is([data-slot="carousel-previous"], [data-slot="carousel-next"])
+    [data-slot="carousel-icon"] {
+    transform: rotate(90deg);
+  }
+
+  :dir(rtl)
+    [data-slot="carousel"]:not([data-orientation="vertical"])
+    :is([data-slot="carousel-previous"], [data-slot="carousel-next"])
+    [data-slot="carousel-icon"] {
+    transform: scaleX(-1);
+  }
+
+  /* Indicator dots / pills */
+  [data-slot="carousel-indicator-group"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  [data-slot="carousel-indicator"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--v2-border-border-strong);
+    cursor: pointer;
+    outline: none;
+    transition:
+      width 160ms ease-out,
+      background-color 140ms ease-out;
+  }
+
+  @media (hover: hover) {
+    [data-slot="carousel-indicator"]:hover:not([data-selected]) {
+      background: var(--v2-icon-icon-muted);
+    }
+  }
+
+  [data-slot="carousel-indicator"][data-selected] {
+    width: 18px;
+    background: var(--v2-text-text-base);
+  }
+
+  [data-slot="carousel-indicator"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Optional scroll-progress track */
+  [data-slot="carousel-progress"] {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--v2-background-bg-layer-02);
+  }
+
+  [data-slot="carousel-progress-bar"] {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--v2-text-text-base);
+    transform-origin: left center;
+    transform: scaleX(var(--carousel-progress, 0));
+  }
+
+  :dir(rtl) [data-slot="carousel-progress-bar"] {
+    transform-origin: right center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :is(
+        [data-slot="carousel-previous"],
+        [data-slot="carousel-next"],
+        [data-slot="carousel-play-toggle"],
+        [data-slot="carousel-indicator"]
+      ) {
+      transition: none;
+    }
+  }
+}

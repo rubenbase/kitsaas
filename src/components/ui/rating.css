@@ -1,0 +1,128 @@
+@layer components {
+  [data-slot="rating"] {
+    --rating-size: 20px;
+    --rating-gap: 3px;
+    --rating-empty-color: var(--v2-border-border-strong);
+    --rating-fill-color: var(--v2-yellow-600);
+    --rating-fill-stroke: var(--v2-yellow-700);
+
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--rating-gap);
+    vertical-align: middle;
+    user-select: none;
+  }
+
+  [data-slot="rating"][data-size="small"] {
+    --rating-size: 16px;
+    --rating-gap: 2px;
+  }
+
+  [data-slot="rating"][data-size="large"] {
+    --rating-size: 24px;
+    --rating-gap: 4px;
+  }
+
+  [data-slot="rating"][data-tone="neutral"] {
+    --rating-fill-color: var(--v2-text-text-base);
+    --rating-fill-stroke: var(--v2-text-text-base);
+  }
+
+  [data-slot="rating"][data-disabled] {
+    opacity: 0.45;
+  }
+
+  [data-slot="rating-item"] {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--rating-size);
+    height: var(--rating-size);
+    border-radius: 4px;
+    color: var(--rating-empty-color);
+    transition: transform 100ms ease-out;
+  }
+
+  [data-slot="rating-item"][data-highlighted]:not([data-disabled]):not(
+      [data-readonly]
+    ) {
+    transform: scale(1.08);
+  }
+
+  [data-slot="rating-item"]:has(> [role="radio"]:focus-visible) {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  [data-slot="rating-item"] > [role="radio"] {
+    cursor: pointer;
+    outline: none;
+  }
+
+  [data-slot="rating-item"][data-readonly] > [role="radio"] {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  [data-slot="rating-item"][data-disabled] > [role="radio"] {
+    cursor: not-allowed;
+  }
+
+  /* Default layered star icon supporting whole, half, and arbitrary decimal fills */
+  [data-slot="rating-star"] {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  [data-slot="rating-star-empty"],
+  [data-slot="rating-star-filled"] {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  [data-slot="rating-star-empty"] {
+    color: var(--rating-empty-color);
+  }
+
+  [data-slot="rating-star-filled"] {
+    position: absolute;
+    inset: 0;
+    color: var(--rating-fill-color);
+    stroke: var(--rating-fill-stroke);
+    clip-path: inset(0 calc((1 - var(--rating-fill, 0)) * 100%) 0 0);
+  }
+
+  :dir(rtl) [data-slot="rating-star-filled"] {
+    clip-path: inset(0 0 0 calc((1 - var(--rating-fill, 0)) * 100%));
+  }
+
+  /* Custom SVG children passed directly into RatingItem */
+  [data-slot="rating-item"] > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  [data-slot="rating-item"][data-filled] > svg {
+    color: var(--rating-fill-color);
+    fill: currentColor;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="rating-item"] {
+      transition: none;
+    }
+
+    [data-slot="rating-item"][data-highlighted] {
+      transform: none;
+    }
+  }
+}

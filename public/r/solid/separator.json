@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "registry:ui",
+  "title": "Separator",
+  "description": "Divides content with a horizontal or vertical hairline, announced to screen readers unless it is decorative.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/solid"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/solid/theme.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/separator.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/separator.tsx",
+      "content": "import type { ComponentProps } from '@solidjs/web'\nimport { Separator as UiSeparator } from '@ui-sdk/solid/separator'\nimport { omit } from 'solid-js'\n\nimport './separator.css'\n\n/**\n * Separator, a 1:1 port of opencode's `@opencode/ui` Divider visuals (MIT):\n * `packages/ui/src/layout/divider` (`divider-v2`, `divider.css`), on top of\n * ui-sdk's headless Separator.\n *\n * Styling lives in `separator.css` as attribute rules (`data-orientation`), so\n * the 1px hairline, its half-pixel transform and its colour match upstream.\n * Behaviour comes from `@ui-sdk/solid`: the `separator` role,\n * `aria-orientation`, and `role=\"none\"` when `decorative`. It never takes\n * focus. `orientation` and `decorative` need no data-* of their own: ui-sdk\n * already renders `data-orientation` for the styling.\n *\n * Upstream's Divider is horizontal only. `orientation=\"vertical\"` mirrors its\n * values onto the other axis; that rule is a Kitsaas addition, since ui-sdk\n * supports the orientation.\n */\n\ntype UiSeparatorProps = ComponentProps<typeof UiSeparator>\n\nexport type SeparatorProps = Omit<UiSeparatorProps, 'class' | 'render'> & {\n  class?: UiSeparatorProps['class']\n  render?: UiSeparatorProps['render']\n}\n\nexport function Separator(props: SeparatorProps) {\n  const rest = omit(props, 'class', 'render')\n\n  return <UiSeparator {...rest} class={props.class} render={props.render} />\n}\n"
+    },
+    {
+      "path": "src/components/ui/separator.css",
+      "type": "registry:ui",
+      "target": "components/ui/separator.css",
+      "content": "/*\n * 1:1 port of opencode's Divider (`@opencode/ui`, MIT):\n * packages/ui/src/layout/divider/divider.css (`divider-v2`).\n *\n * Only the selectors changed, to meet ui-sdk's markup. Every value is\n * upstream: the 1px line, its 0.5px transform and its strong border colour:\n *\n *   [data-component=\"divider-v2\"]  →  [data-slot=\"separator\"]  (ui-sdk's root slot)\n *\n * Upstream's Divider is horizontal only; it hardcodes `aria-orientation`.\n * ui-sdk supports both orientations, so the vertical rule mirrors upstream's\n * values onto the other axis (width 1px, scaleX(0.5), no fixed height, so\n * `align-self: stretch` makes it take the row's height). That one rule is the\n * only Kitsaas addition.\n *\n * Upstream has no [data-color-scheme=\"dark\"] block; --v2-border-border-strong\n * flips with the scheme.\n *\n * The rule set is attribute driven, so the React, Vue and web-component\n * bindings can reuse this file unchanged.\n */\n\n@layer components {\n  [data-slot=\"separator\"] {\n    box-sizing: border-box;\n    width: 100%;\n    height: 1px;\n    transform: scaleY(0.5);\n    border: none;\n    background: var(--v2-border-border-strong);\n    flex: none;\n    align-self: stretch;\n    flex-grow: 0;\n  }\n\n  [data-slot=\"separator\"][data-orientation=\"vertical\"] {\n    width: 1px;\n    height: auto;\n    transform: scaleX(0.5);\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "solid",
+    "uiSdkPackage": "@ui-sdk/solid/separator"
+  }
+}

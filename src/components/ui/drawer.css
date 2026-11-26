@@ -1,0 +1,348 @@
+/*
+ * Drawer styles for Kitsaas, aligned with dialog.css overlay tokens on top of
+ * @ui-sdk/solid/drawer.
+ *
+ * Positioning, translation and backdrop opacity are driven by ui-sdk's sheet
+ * engine (including spring physics and reduced-motion fade). This stylesheet
+ * owns the surface, edge radii, overscroll covers, drag handle pill, header /
+ * body / footer layout and nested stack scale.
+ */
+
+@layer components {
+  [data-slot="drawer-backdrop"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--v2-overlay-simple-overlay-scrim);
+  }
+
+  [data-slot="drawer-backdrop"][data-hidden] {
+    display: none;
+  }
+
+  [data-slot="drawer-viewport"] {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+  }
+
+  [data-slot="drawer-viewport"][data-side="top"] {
+    justify-content: flex-start;
+  }
+
+  [data-slot="drawer-viewport"]:is([data-side="left"], [data-side="right"]) {
+    flex-direction: row;
+  }
+
+  [data-slot="drawer-viewport"][data-side="left"] > * {
+    margin-right: auto;
+  }
+
+  [data-slot="drawer-viewport"][data-side="right"] > * {
+    margin-left: auto;
+  }
+
+  [data-slot="drawer-viewport"] > * {
+    pointer-events: auto;
+  }
+
+  [data-slot="drawer-content"] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 90dvh;
+    padding: 0;
+    border: 0;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-overlay);
+    color: var(--v2-text-text-base);
+    font-family: var(--font-family-sans);
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    outline: none;
+    scale: calc(1 - var(--drawer-stack, 0) * 0.04);
+    transition: scale 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-slot="drawer-content"]:focus-visible {
+    outline: none;
+  }
+
+  /* Covers the gap that rubber-banding past the edge opens during a drag. */
+  [data-slot="drawer-content"]::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    pointer-events: none;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="bottom"], [data-side="top"]) {
+    max-width: 520px;
+    height: fit-content;
+    margin-inline: auto;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="bottom"], [data-side="top"])[data-size="small"] {
+    max-width: 400px;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="bottom"], [data-side="top"])[data-size="large"] {
+    max-width: 680px;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="bottom"], [data-side="top"])[data-full-height] {
+    height: calc(100dvh - 48px);
+    max-height: calc(100dvh - 48px);
+  }
+
+  [data-slot="drawer-content"]:is([data-side="bottom"], [data-side="top"])::after {
+    inset-inline: 0;
+    height: 96px;
+  }
+
+  [data-slot="drawer-content"][data-side="bottom"] {
+    border-radius: 12px 12px 0 0;
+    transform-origin: bottom center;
+  }
+
+  [data-slot="drawer-content"][data-side="bottom"]::after {
+    top: 100%;
+  }
+
+  [data-slot="drawer-content"][data-side="top"] {
+    border-radius: 0 0 12px 12px;
+    transform-origin: top center;
+  }
+
+  [data-slot="drawer-content"][data-side="top"]::after {
+    bottom: 100%;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="left"], [data-side="right"]) {
+    width: min(calc(100vw - 32px), 380px);
+    height: 100%;
+    max-height: none;
+  }
+
+  [data-slot="drawer-content"]:is([data-side="left"], [data-side="right"])[data-size="small"] {
+    width: min(calc(100vw - 32px), 300px);
+  }
+
+  [data-slot="drawer-content"]:is([data-side="left"], [data-side="right"])[data-size="large"] {
+    width: min(calc(100vw - 32px), 520px);
+  }
+
+  [data-slot="drawer-content"]:is([data-side="left"], [data-side="right"])::after {
+    inset-block: 0;
+    width: 96px;
+  }
+
+  [data-slot="drawer-content"][data-side="left"] {
+    border-radius: 0 12px 12px 0;
+    transform-origin: left center;
+  }
+
+  [data-slot="drawer-content"][data-side="left"]::after {
+    right: 100%;
+  }
+
+  [data-slot="drawer-content"][data-side="right"] {
+    border-radius: 12px 0 0 12px;
+    transform-origin: right center;
+  }
+
+  [data-slot="drawer-content"][data-side="right"]::after {
+    left: 100%;
+  }
+
+  /* Interactive resize handle button for multi-snap-point drawers */
+  [data-slot="drawer-handle"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    align-self: center;
+    width: 56px;
+    height: 20px;
+    margin-top: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    cursor: grab;
+    outline: none;
+  }
+
+  [data-slot="drawer-handle"]::before {
+    content: "";
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background-color: var(--v2-border-border-strong);
+    transition:
+      background-color 120ms ease,
+      width 120ms ease;
+  }
+
+  [data-slot="drawer-handle"]:hover::before {
+    width: 44px;
+    background-color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="drawer-handle"]:active {
+    cursor: grabbing;
+  }
+
+  [data-slot="drawer-handle"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Decorative drag pill for single-snap-point sheets */
+  [data-slot="drawer-grip"] {
+    flex-shrink: 0;
+    align-self: center;
+    width: 36px;
+    height: 4px;
+    margin-top: 10px;
+    border-radius: 999px;
+    background-color: var(--v2-border-border-strong);
+  }
+
+  [data-slot="drawer-content"][data-side="top"] [data-slot="drawer-grip"],
+  [data-slot="drawer-content"][data-side="top"] [data-slot="drawer-handle"] {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  [data-slot="drawer-header"] {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    gap: 8px;
+    padding: 16px;
+    flex-shrink: 0;
+  }
+
+  [data-slot="drawer-title-group"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  [data-slot="drawer-title"] {
+    margin: 0;
+    flex: none;
+    user-select: none;
+    font-weight: 530;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.13px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="drawer-description"] {
+    margin: 0;
+    flex: none;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    user-select: none;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-muted);
+    font-variation-settings: "slnt" 0;
+  }
+
+  [data-slot="drawer-header"] [data-slot="drawer-close"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    margin-top: -2px;
+    margin-inline-end: -2px;
+    margin-inline-start: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="drawer-header"] [data-slot="drawer-close"]:hover {
+    background: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="drawer-header"] [data-slot="drawer-close"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  [data-slot="drawer-body"] {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 16px 16px;
+  }
+
+  [data-slot="drawer-body"]:focus-visible {
+    outline: none;
+  }
+
+  [data-slot="drawer-footer"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 12px 16px 16px;
+    gap: 8px;
+    align-self: stretch;
+    flex-shrink: 0;
+    border-top: 1px solid var(--v2-border-border-muted);
+  }
+
+  [data-slot="drawer-shortcut"] {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: 4px;
+    font-family: var(--font-family-sans);
+    font-size: 11px;
+    font-weight: 530;
+    line-height: 1;
+    color: var(--v2-text-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="drawer-content"],
+    [data-slot="drawer-handle"]::before {
+      transition: none;
+    }
+  }
+}

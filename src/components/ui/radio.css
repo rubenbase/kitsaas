@@ -1,0 +1,146 @@
+/*
+ * 1:1 port of opencode's Radio (`@opencode/ui/radio`, MIT):
+ * packages/ui/src/forms/radio/radio.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream's root and
+ * item are Kobalte wrappers that also hold the label, description and error;
+ * ui-sdk renders the group and the control itself, so:
+ *
+ *   [data-component="radio-v2"]           →  [data-slot="radio-group"]
+ *   [data-slot="radio-v2-items"]          →  [data-slot="radio-group"]  (the 12px gap)
+ *   [data-slot="radio-v2-item-control"]   →  [data-slot="radio"]
+ *   [data-slot="radio-v2-item-indicator"] →  [data-slot="radio-indicator"]
+ *   [data-slot="radio-v2-item"]           →  Kitsaas' label around the control
+ *   [radio-v2-item-input]:focus-visible   →  [data-slot="radio"]:focus-visible
+ *       ~ [radio-v2-item-control]             (ui-sdk focuses the button, not a hidden input)
+ *   [data-checked] / [data-disabled] / [data-readonly]  →  same names (ui-sdk sets them)
+ *   [data-invalid]                        →  same name, from Kitsaas' `invalid` prop
+ *
+ * States upstream styles and this file keeps: rest, row hover (not checked),
+ * checked, checked hover, focus-visible, disabled, invalid while unchecked.
+ * `read-only` only removes hover and focus, which is what the `:not()` guards
+ * below do. Upstream has no pressed, expanded or pending state for a radio,
+ * and no dark block: every value is a --v2-* token that flips by scheme.
+ *
+ * Not ported, because those parts live outside ui-sdk's group and control:
+ * upstream's root label / description / error parts (`radio-v2-label`,
+ * `-description`, `-error`), and the item row / text parts (`radio-v2-item`,
+ * `-text`, `-label`, `-label-text`, `-description`). Wrap a `<Radio>` and its
+ * text in a `<label>` and style that text yourself; upstream's row is
+ * `gap: 8px` with a 16x20 control stack, so an `items-center` label reproduces
+ * it for one line. There is no choice-card variant in this stylesheet.
+ *
+ * Upstream stacks items vertically even for `orientation="horizontal"`, so
+ * the group does too.
+ */
+
+@layer components {
+  [data-slot="radio-group"] {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: default;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Control                                                          */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="radio"] {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: none;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-strong);
+    background:
+      linear-gradient(180deg, var(--v2-alpha-light-6) 0%, var(--v2-alpha-light-0) 100%),
+      var(--v2-background-bg-base);
+    color: inherit;
+    font: inherit;
+    cursor: default;
+    outline: none;
+    transition:
+      background 170ms ease-out,
+      opacity 170ms ease-out,
+      outline-color 170ms ease-out;
+  }
+
+  /* Upstream rings the control when the hidden input takes focus; ui-sdk puts
+     focus on the button, and a read-only group skips it like upstream. */
+  [data-slot="radio"]:where(:not([data-readonly])):focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+  }
+
+  /* Upstream hovers the whole item row, which is the label around the control
+     here, so hovering the text previews the control too. State conditions sit
+     in :where() so every rule keeps the base specificity and the order below
+     decides, as it does upstream. */
+  [data-slot="radio"]:where(
+      :not([data-disabled], [data-readonly], [data-checked], [data-invalid])
+    ):is(:hover, :where(label:hover > *)) {
+    background:
+      linear-gradient(0deg, var(--v2-overlay-simple-overlay-hover), var(--v2-overlay-simple-overlay-hover)),
+      linear-gradient(180deg, var(--v2-alpha-light-6) 0%, var(--v2-alpha-light-0) 100%),
+      var(--v2-background-bg-base);
+  }
+
+  [data-slot="radio"]:where([data-disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-slot="radio"]:where([data-checked]) {
+    background:
+      linear-gradient(180deg, var(--v2-alpha-light-20) 0%, var(--v2-alpha-light-0) 100%),
+      var(--v2-background-bg-accent);
+  }
+
+  [data-slot="radio"]:where([data-checked]):where(
+      :not([data-disabled], [data-readonly])
+    ):is(:hover, :where(label:hover > *)) {
+    background:
+      linear-gradient(
+        0deg,
+        var(--v2-overlay-simple-overlay-contrast-hover),
+        var(--v2-overlay-simple-overlay-contrast-hover)
+      ),
+      linear-gradient(180deg, var(--v2-alpha-light-20) 0%, var(--v2-alpha-light-0) 100%),
+      var(--v2-background-bg-accent);
+  }
+
+  /* Upstream marks each item invalid, so the group's `invalid` reaches its
+     controls as well. Only unchecked controls turn red. */
+  [data-slot="radio"]:where([data-invalid]):where(:not([data-checked])),
+  [data-slot="radio-group"]:where([data-invalid]) [data-slot="radio"]:where(:not([data-checked])) {
+    background: var(--v2-state-bg-danger);
+    box-shadow: inset 0 0 0 0.5px var(--v2-state-border-danger);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Indicator                                                        */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="radio-indicator"] {
+    box-sizing: border-box;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: calc(50% - 6px / 2);
+    top: calc(50% - 6px / 2);
+    border: none;
+    border-radius: 9999px;
+    background: var(--v2-grey-300);
+    box-shadow:
+      inset 0 0 0 0.5px var(--v2-overlay-gradient-depth-overlay-depth-top),
+      0px 0.5px 0.5px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+}

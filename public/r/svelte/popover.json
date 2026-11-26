@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:ui",
+  "title": "Popover",
+  "description": "Opens a small task beside its trigger, moves focus in, flips and shifts to stay in view, and returns focus on close.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/svelte"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/svelte/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/svelte/ui/popover.ts",
+      "type": "registry:ui",
+      "target": "components/ui/popover.ts",
+      "content": "import './popover.css'\n\nexport {\n  Popover,\n  PopoverArrow,\n  PopoverClose,\n  PopoverContent,\n  PopoverDescription,\n  PopoverTitle,\n  PopoverTrigger,\n} from '@ui-sdk/svelte/popover'\n"
+    },
+    {
+      "path": "src/components/ui/popover.css",
+      "type": "registry:ui",
+      "target": "components/ui/popover.css",
+      "content": "/*\n * 1:1 port of opencode's Popover (`@opencode/ui`, MIT):\n * packages/ui/src/components/popover.css.\n *\n * Only the selectors changed, to meet ui-sdk's markup. Every value is\n * upstream, so the panel, its title, description, close part and arrow match\n * `data-component=\"popover-content\"`:\n *\n *   [data-component=\"popover-content\"]   →  [data-slot=\"popover-content\"]\n *   [data-slot=\"popover-trigger\"]        →  same (ui-sdk's trigger slot)\n *   [data-slot=\"popover-header\"]         →  same (upstream's own slot; a plain\n *                                            wrapper the author adds)\n *   [data-slot=\"popover-title\"]          →  same\n *   [data-slot=\"popover-close-button\"]   →  [data-slot=\"popover-close\"]\n *   [data-slot=\"popover-description\"]    →  same\n *   [data-slot=\"popover-body\"]           →  no element; ui-sdk's content holds\n *                                            the body, so its 12px inset is the\n *                                            content's padding\n *   [data-slot=\"popover-arrow\"]          →  same\n *\n * ui-sdk has no header or body wrapper. Upstream's 12px header and body insets\n * become the content's padding here, so the header keeps only its row layout\n * and the body needs no rule. Upstream's close button was an IconButton\n * (styled in icon-button.css), so only its `flex-shrink: 0` is carried over.\n *\n * Four upstream app-level tokens are mapped to the --v2-* token that is\n * nearest, noted at each use: --surface-raised-stronger-non-alpha,\n * --shadow-md, --text-strong and --text-base.\n *\n * ui-sdk sizes and places the arrow from its own box, where upstream filled an\n * SVG path. The 10px box, the rotation and the two border edges that continue\n * the panel border are Kitsaas glue; the fill is upstream's. `data-side` and\n * `data-align` are ui-sdk's placement attributes.\n *\n * ui-sdk renders the content in the browser's top layer with no positioner\n * element, so the content keeps upstream's z-index directly.\n *\n * popover.css has no [data-color-scheme=\"dark\"] block: the --v2-* tokens flip\n * with the scheme.\n *\n * The rule set is attribute driven, so the React, Vue and web-component\n * bindings can reuse this file unchanged.\n */\n\n@layer components {\n  [data-slot=\"popover-trigger\"] {\n    display: inline-flex;\n  }\n\n  [data-slot=\"popover-content\"] {\n    z-index: 50;\n    box-sizing: border-box;\n    min-width: 200px;\n    max-width: 320px;\n    padding: 12px;\n    border-radius: var(--radius-md);\n\n    /* upstream --surface-raised-stronger-non-alpha (#fff light); the floating\n       layer is the nearest --v2-* token, as in menu and tooltip */\n    background-color: var(--v2-background-bg-layer-01);\n\n    border: 1px solid var(--v2-border-border-muted);\n    background-clip: padding-box;\n\n    /* upstream --shadow-md */\n    box-shadow: var(--v2-elevation-floating);\n  }\n\n  [data-slot=\"popover-content\"]:focus-within {\n    outline: none;\n  }\n\n  /* upstream's header row, without its 12px inset, which the content carries */\n  [data-slot=\"popover-header\"] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    gap: 8px;\n  }\n\n  [data-slot=\"popover-title\"] {\n    flex: 1;\n    margin: 0;\n\n    /* upstream --text-strong (#171717 light) */\n    color: var(--v2-text-text-base);\n\n    font-family: var(--font-family-sans);\n    font-size: var(--font-size-base);\n    font-style: normal;\n    font-weight: var(--font-weight-medium);\n    line-height: var(--line-height-large);\n    letter-spacing: var(--letter-spacing-normal);\n  }\n\n  [data-slot=\"popover-close\"] {\n    flex-shrink: 0;\n  }\n\n  [data-slot=\"popover-description\"] {\n    margin: 0;\n\n    /* upstream --text-base (#6f6f6f light); grey-700 is the nearest token */\n    color: var(--v2-text-text-muted);\n\n    font-family: var(--font-family-sans);\n    font-size: var(--font-size-small);\n    font-style: normal;\n    font-weight: var(--font-weight-regular);\n    line-height: var(--line-height-large);\n    letter-spacing: var(--letter-spacing-normal);\n  }\n\n  [data-slot=\"popover-arrow\"] {\n    position: absolute;\n    width: 10px;\n    height: 10px;\n    background: var(--v2-background-bg-layer-01);\n    border: 1px solid var(--v2-border-border-muted);\n    transform: rotate(45deg);\n    pointer-events: none;\n  }\n\n  /*\n   * The arrow sits just outside the panel's edge it points from. Only the two\n   * outer edges keep a border, so the light half blends into the panel.\n   */\n  [data-slot=\"popover-arrow\"][data-side=\"bottom\"] {\n    top: -6px;\n    border-width: 1px 0 0 1px;\n  }\n\n  [data-slot=\"popover-arrow\"][data-side=\"top\"] {\n    bottom: -6px;\n    border-width: 0 1px 1px 0;\n  }\n\n  [data-slot=\"popover-arrow\"][data-side=\"left\"] {\n    right: -6px;\n    border-width: 1px 1px 0 0;\n  }\n\n  [data-slot=\"popover-arrow\"][data-side=\"right\"] {\n    left: -6px;\n    border-width: 0 0 1px 1px;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "svelte",
+    "uiSdkPackage": "@ui-sdk/svelte/popover"
+  }
+}

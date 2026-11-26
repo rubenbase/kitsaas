@@ -1,0 +1,101 @@
+/*
+ * 1:1 port of opencode's Progress (`@opencode/ui`, MIT):
+ * packages/ui/src/components/progress.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream: the 4px / 8px gaps, the 8px track with its 999px radius and 1px
+ * border, the 200ms width transition and the 1.3s indeterminate sweep.
+ *
+ *   [data-component="progress"]        →  [data-slot="progress"]  (ui-sdk's root slot)
+ *   [data-slot="progress-header"]      →  same name (upstream's own slot; render it
+ *                                         as a plain div inside <Progress>)
+ *   [data-slot="progress-label"]       →  same name
+ *   [data-slot="progress-value-label"] →  [data-slot="progress-value"]
+ *   [data-slot="progress-track"]       →  same name
+ *   [data-slot="progress-fill"]        →  [data-slot="progress-indicator"]
+ *   width: var(--kb-progress-fill-width)  →  the indicator's inline width, which
+ *                                         ui-sdk writes as a percentage
+ *
+ * `data-indeterminate` is upstream's own attribute; ui-sdk renders it on every
+ * part when `value` is null, so the sweep needs no Kitsaas prop. Determinate
+ * progress needs no CSS of its own: ui-sdk sets the fill's inline width.
+ *
+ * Three OC-1 alias tokens Kitsaas doesn't carry are mapped to the --v2-* token
+ * that is nearest, noted at each use: --text-base, --text-weak and
+ * --surface-base.
+ *
+ * Upstream has no [data-color-scheme="dark"] block: every --v2-* token read
+ * here flips with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="progress"] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  [data-slot="progress"] [data-slot="progress-header"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  [data-slot="progress"] [data-slot="progress-label"],
+  [data-slot="progress"] [data-slot="progress-value"] {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-large);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  /* upstream --text-base (#6f6f6f light); grey-700 is the nearest token */
+  [data-slot="progress"] [data-slot="progress-label"] {
+    color: var(--v2-text-text-muted);
+  }
+
+  /* upstream --text-weak (#8f8f8f light); grey-600 is the nearest token */
+  [data-slot="progress"] [data-slot="progress-value"] {
+    color: var(--v2-text-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="progress"] [data-slot="progress-track"] {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    border: 1px solid var(--v2-border-border-base);
+    /* upstream --surface-base, black 3.1% over the page; layer-01 is the
+       nearest token that flips with the scheme */
+    background-color: var(--v2-background-bg-layer-01);
+  }
+
+  [data-slot="progress"] [data-slot="progress-indicator"] {
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--v2-icon-icon-base);
+    transition: width 200ms ease;
+  }
+
+  [data-slot="progress"][data-indeterminate] [data-slot="progress-indicator"] {
+    width: 35%;
+    animation: progress-indeterminate 1.3s ease-in-out infinite;
+  }
+
+  @keyframes progress-indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(300%);
+    }
+  }
+}

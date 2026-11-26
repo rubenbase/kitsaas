@@ -1,0 +1,457 @@
+/*
+ * 1:1 port of opencode's Select (`@opencode/ui`, MIT):
+ * packages/ui/src/forms/select/select.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so rest / hover / expanded / focus / invalid / disabled, the
+ * placeholder, the inline trigger and the item states all match
+ * `data-component="select-v2"`:
+ *
+ *   [data-component="select-v2"]                 →  [data-slot="select-trigger"]
+ *   [data-slot="select-v2-value"]                →  [data-slot="select-trigger-value"]
+ *   [data-slot="select-v2-value-text"]           →  [data-slot="select-value"]  (ui-sdk's part)
+ *   [data-slot="select-v2-chevron"]              →  [data-slot="select-chevron"]
+ *   [data-component="menu-v2-content"]
+ *     [data-slot="select-v2-content"]            →  [data-slot="select-content"]
+ *   [data-slot="select-v2-listbox"]              →  [data-slot="select-content"]
+ *                                                  (ui-sdk's content is the listbox)
+ *   [data-component="menu-v2-item"]              →  [data-slot="select-item"]
+ *   [data-slot="menu-v2-item-content"]           →  [data-slot="menu-item-content"]   (same rule as Menu)
+ *   [data-slot="menu-v2-item-indicator"]         →  [data-slot="menu-item-indicator"] (same rule as Menu)
+ *   [data-slot="menu-v2-group-label"]            →  [data-slot="select-group-label"]
+ *   [data-slot="menu-v2-separator"]              →  [data-slot="select-separator"]
+ *   [data-expanded]                              →  [data-open]  (ui-sdk's attribute)
+ *   [data-placeholder-shown]                     →  [data-placeholder]
+ *   [data-checked] on an item                    →  [data-selected]  (upstream mirrors selection
+ *                                                  onto the listbox item's `data-selected`)
+ *
+ * The item's text and check glyph keep upstream's `menu-v2` slots
+ * (`menu-item-content`, `menu-item-indicator`), so their rules stay in
+ * `menu.css` and are reused unchanged: this file imports it, as upstream's
+ * select.css imports menu.css. The item box, the vars it hands those slots,
+ * the content surface and the group label / separator repeat the shared menu
+ * declarations here with the same values, because ui-sdk gives Select's parts
+ * slots of their own.
+ *
+ * Upstream wraps the popup in `[data-popper-positioner]` and raises that
+ * wrapper with `z-index: 60`. ui-sdk renders the popup in place in the top
+ * layer, with no positioner element, so the content is its own positioner and
+ * keeps that z-index directly.
+ *
+ * Upstream's listbox sits inside its scroll viewport; ui-sdk's content is the
+ * listbox itself, so the listed rules merge onto that one element and the
+ * listbox's `width: 100%` is dropped: the popup is sized by the positioner
+ * already. Upstream's trigger is a div with a hidden input, so `:focus-within`
+ * matched its field; ui-sdk's trigger is the button itself and keeps the same
+ * selector. Upstream styles no read-only state, so neither does this file.
+ *
+ * Not ported: `components/menu-scroll.css`. Its custom thumb belongs to
+ * opencode's own scroll container, which ui-sdk has no part for; the content
+ * keeps upstream's 12rem limit and scrolls natively. The sheet presentation
+ * that ui-sdk can render has no upstream styling either.
+ *
+ * select.css has no [data-color-scheme="dark"] block upstream; the --v2-*
+ * tokens flip with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@import "./menu.css";
+
+@layer components {
+  /* ---------------------------------------------------------------- */
+  /* Trigger                                                          */
+  /* ---------------------------------------------------------------- */
+
+  /* [data-component="select-v2"] — the field trigger. Upstream's root is a
+     div; ui-sdk renders a button, so the button's UA font is reset. */
+  [data-slot="select-trigger"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding-block: 0;
+    padding-inline: 0 6px;
+    gap: 8px;
+    width: 280px;
+    height: 28px;
+    border: 0;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-input);
+    flex: none;
+    align-self: stretch;
+    user-select: none;
+    font: inherit;
+    transition:
+      background 85ms ease-out,
+      outline-color 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="select-trigger"][data-appearance="small"] {
+    height: 24px;
+  }
+
+  [data-slot="select-trigger"][data-appearance="large"] {
+    height: 32px;
+    padding-inline: 0 8px;
+  }
+
+  [data-slot="select-trigger"][data-surface="layer-1"] {
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  [data-slot="select-trigger"][data-surface="invisible"] {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* An inset overlay keeps the surface colour underneath, the same hover the
+     text input uses. */
+  @media (hover: hover) {
+    [data-slot="select-trigger"]:where(:hover):not(
+        [data-disabled],
+        [data-invalid],
+        [data-open],
+        [data-appearance="inline"],
+        [data-surface="invisible"]
+      ):not(:focus-within) {
+      box-shadow:
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),
+        var(--v2-elevation-input);
+    }
+
+    [data-slot="select-trigger"][data-surface="invisible"]:where(:hover):not(
+        [data-disabled],
+        [data-invalid],
+        [data-open]
+      ):not(:focus-within) {
+      background: var(--v2-overlay-simple-overlay-hover);
+    }
+  }
+
+  [data-slot="select-trigger"]:where([data-open]):not(
+      [data-disabled],
+      [data-invalid],
+      [data-appearance="inline"]
+    ) {
+    box-shadow:
+      inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),
+      var(--v2-elevation-input);
+    outline-color: transparent;
+  }
+
+  [data-slot="select-trigger"][data-surface="invisible"]:where([data-open]):not(
+      [data-disabled],
+      [data-invalid]
+    ) {
+    background: var(--v2-overlay-simple-overlay-hover);
+    box-shadow: none;
+  }
+
+  [data-slot="select-trigger"]:where(:focus-within):not(
+      [data-disabled],
+      [data-invalid]
+    ):not([data-open]) {
+    outline-color: var(--v2-border-border-focus);
+    box-shadow: none;
+  }
+
+  [data-slot="select-trigger"]:where([data-invalid]):not([data-disabled]) {
+    outline-color: var(--v2-state-fg-danger);
+    box-shadow: none;
+  }
+
+  [data-slot="select-trigger"]:where([data-disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Value and chevron                                                */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="select-trigger"] [data-slot="select-trigger-value"] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+    padding: 0;
+    min-width: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    cursor: default;
+  }
+
+  [data-slot="select-trigger"] [data-slot="select-value"] {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-block: 0;
+    padding-inline: 8px 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    text-align: start;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+    cursor: default;
+  }
+
+  [data-slot="select-trigger"] [data-slot="select-value"][data-placeholder] {
+    color: var(--v2-text-text-faint);
+  }
+
+  [data-slot="select-trigger"][data-numeric] [data-slot="select-value"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="select-trigger"]:where([data-invalid]):not([data-disabled])
+    [data-slot="select-value"] {
+    color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="select-trigger"] [data-slot="select-chevron"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    gap: 3px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--v2-icon-icon-muted);
+    pointer-events: none;
+  }
+
+  /* Keyed to the chevron, not the trigger slot, so a trigger rendered as a Button keeps it. */
+  [data-slot="select-chevron"] svg {
+    display: block;
+    flex: none;
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
+  }
+
+  [data-open] > [data-slot="select-chevron"] svg {
+    transform: rotate(0deg);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Inline trigger, upstream's default                               */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="select-trigger"][data-appearance="inline"] {
+    width: fit-content;
+    max-width: 100%;
+    height: 24px;
+    padding-block: 4px;
+    padding-inline: 8px 4px;
+    gap: 4px;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    align-self: auto;
+  }
+
+  [data-slot="select-trigger"][data-appearance="inline"]:where(:hover):not(
+      [data-disabled],
+      [data-invalid]
+    ):not(:focus-within):not([data-open]) {
+    background: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="select-trigger"][data-appearance="inline"]:where([data-open]):not(
+      [data-disabled],
+      [data-invalid]
+    ) {
+    background: var(--v2-overlay-simple-overlay-hover);
+    outline: none;
+    box-shadow: none;
+  }
+
+  [data-slot="select-trigger"][data-appearance="inline"]:where(:active):not(
+      [data-disabled],
+      [data-invalid]
+    ):not([data-open]) {
+    background: var(--v2-overlay-simple-overlay-pressed);
+  }
+
+  [data-slot="select-trigger"][data-appearance="inline"]
+    [data-slot="select-value"] {
+    padding: 0;
+    font-weight: 530;
+  }
+
+  [data-slot="select-trigger"][data-appearance="inline"]
+    [data-slot="select-chevron"] {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Content: the menu surface and the listbox, on one element        */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="select-content"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+    padding: 4px;
+    min-width: 160px;
+    max-width: 23rem;
+    max-height: 12rem;
+    list-style: none;
+    white-space: nowrap;
+    z-index: 60;
+    pointer-events: auto;
+
+    background: var(--v2-background-bg-layer-01);
+    border-radius: 6px;
+    box-shadow: var(--v2-elevation-floating);
+
+    outline: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+
+  /* Upstream's `[data-scrollable]` viewport; the content is the scroller here. */
+  [data-slot="select-content"][data-scrollable] {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  [data-slot="select-content"]:focus {
+    outline: none;
+  }
+
+  [data-slot="select-content"] > *:not([role="presentation"], [role="none"])
+    + *:not([role="presentation"], [role="none"]) {
+    margin-top: 2px;
+  }
+
+  [data-slot="select-content"] > [data-slot="select-item"],
+  [data-slot="select-content"] > [data-slot="select-group-label"] {
+    flex: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Items                                                            */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="select-item"] {
+    --menu-v2-fg: var(--v2-text-text-base);
+    --menu-v2-fg-muted: var(--v2-text-text-faint);
+    --menu-v2-fg-subtle: var(--v2-text-text-muted);
+    --menu-v2-icon: var(--v2-icon-icon-base);
+    --menu-v2-badge-bg: var(--v2-background-bg-layer-02);
+    --menu-v2-badge-border: var(--v2-border-border-base);
+    --menu-v2-hover: var(--v2-overlay-simple-overlay-hover);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 12px;
+    padding-inline-end: 6px;
+    background: transparent;
+    border-radius: 4px;
+    outline: none;
+    cursor: default;
+    user-select: none;
+
+    font-variation-settings: "slnt" 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--menu-v2-fg);
+  }
+
+  [data-slot="select-item"][data-highlighted] {
+    background: var(--menu-v2-hover);
+  }
+
+  /* A listbox marks selection with data-selected; the menu item CSS uses
+     data-checked, so the selected look is mirrored here. */
+  [data-slot="select-item"][data-selected] [data-slot="menu-item-content"] {
+    font-weight: 440;
+    color: var(--menu-v2-fg);
+  }
+
+  [data-slot="select-item"][data-selected] [data-slot="menu-item-indicator"] {
+    color: var(--menu-v2-icon);
+  }
+
+  [data-slot="select-item"][data-selected]
+    [data-slot="menu-item-indicator"]
+    svg {
+    visibility: visible;
+  }
+
+  [data-slot="select-item"]:not([data-selected])
+    [data-slot="menu-item-indicator"]
+    svg {
+    visibility: hidden;
+  }
+
+  [data-slot="select-item"][data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Group label and separator, from the shared menu rules            */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="select-group-label"] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+
+    font-size: 11px;
+    font-weight: 530;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-faint);
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="select-separator"] {
+    flex: none;
+    height: 1px;
+    width: calc(100% + 4px);
+    margin: 2px -2px;
+    background: var(--v2-border-border-muted);
+    border: none;
+  }
+}

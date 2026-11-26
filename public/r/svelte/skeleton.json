@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "opencode console's loading placeholder: a faint bar with a slow shimmer, faded in after 120ms. Decorative by default; reduced motion drops the sweep.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/svelte"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/svelte/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/overrides/svelte/skeleton.ts",
+      "type": "registry:ui",
+      "target": "components/ui/skeleton.ts",
+      "content": "import \"./skeleton.css\";\n\n/**\n * Skeleton, opencode console's loading placeholder. There is no behaviour, so\n * there is no component to register: spread `skeletonAttrs()` on an empty\n * <span> and give it a width; `skeleton.css` does the rest. It is decorative,\n * so mark the loading region with `aria-busy=\"true\"` instead.\n *\n *   <span {...skeletonAttrs()} class=\"w-[120px]\"></span>\n *   <div {...skeletonFadeAttrs()}>…rows…</div>\n */\n\nexport function skeletonAttrs() {\n  return { \"data-slot\": \"skeleton\", \"aria-hidden\": \"true\" } as const;\n}\n\n/** For a wrapper around a stack of skeleton rows: fades out its last 9rem. */\nexport function skeletonFadeAttrs() {\n  return { \"data-slot\": \"skeleton-fade\", \"aria-hidden\": \"true\" } as const;\n}\n"
+    },
+    {
+      "path": "src/components/ui/skeleton.css",
+      "type": "registry:ui",
+      "target": "components/ui/skeleton.css",
+      "content": "/*\n * Skeleton, ported from opencode console's loading placeholder. The console is\n * hosted and its source is not in the opencode checkout, so the rules were\n * read from its live stylesheet and renamed to Kitsaas slots:\n *\n *   .console-skeleton           →  [data-slot=\"skeleton\"]\n *   .console-skeleton-fade      →  [data-slot=\"skeleton-fade\"]\n *   @keyframes console-skeleton-in / -shimmer  →  skeleton-in / skeleton-shimmer\n *\n * The console's two scheme variables are set on :root and\n * :root[data-color-scheme=\"dark\"]. Here they are set on any\n * [data-color-scheme] element (and :root), so a nested region rethemes:\n *\n *   --console-skeleton        →  --skeleton-bg\n *                                (light --v2-alpha-dark-6, dark --v2-alpha-light-6)\n *   --console-skeleton-shine  →  --skeleton-shine\n *                                (light --v2-alpha-light-50, dark --v2-alpha-light-4)\n *\n * The shimmer is a viewport-wide gradient on a `fixed` background, so every\n * skeleton on the page shows the same sweep at the same moment. Reduced motion\n * keeps the 0.36s fade-in and drops the sweep, as upstream does.\n *\n * Kitsaas addition, marked below: `:root[data-motion=\"reduce\"]` gets the same\n * reduced-motion rule as the OS preference, as in tooltip.css and spinner.css.\n *\n * Not ported: `.activity-chart-skeleton-*` (Activity's chart placeholder, a\n * 28px button bar and an opacity pulse on an SVG curve); it is chart-specific.\n */\n\n@layer components {\n  :root,\n  [data-color-scheme=\"light\"] {\n    --skeleton-bg: var(--v2-alpha-dark-6);\n    --skeleton-shine: var(--v2-alpha-light-50);\n  }\n\n  [data-color-scheme=\"dark\"] {\n    --skeleton-bg: var(--v2-alpha-light-6);\n    --skeleton-shine: var(--v2-alpha-light-4);\n  }\n\n  [data-slot=\"skeleton\"] {\n    background: var(--skeleton-bg)\n      linear-gradient(100deg, transparent 30%, var(--skeleton-shine) 50%, transparent 70%)\n      no-repeat fixed;\n    background-position: -100vw 0;\n    background-size: 100vw 100%;\n    border-radius: 4px;\n    max-width: 100%;\n    height: 0.7em;\n    animation:\n      0.36s ease-out 0.12s both skeleton-in,\n      2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite skeleton-shimmer;\n    display: inline-block;\n  }\n\n  /* Fades a stack of skeleton rows out over its last 9rem. */\n  [data-slot=\"skeleton-fade\"] {\n    -webkit-mask-image: linear-gradient(#000 calc(100% - 9rem), #0000);\n    mask-image: linear-gradient(#000 calc(100% - 9rem), #0000);\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"skeleton\"] {\n      background-image: none;\n      animation: 0.36s ease-out 0.12s both skeleton-in;\n    }\n  }\n\n  /* Kitsaas addition: the app-level reduced-motion switch. */\n  :root[data-motion=\"reduce\"] [data-slot=\"skeleton\"] {\n    background-image: none;\n    animation: 0.36s ease-out 0.12s both skeleton-in;\n  }\n\n  @media (forced-colors: active) {\n    [data-slot=\"skeleton\"] {\n      background: graytext;\n    }\n  }\n\n  @keyframes skeleton-in {\n    0% {\n      opacity: 0;\n    }\n  }\n\n  @keyframes skeleton-shimmer {\n    0% {\n      background-position: -100vw 0;\n    }\n\n    to {\n      background-position: 100vw 0;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "svelte",
+    "uiSdkPackage": "@ui-sdk/svelte/skeleton"
+  }
+}

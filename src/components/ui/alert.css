@@ -1,0 +1,136 @@
+/*
+ * Alert, styled after opencode console's inline callout (the "Your credit
+ * balance is running low" banner on Billing). That screen ships in opencode's
+ * hosted console, not in `@opencode/ui`, so there is no upstream stylesheet to
+ * port; the values are read off the console and mapped to the ported tokens:
+ *
+ *   fill  →  --v2-state-bg-<variant>   (dark: yellow-1200 #4b4025 for warning)
+ *   text  →  --v2-state-fg-<variant>   (dark: yellow-500  #f2cf76 for warning)
+ *   box   →  8px × 12px padding, 6px radius, no border; 13px / 20px text at
+ *            weight 440, the same body type as the Toast description.
+ *
+ * The console's rule is `.billing-notice` (6px radius, 8px × 12px padding)
+ * with `data-tone` warning, danger or neutral. Its neutral tone is a layer-03
+ * fill with inherited (base) text; info and success are Kitsaas additions on
+ * the same state tokens. Every colour is a token, so both schemes follow
+ * [data-color-scheme] with no dark block here.
+ *
+ * Layout is a grid so an optional leading icon (a direct <svg> child) and a
+ * trailing [data-slot="alert-action"] get their own columns, as in shadcn.
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="alert"] {
+    --alert-bg: var(--v2-background-bg-layer-03);
+    --alert-fg: var(--v2-text-text-base);
+
+    box-sizing: border-box;
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 8px;
+    row-gap: 2px;
+    align-items: start;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--alert-bg);
+    color: var(--alert-fg);
+    font-family: var(--v2-font-family-sans, inherit);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    font-synthesis: none;
+    text-align: start;
+  }
+
+  [data-slot="alert"][data-variant="info"] {
+    --alert-bg: var(--v2-state-bg-info);
+    --alert-fg: var(--v2-state-fg-info);
+  }
+
+  [data-slot="alert"][data-variant="success"] {
+    --alert-bg: var(--v2-state-bg-success);
+    --alert-fg: var(--v2-state-fg-success);
+  }
+
+  [data-slot="alert"][data-variant="warning"] {
+    --alert-bg: var(--v2-state-bg-warning);
+    --alert-fg: var(--v2-state-fg-warning);
+  }
+
+  [data-slot="alert"][data-variant="danger"] {
+    --alert-bg: var(--v2-state-bg-danger);
+    --alert-fg: var(--v2-state-fg-danger);
+  }
+
+  /* Leading icon: a 16px column, vertically centred on the first line. */
+  [data-slot="alert"]:has(> svg) {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+
+  [data-slot="alert"] > svg {
+    grid-row: 1 / span 2;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    color: currentColor;
+    flex: none;
+  }
+
+  [data-slot="alert"] > [data-slot="alert-title"],
+  [data-slot="alert"] > [data-slot="alert-description"] {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  [data-slot="alert"]:has(> svg) > [data-slot="alert-title"],
+  [data-slot="alert"]:has(> svg) > [data-slot="alert-description"] {
+    grid-column: 2;
+  }
+
+  /* Trailing action: an auto column centred across title and description. */
+  [data-slot="alert"]:has(> [data-slot="alert-action"]) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  [data-slot="alert"]:has(> svg):has(> [data-slot="alert-action"]) {
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+  }
+
+  [data-slot="alert"]:has(> [data-slot="alert-action"]) > svg {
+    align-self: start;
+  }
+
+  [data-slot="alert-action"] {
+    grid-row: 1 / span 2;
+    grid-column: -2;
+    margin-inline-start: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  [data-slot="alert-title"] {
+    font-weight: 530;
+  }
+
+  [data-slot="alert-description"] {
+    color: inherit;
+  }
+
+  [data-slot="alert-description"] p + p {
+    margin-top: 4px;
+  }
+
+  [data-slot="alert-description"] a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}

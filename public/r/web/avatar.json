@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "description": "Shows initials until the image loads and keeps them if it fails, reporting the loading status on every part.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/web"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/web/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/web/ui/avatar.ts",
+      "type": "registry:ui",
+      "target": "components/ui/avatar.ts",
+      "content": "import '@ui-sdk/web/avatar'\nimport './avatar.css'\n\nexport type AvatarKind = 'user' | 'org'\nexport type AvatarSize = 'large' | 'normal' | 'small'\n"
+    },
+    {
+      "path": "src/components/ui/avatar.css",
+      "type": "registry:ui",
+      "target": "components/ui/avatar.css",
+      "content": "/*\n * 1:1 port of opencode's Avatar (`@opencode/ui/avatar`, MIT):\n * packages/ui/src/data-display/avatar/avatar.css.\n *\n * Only the root selector changed, to meet ui-sdk's markup. Every value is\n * upstream: the 16 / 20 / 28px boxes, the circular and 4 / 6px radii, the\n * 0.5px border and the ::before sheen.\n *\n *   [data-component=\"avatar-v2\"]  →  [data-slot=\"avatar\"]  (ui-sdk's root slot)\n *   [data-slot=\"avatar-image\"]    →  same name (ui-sdk already uses it)\n *\n * `data-size` (\"small\" | \"normal\" | \"large\") and `data-kind` (\"user\" | \"org\")\n * come from Kitsaas' props; `data-has-image` is upstream's own attribute,\n * exposed as the `hasImage` prop, and drops the sheen once an image is there.\n *\n * Upstream has no [data-color-scheme=\"dark\"] block: the fallback layer,\n * text, border and light-alpha sheen all come from --v2-* tokens that flip\n * with the scheme on their own.\n *\n * The rule set is attribute driven, so the React, Vue and web-component\n * bindings can reuse this file unchanged.\n */\n\n@layer components {\n  [data-slot=\"avatar\"] {\n    --avatar-bg: var(--v2-background-bg-layer-02);\n    --avatar-fg: var(--v2-text-text-muted);\n    --avatar-radius: 9999px;\n    --avatar-font-size: 11px;\n    --avatar-tracking: 0.05px;\n\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-shrink: 0;\n    position: relative;\n    overflow: hidden;\n    width: 28px;\n    height: 28px;\n    border-radius: var(--avatar-radius);\n    border: 0.5px solid var(--v2-border-border-base);\n    font-weight: 530;\n    font-size: var(--avatar-font-size);\n    line-height: 1;\n    letter-spacing: var(--avatar-tracking);\n    text-transform: uppercase;\n    background-color: var(--avatar-bg);\n    color: var(--avatar-fg);\n    user-select: none;\n    -webkit-user-select: none;\n  }\n\n  [data-slot=\"avatar\"]::before {\n    content: \"\";\n    position: absolute;\n    inset: 0;\n    background: linear-gradient(\n      180deg,\n      var(--v2-alpha-light-16) 0%,\n      var(--v2-alpha-light-0) 100%\n    );\n    pointer-events: none;\n  }\n\n  [data-slot=\"avatar\"][data-has-image]::before {\n    display: none;\n  }\n\n  [data-slot=\"avatar\"][data-kind=\"org\"] {\n    --avatar-radius: 6px;\n  }\n\n  [data-slot=\"avatar\"][data-kind=\"org\"][data-size=\"normal\"],\n  [data-slot=\"avatar\"][data-kind=\"org\"][data-size=\"small\"] {\n    --avatar-radius: 4px;\n  }\n\n  [data-slot=\"avatar\"][data-size=\"normal\"] {\n    width: 20px;\n    height: 20px;\n  }\n\n  [data-slot=\"avatar\"][data-size=\"small\"] {\n    width: 16px;\n    height: 16px;\n  }\n\n  [data-slot=\"avatar\"] [data-slot=\"avatar-image\"] {\n    position: relative;\n    z-index: 1;\n    width: 100%;\n    height: 100%;\n    display: block;\n    object-fit: cover;\n    border-radius: inherit;\n    user-select: none;\n    -webkit-user-select: none;\n    -webkit-user-drag: none;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "web",
+    "uiSdkPackage": "@ui-sdk/web/avatar"
+  }
+}

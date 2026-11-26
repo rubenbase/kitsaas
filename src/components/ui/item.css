@@ -1,0 +1,206 @@
+/*
+ * Item, ported from opencode console's list rows. The console is hosted and
+ * its source is not in the opencode checkout, so the rules were read from its
+ * live stylesheet and renamed to Kitsaas slots:
+ *
+ *   .control-list                       →  [data-slot="item-group"]
+ *   .control-list-row                   →  [data-slot="item"][data-variant="outline"]
+ *   .control-list-row:hover             →  a link item's :hover (every variant)
+ *   .extensions-item                    →  [data-slot="item"] (radius, gap, flex)
+ *   .billing-inset                      →  [data-slot="item"][data-variant="muted"]
+ *   .activity-request-row (+ shared
+ *     .activity-*-row padding/radius)   →  [data-slot="item"][data-size="sm"]
+ *   .activity-*-row:focus-visible       →  [data-slot="item"]:focus-visible
+ *   .extensions-layout .control-list-icon
+ *                                       →  [data-slot="item-media"][data-variant="icon"]
+ *   .resource-controls-card .control-list-logo > *
+ *                                       →  [data-slot="item-media"][data-variant="image"]
+ *   .resource-control-text              →  [data-slot="item-content"]
+ *   .resource-control-subtitle          →  [data-slot="item-description"]
+ *   .billing-row (gap 8px)              →  [data-slot="item-actions"]
+ *   .summary-row-chevron                →  an svg in [data-slot="item-actions"]
+ *   .controls-layout (13px / 20px)      →  the item's type
+ *   .resource-controls-card > li + li   →  a group with ItemSeparators (no gap)
+ *
+ * Every colour is a --v2-* token already, except two legacy aliases that
+ * .resource-controls-card reads, mapped to the --v2-* they alias in
+ * src/theme.css:
+ *
+ *   --color-surface      →  --v2-background-bg-layer-01
+ *   --color-border-muted →  --v2-border-border-muted
+ *
+ * The separator itself is Kitsaas's Separator (opencode's Divider, the same
+ * 1px × scaleY(0.5) hairline the console draws in .billing-panel hr).
+ *
+ * Kitsaas additions, marked below: `flex-wrap` so ItemHeader and ItemFooter
+ * take a full line (shadcn's layout); ItemTitle's 530 weight and the 8px gap
+ * for a Badge beside it (the console's .activity-request-model and
+ * .billing-shortcut weight); ItemDescription's two-line clamp and top-aligned
+ * media beside a description (shadcn); and the
+ * `display: contents` list item that wraps a link row in an ItemGroup.
+ *
+ * The rule set is attribute driven, so the React, Vue, Svelte and web
+ * bindings reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="item-group"] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  /* Rows joined by hairlines, like .resource-controls-card. */
+  [data-slot="item-group"]:has(> [data-item-separator]) {
+    gap: 0;
+  }
+
+  [data-slot="item-listitem"] {
+    display: contents;
+  }
+
+  [data-slot="item"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap; /* Kitsaas addition: room for ItemHeader / ItemFooter. */
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    padding: 12px 16px;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--v2-text-text-base);
+    font-family: var(--v2-font-family-sans, inherit);
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  [data-slot="item"][data-variant="outline"] {
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-muted);
+  }
+
+  [data-slot="item"][data-variant="muted"] {
+    background: var(--v2-background-bg-layer-02);
+    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-muted);
+  }
+
+  [data-slot="item"][data-size="sm"] {
+    gap: 12px;
+    padding: 6px 8px;
+  }
+
+  a[data-slot="item"][href] {
+    cursor: pointer;
+  }
+
+  a[data-slot="item"][href]:hover {
+    background-image: linear-gradient(
+      var(--v2-overlay-simple-overlay-hover),
+      var(--v2-overlay-simple-overlay-hover)
+    );
+  }
+
+  [data-slot="item"]:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2.5px;
+  }
+
+  [data-slot="item-media"] {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Kitsaas addition (shadcn): media aligns to the title when there's a description. */
+  [data-slot="item"]:has(> [data-slot="item-content"] > [data-slot="item-description"])
+    > [data-slot="item-media"] {
+    align-self: flex-start;
+  }
+
+  [data-slot="item-media"][data-variant="icon"] {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-raised);
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="item-media"][data-variant="icon"] > svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+
+  [data-slot="item-media"][data-variant="image"] {
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  [data-slot="item-media"][data-variant="image"] > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  [data-slot="item-content"] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  [data-slot="item-title"] {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Kitsaas addition: a Badge beside the title. */
+    min-width: 0;
+    color: var(--v2-text-text-base);
+    font-weight: 530; /* Kitsaas addition, from .activity-request-model. */
+  }
+
+  [data-slot="item-description"] {
+    margin: 0;
+    color: var(--v2-text-text-muted);
+    text-wrap: pretty;
+    /* Kitsaas addition: shadcn's two-line clamp. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  [data-slot="item-actions"] {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+  }
+
+  [data-slot="item-actions"] > svg {
+    width: 16px;
+    height: 16px;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  /* Kitsaas addition (shadcn's layout): full-width lines above and below. */
+  [data-slot="item-header"],
+  [data-slot="item-footer"] {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+}

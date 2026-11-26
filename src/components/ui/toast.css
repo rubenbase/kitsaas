@@ -1,0 +1,284 @@
+/*
+ * 1:1 port of opencode's Toast (`@opencode/ui`, MIT):
+ * packages/ui/src/feedback/toast/toast.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so the 320px card, the collapsed and expanded stacks, the icon
+ * slot, the close button and the action row match `data-component="toast"`:
+ *
+ *   .toast-v2-region                        →  [data-slot="toast-region"]
+ *   .toast-v2                               →  [data-slot="toast"]
+ *   .toast-v2 > [data-icon]                 →  [data-slot="toast"] >
+ *                                                [data-icon]:not([data-slot="button"])
+ *   [data-slot="toast-v2-icon"]             →  also [data-icon]
+ *   .toast-v2 > [data-content]              →  [data-slot="toast"] > [data-slot="toast-content"]
+ *   [data-slot="toast-v2-content"]          →  same
+ *   [data-slot="toast-v2-actions"]          →  [data-slot="toast-actions"]
+ *   [data-title]                            →  [data-slot="toast-title"]
+ *   [data-description]                      →  [data-slot="toast-description"]
+ *   .toast-v2 > [data-close-button]         →  [data-slot="toast"] > [data-slot="button"]
+ *   &[data-expanded="true"]                 →  [data-expanded]
+ *   &[data-expanded="false"][data-front="false"]
+ *                                           →  :not([data-expanded]):not([data-front])
+ *   :root[data-motion="reduce"]             →  same, plus the OS preference
+ *
+ * Upstream's `ToastContent` and `ToastActions` were plain wrappers the author
+ * wrote, so `toast-content` and `toast-actions` are wrappers the author writes
+ * too. `[data-slot="toast-v2-header"]` has no counterpart (upstream renders no
+ * header either); `[data-slot="toast-v2-content"]`'s `flex: 1` served that
+ * header, so it is not needed on the grid child.
+ *
+ * A Kitsaas Button marks itself `data-icon` when it has an icon, so the icon
+ * selectors skip `data-slot="button"`. Only an author's icon element counts.
+ *
+ * ui-sdk already positions the region (`fixed`, side and align) and resets the
+ * list, so this file adds upstream's z-index, offsets, width and stack. The
+ * 32px / 48px offsets are upstream `ToastRegion`'s `offset` prop, and 16px is
+ * its `mobileOffset`. The stack reads ui-sdk's variables: `--toast-front-height` and
+ * `--toast-stack-height` on the region, `--toast-index`, `--toast-offset` and
+ * `--toast-height` on each toast. Upstream's `--toasts-before` is
+ * ui-sdk's `--toast-index`; its transform is ui-sdk's `translate` and `scale`,
+ * so swipes can add `--toast-swipe-x` / `--toast-swipe-y`. The 12px stack gap
+ * is upstream's `gap={12}`, and 9.5px the collapsed peek.
+ *
+ * Kitsaas glue, not upstream: the enter and exit rules (ui-sdk's
+ * `data-starting-style` / `data-ending-style`, where sonner animated upstream)
+ * and the 20px dismiss box, because the close slot renders a Kitsaas Button
+ * whose smallest size is 24px. The button's colour, hover and pressed states
+ * already match, so the override only touches the box.
+ *
+ * toast.css has no [data-color-scheme="dark"] block: the --v2-* tokens flip
+ * with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="toast-region"] {
+    z-index: 1000;
+    inset-inline-end: 32px;
+    bottom: calc(var(--keyboard-inset, 0px) + env(safe-area-inset-bottom, 0px) + 48px);
+    max-width: min(320px, calc(100vw - 64px));
+    width: 320px;
+    height: var(--toast-front-height);
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  [data-slot="toast-region"][data-expanded] {
+    height: calc(var(--toast-stack-height) + (var(--toast-count) - 1) * 12px);
+  }
+
+  [data-slot="toast"] {
+    /* upstream's --y, as a length so `translate` can add the swipe offsets */
+    --y: calc(var(--toast-index) * -9.5px);
+
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: calc(100 - var(--toast-index));
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20px;
+    column-gap: 12px;
+    row-gap: 12px;
+    width: 320px;
+    max-width: 100%;
+    padding: 12px;
+    height: var(--toast-height);
+    max-height: min(420px, calc(100dvh - 96px));
+    overflow: hidden;
+    pointer-events: auto;
+    box-sizing: border-box;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 8px;
+    color: var(--v2-text-text-base);
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-floating);
+
+    translate: var(--toast-swipe-x, 0px) calc(var(--y) + var(--toast-swipe-y, 0px));
+    scale: calc(1 - var(--toast-index) * 0.05);
+    transition:
+      translate 280ms cubic-bezier(0.2, 0, 0, 1),
+      scale 280ms cubic-bezier(0.2, 0, 0, 1),
+      opacity 160ms ease-out,
+      height 280ms cubic-bezier(0.2, 0, 0, 1),
+      box-shadow 160ms ease-out;
+  }
+
+  [data-slot="toast"]:has(> [data-icon]:not([data-slot="button"])) {
+    grid-template-columns: 16px minmax(0, 1fr) 20px;
+  }
+
+  [data-slot="toast"]:focus-visible {
+    box-shadow:
+      var(--v2-elevation-floating),
+      0 0 0 2px var(--v2-border-border-focus);
+  }
+
+  [data-slot="toast"][data-expanded] {
+    overflow: visible;
+    /* ui-sdk glue: offset by the toasts in front, plus upstream's 12px gap. */
+    --y: calc(-1 * (var(--toast-offset) + var(--toast-index) * 12px));
+    scale: 1;
+  }
+
+  [data-slot="toast"]:not([data-expanded]):not([data-front]) > * {
+    opacity: 0;
+  }
+
+  [data-slot="toast"] > [data-icon]:not([data-slot="button"]) {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 20px;
+    color: var(--v2-icon-icon-base);
+  }
+
+  [data-slot="toast"] > [data-slot="toast-content"] {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  [data-slot="toast"]:has(> [data-icon]:not([data-slot="button"])) > [data-slot="toast-content"] {
+    grid-column: 2;
+  }
+
+  /* An author who renders no dismiss button gives the content the whole width. */
+  [data-slot="toast"]:not(:has(> :is([data-slot="toast-close"], [data-slot="button"])))
+    > [data-slot="toast-content"] {
+    grid-column: 1 / -1;
+  }
+
+  [data-slot="toast-description"]:empty {
+    display: none;
+  }
+
+  /*
+   * The dismiss slot: a Kitsaas Button (`data-slot="button"`) rendered through
+   * `ToastClose`'s `render`. Only the box differs from upstream's
+   * `[data-close-button]`: 20 × 20, no padding, 4px radius. A direct child is
+   * the corner button; the action row's buttons keep their own box.
+   */
+  [data-slot="toast"] > [data-slot="button"] {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    padding: 0;
+    border-radius: 4px;
+  }
+
+  [data-slot="toast"]:has(> [data-icon]:not([data-slot="button"])) > [data-slot="button"] {
+    grid-column: 3;
+  }
+
+  [data-slot="toast"] > [data-icon]:not([data-slot="button"]) > *,
+  [data-slot="toast"] > [data-icon]:not([data-slot="button"]) svg,
+  [data-slot="toast"] > [data-slot="button"] svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  [data-slot="toast-title"] {
+    color: var(--v2-text-text-base);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 530;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    font-synthesis: none;
+    margin: 0;
+  }
+
+  [data-slot="toast-description"] {
+    color: var(--v2-text-text-muted);
+    text-wrap-style: pretty;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+    font-synthesis: none;
+    margin: 0;
+  }
+
+  [data-slot="toast-actions"] {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  [data-slot="toast"]:has(> [data-icon]:not([data-slot="button"])) > [data-slot="toast-actions"] {
+    grid-column: 2;
+  }
+
+  /* ui-sdk glue: the states ui-sdk waits on for an enter and exit animation. */
+  [data-slot="toast"][data-starting-style] {
+    transition: none;
+  }
+
+  [data-slot="toast"][data-starting-style][data-front] {
+    --y: 100%;
+  }
+
+  [data-slot="toast"]:is([data-starting-style]:not([data-front]), [data-ending-style]) {
+    opacity: 0;
+  }
+
+  [data-slot="toast"][data-swiping] {
+    transition: none;
+  }
+
+  :root[data-motion="reduce"] [data-slot="toast"],
+  :root[data-motion="reduce"] [data-slot="toast"] > * {
+    animation: none;
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="toast"],
+    [data-slot="toast"] > * {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    [data-slot="toast-region"] {
+      inset-inline-end: 16px;
+      bottom: calc(var(--keyboard-inset, 0px) + env(safe-area-inset-bottom, 0px) + 16px);
+      width: 100%;
+      max-width: calc(100vw - 32px);
+    }
+
+    [data-slot="toast"] {
+      width: 100%;
+    }
+  }
+}

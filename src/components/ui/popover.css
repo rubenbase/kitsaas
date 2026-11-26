@@ -1,0 +1,147 @@
+/*
+ * 1:1 port of opencode's Popover (`@opencode/ui`, MIT):
+ * packages/ui/src/components/popover.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so the panel, its title, description, close part and arrow match
+ * `data-component="popover-content"`:
+ *
+ *   [data-component="popover-content"]   →  [data-slot="popover-content"]
+ *   [data-slot="popover-trigger"]        →  same (ui-sdk's trigger slot)
+ *   [data-slot="popover-header"]         →  same (upstream's own slot; a plain
+ *                                            wrapper the author adds)
+ *   [data-slot="popover-title"]          →  same
+ *   [data-slot="popover-close-button"]   →  [data-slot="popover-close"]
+ *   [data-slot="popover-description"]    →  same
+ *   [data-slot="popover-body"]           →  no element; ui-sdk's content holds
+ *                                            the body, so its 12px inset is the
+ *                                            content's padding
+ *   [data-slot="popover-arrow"]          →  same
+ *
+ * ui-sdk has no header or body wrapper. Upstream's 12px header and body insets
+ * become the content's padding here, so the header keeps only its row layout
+ * and the body needs no rule. Upstream's close button was an IconButton
+ * (styled in icon-button.css), so only its `flex-shrink: 0` is carried over.
+ *
+ * Four upstream app-level tokens are mapped to the --v2-* token that is
+ * nearest, noted at each use: --surface-raised-stronger-non-alpha,
+ * --shadow-md, --text-strong and --text-base.
+ *
+ * ui-sdk sizes and places the arrow from its own box, where upstream filled an
+ * SVG path. The 10px box, the rotation and the two border edges that continue
+ * the panel border are Kitsaas glue; the fill is upstream's. `data-side` and
+ * `data-align` are ui-sdk's placement attributes.
+ *
+ * ui-sdk renders the content in the browser's top layer with no positioner
+ * element, so the content keeps upstream's z-index directly.
+ *
+ * popover.css has no [data-color-scheme="dark"] block: the --v2-* tokens flip
+ * with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="popover-trigger"] {
+    display: inline-flex;
+  }
+
+  [data-slot="popover-content"] {
+    z-index: 50;
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 320px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+
+    /* upstream --surface-raised-stronger-non-alpha (#fff light); the floating
+       layer is the nearest --v2-* token, as in menu and tooltip */
+    background-color: var(--v2-background-bg-layer-01);
+
+    border: 1px solid var(--v2-border-border-muted);
+    background-clip: padding-box;
+
+    /* upstream --shadow-md */
+    box-shadow: var(--v2-elevation-floating);
+  }
+
+  [data-slot="popover-content"]:focus-within {
+    outline: none;
+  }
+
+  /* upstream's header row, without its 12px inset, which the content carries */
+  [data-slot="popover-header"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  [data-slot="popover-title"] {
+    flex: 1;
+    margin: 0;
+
+    /* upstream --text-strong (#171717 light) */
+    color: var(--v2-text-text-base);
+
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-large);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  [data-slot="popover-close"] {
+    flex-shrink: 0;
+  }
+
+  [data-slot="popover-description"] {
+    margin: 0;
+
+    /* upstream --text-base (#6f6f6f light); grey-700 is the nearest token */
+    color: var(--v2-text-text-muted);
+
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-small);
+    font-style: normal;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-large);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  [data-slot="popover-arrow"] {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--v2-background-bg-layer-01);
+    border: 1px solid var(--v2-border-border-muted);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  /*
+   * The arrow sits just outside the panel's edge it points from. Only the two
+   * outer edges keep a border, so the light half blends into the panel.
+   */
+  [data-slot="popover-arrow"][data-side="bottom"] {
+    top: -6px;
+    border-width: 1px 0 0 1px;
+  }
+
+  [data-slot="popover-arrow"][data-side="top"] {
+    bottom: -6px;
+    border-width: 0 1px 1px 0;
+  }
+
+  [data-slot="popover-arrow"][data-side="left"] {
+    right: -6px;
+    border-width: 1px 1px 0 0;
+  }
+
+  [data-slot="popover-arrow"][data-side="right"] {
+    left: -6px;
+    border-width: 0 0 1px 1px;
+  }
+}

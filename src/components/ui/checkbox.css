@@ -1,0 +1,240 @@
+/*
+ * 1:1 port of opencode's Checkbox (`@opencode/ui/checkbox`, MIT):
+ * packages/ui/src/forms/checkbox/checkbox.css (the default "standard" look)
+ * and packages/ui/src/forms/checkbox/checkbox-compact.css (the design-system
+ * checkbox).
+ *
+ * Upstream picks the stylesheet with one `appearance` prop on one Kobalte
+ * Root, so the two are the same control and both live on ui-sdk's single
+ * root: `data-appearance="standard"` is checkbox.css, `data-appearance=
+ * "compact"` is checkbox-compact.css, and `data-surface` (compact only) picks
+ * the layer-1 control fill.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Upstream's root is a
+ * row that also holds the label, description and error; ui-sdk renders the
+ * control itself as the root (the label stays outside, wrapped around it), so
+ * the control's rules move onto the root:
+ *
+ *   [data-component="checkbox"] [data-slot="checkbox-checkbox-control"]
+ *                                   →  [data-slot="checkbox"][data-appearance="standard"]
+ *   [data-slot="checkbox-v2"] [data-slot="checkbox-v2-control"]
+ *                                   →  [data-slot="checkbox"][data-appearance="compact"]
+ *   [data-slot="checkbox-checkbox-indicator"], [data-slot="checkbox-v2-indicator"]
+ *                                   →  [data-slot="checkbox-indicator"]
+ *   [data-checked] / [data-indeterminate] / [data-disabled] / [data-readonly]
+ *                                   →  same names (ui-sdk sets them on both parts)
+ *   [data-invalid]                  →  same name, from Kitsaas' `invalid` prop
+ *   [data-surface]                  →  same name
+ *
+ * Upstream styles no pressed or expanded state for a checkbox, so neither is
+ * here. The label / description / error type (slots checkbox-checkbox-label,
+ * -description, -error, checkbox-v2-row, -text, -label) and the compact
+ * control-stack offset are not ported: those parts live outside this root.
+ *
+ * Values upstream reads from the legacy OC-1 aliases Kitsaas doesn't carry are
+ * mapped to the --v2-* token that equals them, noted at each use.
+ */
+
+@layer components {
+  /* Both appearances are a 16px box with a 1px inline icon grid. */
+  [data-slot="checkbox"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: default;
+    outline: none;
+  }
+
+  [data-slot="checkbox"][data-readonly] {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Indicator, shared base                                           */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="checkbox-indicator"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    /* upstream --icon-base #8f8f8f, between --v2-icon-icon-faint and -muted */
+    color: var(--v2-icon-icon-muted);
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    transition:
+      opacity 180ms var(--tool-motion-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+      transform 220ms var(--tool-motion-ease, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  [data-slot="checkbox"]:is([data-checked], [data-indeterminate]) [data-slot="checkbox-indicator"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Standard: checkbox.css                                           */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="checkbox"][data-appearance="standard"] {
+    padding: 2px;
+    margin-top: var(--checkbox-offset, 0px);
+    border: 1px solid var(--v2-border-border-base);
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    transition:
+      border-color 220ms var(--tool-motion-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+      background-color 220ms var(--tool-motion-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+      box-shadow 220ms var(--tool-motion-ease, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  /* Upstream also sets `background-color: var(--surface-hover)`, a token it
+     never defines, so the hover is the border alone. */
+  [data-slot="checkbox"][data-appearance="standard"]:hover:not([data-disabled], [data-readonly]) {
+    border-color: var(--v2-border-border-strong);
+  }
+
+  /* Upstream rings the control with `--shadow-xs-border-focus`, an OC-1
+     shadow built from OC-1 borders; Kitsaas uses the --v2 focus ring. */
+  [data-slot="checkbox"][data-appearance="standard"]:not([data-readonly]):focus-visible {
+    border-color: var(--v2-border-border-focus);
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Upstream --surface-weak (black 5.1% over white) is exactly grey-200. */
+  [data-slot="checkbox"][data-appearance="standard"]:is([data-checked], [data-indeterminate]) {
+    border-color: var(--v2-border-border-strong);
+    background-color: var(--v2-background-bg-layer-02);
+  }
+
+  /* Upstream: border stays strong, `background-color: var(--surface-hover)`
+     (undefined), i.e. no fill change. */
+  [data-slot="checkbox"][data-appearance="standard"]:is(
+      [data-checked],
+      [data-indeterminate]
+    ):hover:not([data-disabled], [data-readonly]) {
+    border-color: var(--v2-border-border-strong);
+  }
+
+  /* Upstream: `background-color: var(--surface-disabled)` (undefined), so the
+     border is the only change. */
+  [data-slot="checkbox"][data-appearance="standard"][data-disabled] {
+    cursor: not-allowed;
+    border-color: var(--v2-border-border-muted);
+  }
+
+  [data-slot="checkbox"][data-appearance="standard"][data-invalid] {
+    border-color: var(--v2-state-border-danger);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Compact: checkbox-compact.css                                    */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="checkbox"][data-appearance="compact"] {
+    position: relative;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    color: var(--v2-icon-icon-contrast);
+    background: var(--v2-background-bg-base);
+    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-strong);
+    transition:
+      background 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="checkbox"][data-appearance="compact"][data-surface="layer-1"] {
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  /* The compact indicator is an overlay; its icons show by display, not the
+     shared opacity/scale fade. */
+  [data-slot="checkbox"][data-appearance="compact"] [data-slot="checkbox-indicator"] {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  [data-slot="checkbox"][data-appearance="compact"] [data-slot="checkbox-indicator"] > svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+
+  /* First child is the check, last the minus; pass both to describe a mixed
+     value (a single icon still shows when checked). */
+  [data-slot="checkbox"][data-appearance="compact"][data-checked]
+    [data-slot="checkbox-indicator"]
+    > :first-child,
+  [data-slot="checkbox"][data-appearance="compact"][data-indeterminate]
+    [data-slot="checkbox-indicator"]
+    > :last-child {
+    display: block;
+  }
+
+  [data-slot="checkbox"][data-appearance="compact"]:not([data-readonly]):focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* The depth gradient is Figma's white-to-clear fill at 20% over the accent. */
+  [data-slot="checkbox"][data-appearance="compact"]:is([data-checked], [data-indeterminate]) {
+    background:
+      linear-gradient(180deg, var(--v2-alpha-light-20) 0%, var(--v2-alpha-light-0) 100%),
+      var(--v2-background-bg-accent);
+  }
+
+  [data-slot="checkbox"][data-appearance="compact"][data-invalid]:not(
+      [data-checked],
+      [data-indeterminate]
+    ) {
+    background: var(--v2-state-bg-danger);
+    box-shadow: inset 0 0 0 0.5px var(--v2-state-fg-danger);
+  }
+
+  @media (hover: hover) {
+    [data-slot="checkbox"][data-appearance="compact"]:hover:not(
+        [data-disabled],
+        [data-readonly],
+        [data-invalid]
+      ):not([data-checked], [data-indeterminate]) {
+      box-shadow:
+        inset 0 0 0 0.5px var(--v2-border-border-strong),
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover);
+    }
+
+    [data-slot="checkbox"][data-appearance="compact"]:is(
+        [data-checked],
+        [data-indeterminate]
+      ):hover:not([data-disabled], [data-readonly]) {
+      box-shadow:
+        inset 0 0 0 0.5px var(--v2-border-border-strong),
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-contrast-hover);
+    }
+  }
+
+  /* Upstream fades the whole row; the row is the root here. */
+  [data-slot="checkbox"][data-appearance="compact"][data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

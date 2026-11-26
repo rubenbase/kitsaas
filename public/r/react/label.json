@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "type": "registry:ui",
+  "title": "Label",
+  "description": "Names native inputs and custom controls alike, forwarding clicks to activate or focus the associated control.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/react"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/react/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/react/ui/label.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/label.tsx",
+      "content": "'use client'\n\nimport type { ComponentProps } from 'react'\nimport { Label as UiLabel } from '@ui-sdk/react/label'\nimport { Show } from 'react'\n\nimport './label.css'\n\nfunction omit<T extends object, const K extends readonly (keyof T)[]>(\n  obj: T,\n  ...keys: K\n): Omit<T, K[number]> {\n  const copy = { ...obj }\n  for (const key of keys) delete copy[key]\n  return copy\n}\n\nexport type { LabelOptions, LabelPrimitive } from '@ui-sdk/react/label'\n\n/**\n * Label, matching `field.css` label typography on top of ui-sdk's headless\n * Label.\n *\n * Unlike a plain `<label>`, ui-sdk's Label also names and activates non-native\n * controls such as `Switch`, `RadioGroup` and `Slider` by `for` or wrapping,\n * and prevents text selection on double-click.\n */\n\ntype UiLabelProps = ComponentProps<typeof UiLabel>\n\nexport type LabelProps = Omit<\n  UiLabelProps,\n  'className' | 'render' | 'children'\n> & {\n  /** Shows a subtle required indicator (`*`) and marks `data-required`. */\n  required?: boolean\n  /** Marks the label disabled (`data-disabled`). */\n  disabled?: boolean\n  /** Marks the label invalid (`data-invalid`). */\n  invalid?: boolean\n  className?: UiLabelProps['className']\n  render?: UiLabelProps['render']\n  children?: UiLabelProps['children']\n}\n\nexport function Label(props: LabelProps) {\n  const rest = omit(\n    props,\n    'required',\n    'disabled',\n    'invalid',\n    'className',\n    'render',\n    'children',\n  )\n\n  return (\n    <UiLabel\n      {...rest}\n      className={props.className}\n      render={props.render}\n      data-required={props.required ? '' : undefined}\n      data-disabled={props.disabled ? '' : undefined}\n      data-invalid={props.invalid ? '' : undefined}\n    >\n      {(state) => (\n        <>\n          {typeof props.children === 'function'\n            ? props.children(state)\n            : props.children}\n          <Show when={props.required}>\n            <span data-slot=\"label-required\" aria-hidden=\"true\">\n              *\n            </span>\n          </Show>\n        </>\n      )}\n    </UiLabel>\n  )\n}\n"
+    },
+    {
+      "path": "src/components/ui/label.css",
+      "type": "registry:ui",
+      "target": "components/ui/label.css",
+      "content": "/*\n * Label styles for Kitsaas, aligned with field.css label typography on top of\n * @ui-sdk/solid/label.\n *\n * Attribute-driven rules (`data-required`, `data-disabled`, `data-invalid`)\n * using semantic `--v2-*` tokens that flip automatically with\n * `[data-color-scheme=\"dark\"]`.\n */\n\n@layer components {\n  [data-slot=\"label\"] {\n    display: inline-flex;\n    flex-direction: row;\n    align-items: center;\n    gap: 4px;\n    min-height: 16px;\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font-family: var(--font-family-sans);\n    font-style: normal;\n    font-weight: 530;\n    font-size: 13px;\n    line-height: var(--line-height-compact);\n    letter-spacing: -0.04px;\n    color: var(--v2-text-text-base);\n    font-variation-settings: \"slnt\" 0;\n    cursor: default;\n  }\n\n  /* When wrapping a binary control directly, add comfortable gap and pointer cursor */\n  [data-slot=\"label\"]:has(> [data-slot=\"checkbox\"], > [data-slot=\"switch\"], > [data-slot=\"radio\"]) {\n    gap: 8px;\n    cursor: pointer;\n  }\n\n  [data-slot=\"label\"][data-invalid]:not([data-disabled]) {\n    color: var(--v2-state-fg-danger);\n  }\n\n  [data-slot=\"label\"]:is([data-disabled], :has([data-disabled], :disabled)) {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"label-required\"] {\n    color: var(--v2-state-fg-danger);\n    font-weight: 530;\n    line-height: 1;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "react",
+    "uiSdkPackage": "@ui-sdk/react/label"
+  }
+}

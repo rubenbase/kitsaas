@@ -1,0 +1,172 @@
+/*
+ * 1:1 port of opencode's SegmentedControl (`@opencode/ui`, MIT):
+ * packages/ui/src/navigation/segmented-control/segmented-control.css.
+ *
+ * Upstream keys this component off data-slot, not data-component: its root is
+ * `[data-slot="segmented-control-v2"]`. Only the selector names changed, to
+ * meet ui-sdk's markup, so rest / hover / checked / focus / disabled match
+ * upstream:
+ *
+ *   [data-slot="segmented-control-v2"]             →  [data-slot="segmented-control"]
+ *   [data-slot="segmented-control-v2-indicator"]   →  [data-slot="segmented-control-indicator"]
+ *   [data-slot="segmented-control-v2-item"]        →  [data-slot="segmented-control-item"]
+ *   [data-slot="segmented-control-v2-item-label"]  →  [data-slot="segmented-control-item-label"]
+ *
+ * ui-sdk reports the checked item with `data-checked` (and `data-unchecked`)
+ * instead of upstream's `data-pressed`, and marks disabled state with
+ * `data-disabled` as well as the native attribute (a group's `disabled` leaves
+ * the item focusable), so upstream's `:not([data-pressed])` and `:disabled`
+ * become `:not([data-checked])` and `:is([data-disabled], :disabled)`.
+ *
+ * Upstream places the indicator with its JS spring (transform + width). ui-sdk
+ * measures it into the `--segmented-control-indicator-*` variables, so the box
+ * comes from those and the slide is a 150ms CSS transition, matching upstream's
+ * `visualDuration: 0.15` spring. It is off while
+ * `data-activation-direction="none"`, so the first placement doesn't slide.
+ *
+ * Upstream's `:not([data-ready])` fallback — the checked item drawing its own
+ * background before the indicator is measured — has no ui-sdk counterpart:
+ * ui-sdk has no `data-ready`, and its indicator has no box at all while
+ * nothing is checked, so the rule would double the highlight. It is dropped.
+ *
+ * Upstream has no vertical layout (one horizontal row of 28px items) and no
+ * [data-color-scheme="dark"] block; the --v2-* tokens flip with the scheme.
+ * Upstream's `.segmented-control-v2--full-width` class is not ported: the root
+ * already carries `max-width: 100%`.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="segmented-control"] {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    width: 232px;
+    max-width: 100%;
+    height: 28px;
+    background: var(--v2-background-bg-layer-01);
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 0 0 0.5px var(--v2-border-border-base);
+    flex: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  [data-slot="segmented-control-indicator"] {
+    position: absolute;
+    top: var(--segmented-control-indicator-top);
+    left: var(--segmented-control-indicator-left);
+    width: var(--segmented-control-indicator-width);
+    height: var(--segmented-control-indicator-height);
+    border-radius: 6px;
+    background: var(--v2-background-bg-base);
+    box-shadow: 0 0 0 0.5px var(--v2-border-border-strong);
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 0;
+    will-change: left, top, width, height;
+    transition:
+      top 150ms ease,
+      left 150ms ease,
+      width 150ms ease,
+      height 150ms ease;
+  }
+
+  [data-slot="segmented-control-indicator"][data-activation-direction="none"] {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="segmented-control-indicator"] {
+      transition: none;
+    }
+  }
+
+  [data-slot="segmented-control-item"] {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 28px;
+    margin: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 100%;
+    letter-spacing: -0.04px;
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: "slnt" 0;
+    color: var(--v2-text-text-muted);
+    transition:
+      color 0.15s ease,
+      background-color 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  [data-slot="segmented-control-item"]:where(
+      :hover:not([data-disabled]):not([data-checked])
+    ) {
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="segmented-control-item"]:where(:is([data-disabled], :disabled)) {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  [data-slot="segmented-control-item"]:where(:focus-visible) {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 1px;
+    z-index: 2;
+  }
+
+  [data-slot="segmented-control-item"]:where([data-checked]) {
+    color: var(--v2-text-text-base);
+    z-index: 1;
+  }
+
+  [data-slot="segmented-control-item-label"] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /*
+   * Kitsaas addition: upstream's label box holds text only. An icon beside it
+   * takes button-v2's 6px icon gap, so a segment can show both.
+   */
+  [data-slot="segmented-control-item-label"] {
+    gap: 6px;
+  }
+}

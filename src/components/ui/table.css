@@ -1,0 +1,317 @@
+/*
+ * Table, ported from two opencode console tables and renamed to Kitsaas slots.
+ *
+ * variant="default" is the console's members table (policy builder, members
+ * pane), read from its live stylesheet (builder-*.css):
+ *
+ *   .policy-members-table                  →  [data-slot="table"][data-variant="default"]
+ *   .policy-members-table thead (+ :after) →  [data-slot="table-header"]
+ *   .policy-members-table th               →  [data-slot="table-head"]
+ *   .policy-members-table td               →  [data-slot="table-cell"]
+ *   .policy-members-table tbody (:before)  →  [data-slot="table-body"]
+ *   th/td:not(:first-child) right + tabular → [data-numeric]
+ *
+ * variant="framed" is the console's data table ("a raised body inside a
+ * muted frame that also holds the header"), ported from opencode
+ * packages/session-ui/src/components/markdown.css, which copies it for
+ * rendered Markdown; the console's own copy is Tailwind utilities
+ * ([&_tbody]:bg-background, [&_tbody]:shadow-[var(--v2-elevation-raised)],
+ * rounded tbody corners):
+ *
+ *   [data-component="markdown-table"]  →  [data-slot="table-container"] around a framed table
+ *   table / th / td / tbody            →  the framed table's parts
+ *
+ * Tokens are already --v2-*; the one legacy token:
+ *
+ *   --line-height-compact  →  16px   (its value in packages/ui tokens/theme.css)
+ *
+ * Deviations: upstream right-aligns every column after the first and fixes
+ * the first at 50% with `table-layout: fixed`; here alignment is opt-in per
+ * column with `numeric` and the layout is auto, since column roles vary. The
+ * Markdown frame's 16px block margin is left to the page.
+ *
+ * Kitsaas additions, marked below: the shadcn scroll container, base type
+ * for the default variant, TableFooter, TableCaption, selected rows and
+ * sortable column buttons.
+ */
+
+@layer components {
+  /* Kitsaas addition: shadcn's container, so a wide table scrolls sideways. */
+  [data-slot="table-container"] {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Default: .policy-members-table                                   */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="table"][data-variant="default"] {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 13px;
+    /* Kitsaas addition: type the members pane inherits from the page. */
+    color: var(--v2-text-text-base);
+    font-family: var(--v2-font-family-sans, inherit);
+    font-weight: 440;
+    letter-spacing: -0.04px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-header"] {
+    position: relative;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-header"]::after {
+    border: 0.5px solid var(--v2-border-border-muted);
+    content: "";
+    pointer-events: none;
+    border-radius: 6px;
+    position: absolute;
+    inset: 0;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-head"] {
+    background: var(--v2-background-bg-layer-01);
+    color: var(--v2-text-text-muted);
+    vertical-align: top;
+    font-weight: 440;
+    text-align: left;
+  }
+
+  [data-slot="table"][data-variant="default"] :is([data-slot="table-head"], [data-slot="table-cell"]) {
+    padding: 8px 16px;
+    line-height: 20px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-cell"] {
+    overflow-wrap: anywhere;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-header"] [data-slot="table-head"]:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-header"] [data-slot="table-head"]:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Kitsaas addition: a one-column header keeps both rounded ends. */
+  [data-slot="table"][data-variant="default"] [data-slot="table-header"] [data-slot="table-head"]:first-child:last-child {
+    border-radius: 6px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-body"]::before {
+    content: "";
+    height: 8px;
+    display: table-row;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-body"] > tr:hover > :is(td, th) {
+    background: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-body"] > tr > :first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-body"] > tr > :last-child {
+    border-radius: 0 6px 6px 0;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-body"] > tr > :first-child:last-child {
+    border-radius: 6px;
+  }
+
+  /* Kitsaas addition: the footer is a filled pill like the header, 8px under the rows. */
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"] {
+    position: relative;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"]::before {
+    content: "";
+    height: 8px;
+    display: table-row;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"] > tr > * {
+    background: var(--v2-background-bg-layer-01);
+    font-weight: 530;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"] > tr > :first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"] > tr > :last-child {
+    border-radius: 0 6px 6px 0;
+  }
+
+  [data-slot="table"][data-variant="default"] [data-slot="table-footer"] > tr > :first-child:last-child {
+    border-radius: 6px;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Framed: session-ui markdown.css, the console's data table        */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="table-container"]:has(> [data-slot="table"][data-variant="framed"]) {
+    overflow-x: auto;
+    padding: 2px;
+    border-radius: 6px;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: inset 0 0 0 0.5px var(--v2-border-border-muted);
+  }
+
+  [data-slot="table"][data-variant="framed"] {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--v2-text-text-base);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 440;
+    line-height: 16px;
+    letter-spacing: -0.04px;
+    /* Kitsaas addition, as the default variant. */
+    font-family: var(--v2-font-family-sans, inherit);
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] {
+    border-radius: 4px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-raised);
+  }
+
+  [data-slot="table"][data-variant="framed"] :is([data-slot="table-head"], [data-slot="table-cell"]) {
+    text-align: start;
+    vertical-align: top;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-head"] {
+    padding: 8px 12px;
+    color: var(--v2-text-text-muted);
+    font-weight: 530;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-cell"] {
+    padding: 10px 12px;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] > tr:not(:last-child) > * {
+    border-bottom: 0.5px solid var(--v2-border-border-muted);
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] > tr:first-child > :first-child {
+    border-start-start-radius: 4px;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] > tr:first-child > :last-child {
+    border-start-end-radius: 4px;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] > tr:last-child > :first-child {
+    border-end-start-radius: 4px;
+  }
+
+  [data-slot="table"][data-variant="framed"] [data-slot="table-body"] > tr:last-child > :last-child {
+    border-end-end-radius: 4px;
+  }
+
+  /* Kitsaas addition: footer cells sit in the frame, typed like the header. */
+  [data-slot="table"][data-variant="framed"] [data-slot="table-footer"] [data-slot="table-cell"] {
+    padding: 8px 12px;
+    font-weight: 530;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Kitsaas additions: numbers, selection, caption, sorting          */
+  /* ---------------------------------------------------------------- */
+
+  /* Upstream's right-aligned, tabular columns, opt-in per cell. */
+  [data-slot="table"] :is([data-slot="table-head"], [data-slot="table-cell"])[data-numeric] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="table"][data-variant] [data-slot="table-body"] > tr[data-state="selected"] > :is(td, th) {
+    background: var(--v2-overlay-simple-overlay-pressed);
+  }
+
+  [data-slot="table-caption"] {
+    caption-side: bottom;
+    margin-top: 16px;
+    color: var(--v2-text-text-muted);
+    font-size: 13px;
+    line-height: 20px;
+    text-align: left;
+  }
+
+  /* A sortable column: <th aria-sort="…"><button>Name</button></th>. */
+  [data-slot="table-head"][aria-sort] > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    cursor: pointer;
+  }
+
+  [data-slot="table-head"][data-numeric][aria-sort] > button {
+    flex-direction: row-reverse;
+  }
+
+  [data-slot="table-head"][aria-sort] > button:hover {
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="table-head"][aria-sort] > button:focus-visible {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  [data-slot="table-head"][aria-sort] > button::after {
+    content: "";
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 12.5v-9M4.5 7 8 3.5 11.5 7'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 12.5v-9M4.5 7 8 3.5 11.5 7'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    opacity: 0;
+  }
+
+  [data-slot="table-head"]:is([aria-sort="ascending"], [aria-sort="descending"]) > button {
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="table-head"]:is([aria-sort="ascending"], [aria-sort="descending"]) > button::after {
+    opacity: 1;
+  }
+
+  [data-slot="table-head"][aria-sort="descending"] > button::after {
+    transform: rotate(180deg);
+  }
+
+  [data-slot="table-head"][aria-sort="none"] > button:hover::after {
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-slot="table-head"][aria-sort] > button::after {
+      transition:
+        opacity 0.12s ease,
+        transform 0.12s ease;
+    }
+  }
+}

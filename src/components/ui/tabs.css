@@ -1,0 +1,263 @@
+/*
+ * 1:1 port of opencode's Tabs (`@opencode/ui`, MIT):
+ * packages/ui/src/navigation/tabs/tabs-current.css (`tabs-v2`).
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so rest / hover / selected / focus / disabled, both orientations
+ * and the normal, pill and settings variants match `data-component="tabs-v2"`:
+ *
+ *   [data-component="tabs-v2"]           →  [data-slot="tabs"]
+ *   [data-slot="tabs-v2-list"]           →  [data-slot="tabs-list"]
+ *   [data-slot="tabs-v2-content"]        →  [data-slot="tabs-panel"]
+ *   [data-slot="tabs-v2-trigger-wrapper"] +
+ *   [data-slot="tabs-v2-trigger"]        →  [data-slot="tabs-tab"]
+ *   [data-slot="tabs-v2-trigger-content"] →  [data-slot="tabs-tab-content"]
+ *
+ * Upstream wraps each trigger in a div and puts the button inside it, so the
+ * two boxes collapse into ui-sdk's single `tab` button: the wrapper's box
+ * values sit on the tab, and the trigger's `width / height: 100%` are dropped
+ * where they only resolved against that wrapper. Because of the same collapse,
+ * upstream's `:has([data-selected])` and `:not(:has([data-selected]))` become
+ * `[data-selected]` and `:not([data-selected])`.
+ *
+ * ui-sdk keeps a disabled tab focusable and marks it with `aria-disabled` and
+ * `data-disabled` instead of the native attribute, so upstream's `:disabled`
+ * and `:not(:disabled)` become `[data-disabled]` and `:not([data-disabled])`.
+ *
+ * `data-variant` uses upstream's own values: `normal` is the underline tabs
+ * (upstream's `line`), `pill` is the segmented row (upstream's `surface`) and
+ * `settings` is the vertical sidebar. Upstream's `underline` maps to `alt`,
+ * which exists only in the older tabs.css and reads app-level tokens this repo
+ * does not have; `panel` maps to the older stylesheet too, so neither is
+ * ported. The close-button slots, their `icon-button-v2` margin and the
+ * settings section title are not parts of this pass either.
+ *
+ * tabs-current.css has no [data-color-scheme="dark"] block; the --v2-* tokens
+ * flip with the scheme. `data-focused` appears only in the older tabs.css
+ * (the review panel's override), which is not ported.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="tabs"][data-variant] {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: clip;
+  }
+
+  [data-slot="tabs"][data-variant][data-orientation="horizontal"] {
+    flex-direction: column;
+  }
+
+  [data-slot="tabs"][data-variant][data-orientation="vertical"] {
+    flex-direction: row;
+  }
+
+  [data-slot="tabs"][data-variant] > [data-slot="tabs-panel"] {
+    flex: 1;
+    overflow: auto;
+  }
+
+  [data-slot="tabs"][data-variant] > [data-slot="tabs-list"] {
+    display: flex;
+  }
+
+  [data-slot="tabs"][data-variant][data-orientation="horizontal"]
+    > [data-slot="tabs-list"] {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  [data-slot="tabs"][data-variant][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The wrapper and the trigger merged into one element. */
+  [data-slot="tabs"][data-variant]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"] {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    outline: none;
+    user-select: none;
+
+    font-size: 13px;
+    font-weight: 440;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+  }
+
+  /* Upstream's content span: inline-flex, items-center, gap-2. */
+  [data-slot="tabs"][data-variant]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]
+    > [data-slot="tabs-tab-content"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  [data-slot="tabs"][data-variant]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]:is(:focus, :focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Normal: the underline tabs. */
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"],
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"] {
+    gap: 6px;
+    padding-inline: 8px;
+    height: 32px;
+    align-items: center;
+    position: relative;
+  }
+
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]::before,
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]::before {
+    height: 1px;
+    content: "";
+    width: calc(100% + 16px);
+    background-color: var(--v2-border-border-base);
+    position: absolute;
+    bottom: 0px;
+    inset-inline-start: -8px;
+  }
+
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"] {
+    height: 100%;
+    gap: 4px;
+    padding: 6px;
+    color: var(--v2-text-text-muted);
+    border-bottom: 1px solid transparent;
+  }
+
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]:hover:not([data-disabled]):not([data-selected]) {
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"][data-selected] {
+    border-bottom-color: var(--v2-text-text-faint);
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="tabs"][data-variant="normal"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]:not([data-selected]) {
+    color: var(--v2-text-text-muted);
+  }
+
+  /* Pill: the segmented row. */
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"] {
+    padding-bottom: 8px;
+    align-items: start;
+  }
+
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"] {
+    height: 24px;
+    border-radius: 4px;
+    border: 0.5px solid transparent;
+    box-sizing: border-box;
+    color: var(--v2-text-text-muted);
+    justify-content: center;
+    padding: 0 6px;
+  }
+
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]:hover:not([data-disabled]):not([data-selected]) {
+    background-color: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+    border: 0.5px solid var(--v2-border-border-muted);
+  }
+
+  [data-slot="tabs"][data-variant="pill"][data-orientation="horizontal"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"][data-selected] {
+    background-color: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+    border: 0.5px solid var(--v2-border-border-muted);
+  }
+
+  /* Settings: the vertical sidebar. */
+  [data-slot="tabs"][data-variant="settings"][data-orientation="vertical"]
+    > [data-slot="tabs-list"] {
+    flex-direction: column;
+    width: 240px;
+    min-width: 200px;
+    height: 100%;
+    padding: 12px;
+    gap: 4px;
+    overflow-y: auto;
+    border-inline-end: 1px solid var(--v2-border-border-base);
+  }
+
+  [data-slot="tabs"][data-variant="settings"][data-orientation="vertical"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"] {
+    width: 100%;
+    height: 28px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--v2-text-text-muted);
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  [data-slot="tabs"][data-variant="settings"][data-orientation="vertical"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"]:hover:not([data-disabled]):not([data-selected]) {
+    background-color: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+  }
+
+  [data-slot="tabs"][data-variant="settings"][data-orientation="vertical"]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"][data-selected] {
+    background-color: var(--v2-background-bg-layer-03);
+    color: var(--v2-text-text-base);
+  }
+
+  /*
+   * Upstream marks the trigger wrapper `:disabled`; ui-sdk keeps a disabled
+   * tab focusable and sets `data-disabled` instead. This rule comes last and
+   * carries the variant and orientation hooks the variant colours use, so it
+   * wins over them.
+   */
+  [data-slot="tabs"][data-variant][data-orientation]
+    > [data-slot="tabs-list"]
+    > [data-slot="tabs-tab"][data-disabled] {
+    pointer-events: none;
+    color: var(--v2-text-text-faint);
+  }
+}

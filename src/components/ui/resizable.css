@@ -1,0 +1,180 @@
+@layer components {
+  [data-slot="resizable"] {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 180px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--v2-background-bg-base);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-base);
+    color: var(--v2-text-text-base);
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+
+  [data-slot="resizable"] [data-slot="resizable"] {
+    min-height: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  [data-slot="resizable"][data-disabled] {
+    opacity: 0.75;
+  }
+
+  [data-slot="resizable-panel"] {
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* 1px hairline separator with wider hit area & focus/hover/drag highlight */
+  [data-slot="resizable-handle"] {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--v2-border-border-base);
+    outline: none;
+    touch-action: none;
+    user-select: none;
+    transition: background-color 120ms ease-out;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="horizontal"] {
+    width: 1px;
+    cursor: col-resize;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="vertical"] {
+    height: 1px;
+    cursor: row-resize;
+  }
+
+  /* Expanded interactive hit area */
+  [data-slot="resizable-handle"]::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="horizontal"]::before {
+    inset: 0 -6px;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="vertical"]::before {
+    inset: -6px 0;
+  }
+
+  /* Highlight bar shown on hover, drag, or keyboard focus */
+  [data-slot="resizable-handle"]::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    background: var(--v2-border-border-focus);
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="horizontal"]::after {
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    translate: -50% 0;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="vertical"]::after {
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    translate: 0 -50%;
+  }
+
+  [data-slot="resizable-handle"]:not([data-disabled]):is(
+      [data-hovering],
+      [data-dragging],
+      :focus-visible
+    ) {
+    background: var(--v2-border-border-focus);
+  }
+
+  [data-slot="resizable-handle"]:not([data-disabled]):is(
+      [data-hovering],
+      [data-dragging],
+      :focus-visible
+    )::after {
+    opacity: 1;
+  }
+
+  [data-slot="resizable-handle"][data-disabled] {
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  /* Optional centered grip pill */
+  [data-slot="resizable-handle-grip"] {
+    position: relative;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-base);
+    color: var(--v2-icon-icon-faint);
+    pointer-events: none;
+    transition:
+      background-color 120ms ease-out,
+      box-shadow 120ms ease-out,
+      color 120ms ease-out;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="horizontal"]
+    [data-slot="resizable-handle-grip"] {
+    width: 12px;
+    height: 24px;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="vertical"]
+    [data-slot="resizable-handle-grip"] {
+    width: 24px;
+    height: 12px;
+  }
+
+  [data-slot="resizable-handle"][data-orientation="vertical"]
+    [data-slot="resizable-handle-grip"]
+    svg {
+    transform: rotate(90deg);
+  }
+
+  [data-slot="resizable-handle"]:not([data-disabled]):is(
+      [data-hovering],
+      [data-dragging],
+      :focus-visible
+    )
+    [data-slot="resizable-handle-grip"] {
+    background: var(--v2-background-bg-base);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-focus);
+    color: var(--v2-border-border-focus);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="resizable-handle"],
+    [data-slot="resizable-handle"]::after,
+    [data-slot="resizable-handle-grip"] {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "preferences",
+  "type": "registry:ui",
+  "title": "Preferences",
+  "description": "Applies storage-backed user preferences onto data attributes so CSS can adapt before hydration without flash.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/web"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/web/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/web/ui/preferences.ts",
+      "type": "registry:ui",
+      "target": "components/ui/preferences.ts",
+      "content": "import '@ui-sdk/web/preferences'\nimport './preferences.css'\n\nexport {\n  colorSchemeOf,\n  createColorScheme,\n  createCookieStorage,\n  createLocalStorage,\n  createPointerKind,\n  createPreference,\n  createSessionStorage,\n  pointerKindOf,\n  preferencesScript,\n  usePreference,\n} from '@ui-sdk/web/preferences'\n"
+    },
+    {
+      "path": "src/components/ui/preferences.css",
+      "type": "registry:ui",
+      "target": "components/ui/preferences.css",
+      "content": "@layer components {\n  /*\n   * Attribute-driven density and view styles for regions wrapped in\n   * `<Preferences>`. Custom properties cascade into any descendant without\n   * adding extra layout boxes (`Preferences` renders `display: contents`).\n   */\n  [data-density=\"compact\"] {\n    --preferences-gap: 4px;\n    --preferences-item-pad-y: 5px;\n    --preferences-item-pad-x: 10px;\n    --preferences-item-font-size: 12px;\n  }\n\n  [data-density=\"comfortable\"] {\n    --preferences-gap: 8px;\n    --preferences-item-pad-y: 9px;\n    --preferences-item-pad-x: 12px;\n    --preferences-item-font-size: 13px;\n  }\n\n  [data-density=\"spacious\"] {\n    --preferences-gap: 12px;\n    --preferences-item-pad-y: 13px;\n    --preferences-item-pad-x: 14px;\n    --preferences-item-font-size: 13px;\n  }\n\n  [data-slot=\"preferences-collection\"] {\n    display: flex;\n    flex-direction: column;\n    gap: var(--preferences-gap, 8px);\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  [data-view=\"grid\"] [data-slot=\"preferences-collection\"] {\n    display: grid;\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n\n  [data-slot=\"preferences-item\"] {\n    box-sizing: border-box;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 8px;\n    padding: var(--preferences-item-pad-y, 9px)\n      var(--preferences-item-pad-x, 12px);\n    border-radius: 6px;\n    background: var(--v2-background-bg-base);\n    box-shadow: inset 0 0 0 1px var(--v2-border-border-muted);\n    color: var(--v2-text-text-base);\n    font-size: var(--preferences-item-font-size, 13px);\n    font-weight: 440;\n    line-height: 18px;\n    letter-spacing: -0.04px;\n    font-variant-numeric: tabular-nums;\n    transition:\n      padding 140ms ease-out,\n      background-color 110ms ease-out;\n  }\n\n  [data-view=\"grid\"] [data-slot=\"preferences-item\"] {\n    flex-direction: column;\n    align-items: flex-start;\n    justify-content: space-between;\n    gap: 6px;\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"preferences-item\"]:hover {\n      background: var(--v2-background-bg-layer-01);\n    }\n  }\n\n  /* Scoped code-size preference helper */\n  [data-code-size=\"sm\"] [data-slot=\"preferences-code\"] {\n    font-size: 11px;\n    line-height: 16px;\n  }\n\n  [data-code-size=\"md\"] [data-slot=\"preferences-code\"] {\n    font-size: 12px;\n    line-height: 18px;\n  }\n\n  [data-code-size=\"lg\"] [data-slot=\"preferences-code\"] {\n    font-size: 14px;\n    line-height: 22px;\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"preferences-item\"] {\n      transition: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "web",
+    "uiSdkPackage": "@ui-sdk/web/preferences"
+  }
+}

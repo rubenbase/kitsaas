@@ -1,0 +1,51 @@
+/*
+ * Label styles for Kitsaas, aligned with field.css label typography on top of
+ * @ui-sdk/solid/label.
+ *
+ * Attribute-driven rules (`data-required`, `data-disabled`, `data-invalid`)
+ * using semantic `--v2-*` tokens that flip automatically with
+ * `[data-color-scheme="dark"]`.
+ */
+
+@layer components {
+  [data-slot="label"] {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: var(--font-family-sans);
+    font-style: normal;
+    font-weight: 530;
+    font-size: 13px;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+    cursor: default;
+  }
+
+  /* When wrapping a binary control directly, add comfortable gap and pointer cursor */
+  [data-slot="label"]:has(> [data-slot="checkbox"], > [data-slot="switch"], > [data-slot="radio"]) {
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  [data-slot="label"][data-invalid]:not([data-disabled]) {
+    color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="label"]:is([data-disabled], :has([data-disabled], :disabled)) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-slot="label-required"] {
+    color: var(--v2-state-fg-danger);
+    font-weight: 530;
+    line-height: 1;
+  }
+}

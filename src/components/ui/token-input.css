@@ -1,0 +1,212 @@
+@layer components {
+  /* Matches input.css container while growing cleanly with wrapped inline tokens */
+  [data-slot="token-input-editor"] {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 28px;
+    padding: 3px 8px;
+    margin: 0;
+    border: 0;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+    background: var(--v2-background-bg-base);
+    box-shadow: var(--v2-elevation-input);
+    color: var(--v2-text-text-base);
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: 22px;
+    letter-spacing: -0.04px;
+    font-variation-settings: "slnt" 0;
+    word-break: break-word;
+    transition:
+      background 85ms ease-out,
+      outline-color 85ms ease-out,
+      box-shadow 85ms ease-out;
+  }
+
+  [data-slot="token-input-editor"][data-surface="layer-1"] {
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  @media (hover: hover) {
+    [data-slot="token-input-editor"]:hover:not(
+        [data-disabled],
+        [data-invalid],
+        [aria-invalid="true"]
+      ):not(:focus) {
+      box-shadow:
+        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),
+        var(--v2-elevation-input);
+    }
+  }
+
+  [data-slot="token-input-editor"]:focus:not(
+      [data-disabled],
+      [data-invalid],
+      [aria-invalid="true"]
+    ) {
+    outline-color: var(--v2-border-border-focus);
+    box-shadow: none;
+  }
+
+  [data-slot="token-input-editor"]:is(
+      [data-invalid],
+      [aria-invalid="true"]
+    ):not([data-disabled]) {
+    outline-color: var(--v2-state-fg-danger);
+    box-shadow: none;
+  }
+
+  [data-slot="token-input-editor"][data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-slot="token-input-editor"][data-empty]::before {
+    position: absolute;
+    inset-inline-start: 8px;
+    color: var(--v2-text-text-faint);
+    content: attr(aria-placeholder);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Token host & chips                                               */
+  /* ---------------------------------------------------------------- */
+
+  /* Prevent editor pre-wrap whitespace from rendering inside custom token markup */
+  [data-slot="token-input-host"] {
+    white-space: normal;
+  }
+
+  /* Default chip look when no custom renderToken is supplied */
+  [data-slot="token-input-host"]:not(:has([data-slot="token-input-token"])) {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 20px;
+    padding-inline: 6px;
+    margin-block: 1px;
+    border-radius: 4px;
+    background: var(--v2-background-bg-layer-02);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-base);
+    color: var(--v2-text-text-base);
+    font-size: 12px;
+    font-weight: 530;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  [data-slot="token-input-host"]:not(
+      :has([data-slot="token-input-token"])
+    )[data-selected] {
+    background: var(--v2-state-bg-info);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-focus);
+    color: var(--v2-state-fg-info);
+  }
+
+  [data-slot="token-input-token"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 20px;
+    padding-inline: 6px;
+    margin-block: 1px;
+    border-radius: 4px;
+    background: var(--v2-background-bg-layer-02);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-base);
+    color: var(--v2-text-text-base);
+    font-size: 12px;
+    font-weight: 530;
+    line-height: 1;
+    letter-spacing: -0.02px;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    transition:
+      background 85ms ease-out,
+      box-shadow 85ms ease-out,
+      color 85ms ease-out;
+  }
+
+  [data-slot="token-input-token"]:has(
+      [data-slot="token-input-token-remove"]:not([data-disabled], [data-readonly])
+    ) {
+    padding-inline-end: 3px;
+  }
+
+  [data-slot="token-input-token"][data-selected] {
+    background: var(--v2-state-bg-info);
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-focus);
+    color: var(--v2-state-fg-info);
+  }
+
+  [data-slot="token-input-token"][data-pending] {
+    color: var(--v2-text-text-faint);
+    background: var(--v2-background-bg-layer-01);
+  }
+
+  [data-slot="token-input-token"][data-unresolved] {
+    background: var(--v2-state-bg-warning);
+    box-shadow: inset 0 0 0 1px var(--v2-state-border-warning);
+    color: var(--v2-state-fg-warning);
+  }
+
+  [data-slot="token-input-token"] > svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Token remove button                                              */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="token-input-token-remove"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    color: var(--v2-icon-icon-muted);
+    cursor: pointer;
+    transition:
+      background 85ms ease-out,
+      color 85ms ease-out;
+  }
+
+  @media (hover: hover) {
+    [data-slot="token-input-token-remove"]:hover:not(
+        [data-disabled],
+        [data-readonly]
+      ) {
+      background: var(--v2-overlay-simple-overlay-hover);
+      color: var(--v2-text-text-base);
+    }
+  }
+
+  [data-slot="token-input-token-remove"]:is([data-disabled], [data-readonly]) {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="token-input-editor"],
+    [data-slot="token-input-token"],
+    [data-slot="token-input-token-remove"] {
+      transition: none;
+    }
+  }
+}

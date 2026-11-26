@@ -1,0 +1,118 @@
+/*
+ * 1:1 port of opencode's Keybind (`@opencode/ui/keybind`,
+ * packages/ui/src/data-display/keybind/keybind.css, MIT), with shadcn's part
+ * names. The console draws the same key cap by hand in its Billing drawer
+ * footer (`.billing-drawer-footer kbd`: layer-03 fill, 14px tall, 14px min
+ * width, 2px radius, 11px / 530 inherited from the footer), so this is the
+ * console's look; upstream is ported because it is the general rule and has
+ * the variants. The selectors are renamed to Kitsaas slots:
+ *
+ *   [data-component="keybind-v2"]           →  [data-slot="kbd-group"]
+ *   [data-slot="keybind-v2-key"]            →  [data-slot="kbd"]
+ *   [data-slot="keybind-v2-label"]          →  merged into [data-slot="kbd"]
+ *   [data-component="keybind-v2"][data-variant]  →  [data-slot="kbd"][data-variant]
+ *
+ * Upstream nests a label <span> in each key <div>; a Kbd is one <kbd>, so the
+ * label's type declarations sit on the key itself. The label's own box
+ * (`display`, `height: 11px`, `padding`, `flex`) is dropped: the key's 14px
+ * flex box centres the 11px line the same way. The variant moves from the
+ * group to each key, so a lone Kbd has one. Upstream's custom properties are
+ * renamed `--keybind-*` → `--kbd-*`. Upstream's global `*` font-smoothing rule
+ * is not ported (it is not the component's to set).
+ *
+ * The other console key caps, for reference: `.policy-builder-undo kbd` is the
+ * same cap on --v2-background-bg-layer-04 with 3px padding (it sits on a
+ * layer-03 toast), and `.onboarding .kbd` is an 18px, 13px monospace cap on
+ * legacy tokens; `[data-slot="menu-v2-item-shortcut"]` is bare text, which is
+ * Kitsaas's MenuShortcut.
+ *
+ * Kitsaas additions, marked below: `font-family: inherit` (preflight sets
+ * <kbd> to monospace; the console's cap is the UI sans), `white-space: nowrap`
+ * for formatted shortcuts like "Ctrl+K", and a 12px size for an inline <svg>.
+ *
+ * Every colour is a token, so both schemes follow [data-color-scheme] with no
+ * dark block here.
+ */
+
+@layer components {
+  [data-slot="kbd-group"] {
+    box-sizing: border-box;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 2px;
+    flex-shrink: 0;
+
+    /* Kitsaas addition: the group is a <kbd> too, so undo preflight's mono. */
+    font-family: inherit;
+  }
+
+  [data-slot="kbd"] {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    padding-inline: 4px;
+    gap: 4px;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex: none;
+    flex-grow: 0;
+    transition:
+      background-color var(--kbd-transition-duration, 0s) ease,
+      box-shadow var(--kbd-transition-duration, 0s) ease;
+
+    /* Upstream's [data-slot="keybind-v2-label"] type. */
+    font-style: normal;
+    font-weight: var(--kbd-font-weight, 530);
+    font-size: var(--kbd-font-size, 11px);
+    line-height: 1;
+    text-align: center;
+    letter-spacing: 0.05px;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings:
+      "tnum" on,
+      "lnum" on;
+    font-variation-settings: "slnt" 0;
+    user-select: none;
+
+    /* Kitsaas additions. */
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  [data-slot="kbd"][data-variant="neutral"] {
+    background: var(--v2-background-bg-layer-03);
+  }
+
+  [data-slot="kbd"][data-variant="ghost"] {
+    background: transparent;
+  }
+
+  [data-slot="kbd"][data-variant="outline"] {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--v2-border-border-strong);
+  }
+
+  [data-slot="kbd"]:is([data-variant="neutral"], [data-variant="outline"]) {
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="kbd"][data-variant="ghost"] {
+    color: var(--v2-text-text-faint);
+  }
+
+  /* Kitsaas addition: an inline icon, sized to fit the 14px cap. */
+  [data-slot="kbd"] > svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    color: currentColor;
+  }
+}

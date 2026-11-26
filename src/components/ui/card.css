@@ -1,0 +1,223 @@
+/*
+ * Card, ported from opencode console's dashboard cards (the My usage /
+ * Leaderboard / Billing row on Activity). The console is hosted and its source
+ * is not in the opencode checkout, so the rules were read from its live
+ * stylesheet and renamed to Kitsaas slots:
+ *
+ *   .activity-card                  →  [data-slot="card"]
+ *   .activity-card-linked:hover     →  a card whose title holds a link
+ *   .activity-card-heading          →  [data-slot="card-header"]
+ *   .activity-card-heading h2 / p   →  card-title / card-description
+ *   .activity-card-chevron          →  an svg in [data-slot="card-action"]
+ *   .activity-card-inset            →  [data-slot="card-inset"]
+ *   .activity-go-limited[data-tone] →  card-inset[data-variant]
+ *   .activity-facts                 →  [data-slot="card-facts"]
+ *
+ * The console's --oc-* aliases map to the --v2-* tokens they alias, since
+ * --oc-* resolves once at :root (see src/theme.css):
+ *
+ *   --oc-border-muted     →  --v2-border-border-muted   (dark: #ffffff14)
+ *   --oc-border           →  --v2-border-border-base    (dark: #ffffff1a)
+ *   --oc-text-secondary   →  --v2-text-text-muted
+ *
+ * The chevron is an <img> of #dbdbdb with `filter: brightness(0.4)` in light
+ * mode upstream; here it is an inline svg in --v2-icon-icon-base, which is
+ * #dbdbdb in dark.
+ *
+ * Kitsaas additions, marked below: the dashboard's 320px min-height is left to
+ * the page; CardContent gets a 16px top margin and CardFooter is pushed to the
+ * bottom, since upstream spaces each card's content by hand; and the whole
+ * card is clickable through a stretched title link instead of the console's
+ * click handler, so it works without JS.
+ */
+
+@layer components {
+  [data-slot="card"] {
+    --card-bg: var(--v2-background-bg-layer-01);
+
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 16px;
+    border: 0.5px solid var(--v2-border-border-muted);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--v2-text-text-base);
+    font-family: var(--v2-font-family-sans, inherit);
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+  }
+
+  /* Header: title and description on the left, an action pinned top right. */
+  [data-slot="card-header"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 16px;
+    align-items: start;
+    min-height: 44px;
+  }
+
+  [data-slot="card-header"]:has(> [data-slot="card-action"]) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  [data-slot="card-header"] > * {
+    min-width: 0;
+  }
+
+  [data-slot="card-title"] {
+    grid-column: 1;
+    margin: 0;
+    color: var(--v2-text-text-base);
+    font-size: 15px;
+    font-weight: 530;
+    line-height: 20px;
+    letter-spacing: -0.04px;
+  }
+
+  [data-slot="card-title"] a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  [data-slot="card-description"] {
+    grid-column: 1;
+    margin: 4px 0 0;
+    color: var(--v2-text-text-muted);
+    white-space: nowrap;
+  }
+
+  [data-slot="card-action"] {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  [data-slot="card-action"] > svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    color: var(--v2-icon-icon-base);
+  }
+
+  /* Inset tile: the Leaderboard's "Average spent" and Billing's spend-limit row. */
+  [data-slot="card-inset"] {
+    display: block;
+    padding: 12px;
+    border: 0.5px solid var(--v2-border-border-muted);
+    border-radius: 6px;
+    background: var(--v2-background-bg-layer-02);
+  }
+
+  [data-slot="card-inset"][data-variant="danger"] {
+    border-color: var(--v2-state-border-danger);
+    background: var(--v2-state-bg-danger);
+    color: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="card-inset"][data-variant="warning"] {
+    border-color: var(--v2-state-border-warning);
+    background: var(--v2-state-bg-warning);
+    color: var(--v2-state-fg-warning);
+  }
+
+  /* Fact list: label on the left, value on the right, hairline between rows. */
+  [data-slot="card-facts"] {
+    margin: 0;
+  }
+
+  [data-slot="card-facts"] > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--v2-border-border-base);
+  }
+
+  [data-slot="card-facts"] > div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  [data-slot="card-facts"] dt {
+    flex-shrink: 0;
+    color: var(--v2-text-text-muted);
+  }
+
+  [data-slot="card-facts"] dd {
+    min-width: 0;
+    margin: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Kitsaas additions: spacing between parts. */
+  [data-slot="card-content"] {
+    margin-top: 16px;
+  }
+
+  [data-slot="card-footer"] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+  }
+
+  /* Linked card: upstream's hover and press, through a stretched title link. */
+  [data-slot="card"]:has([data-slot="card-title"] a[href]) {
+    cursor: pointer;
+  }
+
+  [data-slot="card-title"] a[href]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  [data-slot="card-title"] a[href]:focus-visible {
+    outline: none;
+  }
+
+  [data-slot="card"]:has([data-slot="card-title"] a[href]:focus-visible) {
+    outline: 2px solid var(--v2-border-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Other links and buttons in a linked card stay clickable above the overlay. */
+  [data-slot="card"]:has([data-slot="card-title"] a[href])
+    :is(a[href], button):not([data-slot="card-title"] a) {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    [data-slot="card"]:has([data-slot="card-title"] a[href]) {
+      transition: background-color 0.12s ease;
+    }
+
+    [data-slot="card"]:has([data-slot="card-title"] a[href]):hover {
+      --card-bg: color-mix(
+        in srgb,
+        var(--v2-background-bg-layer-01),
+        var(--v2-background-bg-layer-02)
+      );
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-slot="card"]:has([data-slot="card-title"] a[href]:active) {
+      transition: transform 0.1s ease-out;
+      transform: scale(0.995);
+    }
+  }
+}

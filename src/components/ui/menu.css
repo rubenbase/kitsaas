@@ -1,0 +1,236 @@
+/*
+ * 1:1 port of opencode's Menu (`@opencode/ui`, MIT):
+ * packages/ui/src/navigation/menu/menu.css.
+ *
+ * Only the selectors changed, to meet ui-sdk's markup. Every value is
+ * upstream, so rest / highlight / checked / expanded / disabled and the
+ * submenu chevron match `data-component="menu-v2-content"`:
+ *
+ *   [data-component="menu-v2-content"]   →  [data-slot="menu-content"][data-appearance="compact"]
+ *   [data-component="menu-v2-item"]      →  the item slots (ui-sdk splits them
+ *                                            into menu-item, menu-checkbox-item,
+ *                                            menu-radio-item and the submenu's
+ *                                            menu-trigger)
+ *   [data-slot="menu-v2-item-content"]   →  [data-slot="menu-item-content"]
+ *   [data-slot="menu-v2-item-shortcut"]  →  [data-slot="menu-shortcut"]  (ui-sdk's own part)
+ *   [data-slot="menu-v2-item-indicator"] →  [data-slot="menu-item-indicator"]
+ *   [data-slot="menu-v2-item-chevron"]   →  [data-slot="menu-item-chevron"]
+ *   [data-slot="menu-v2-separator"]      →  [data-slot="menu-separator"]
+ *   [data-slot="menu-v2-group-label"]    →  [data-slot="menu-group-label"]
+ *   [data-expanded] on a submenu trigger →  [data-open]  (ui-sdk's attribute)
+ *
+ * Upstream positions the popup in a `[data-popper-positioner]` wrapper and
+ * raises it with `z-index: 60`. ui-sdk renders the popup in place in the top
+ * layer, with no positioner element, so the content is its own positioner and
+ * keeps that z-index directly.
+ *
+ * `appearance="standard"` is not ported: it reads opencode's app-level tokens
+ * (--surface-raised-*, --shadow-md, --text-*, --icon-base,
+ * --font-size-x-small) that src/theme.css does not ship. Only `compact`,
+ * upstream's default, is here. The item `badge` slot is not ported either: it
+ * belongs to markup ui-sdk's item owns.
+ *
+ * menu.css has no [data-color-scheme="dark"] block; the --v2-* tokens flip
+ * with the scheme.
+ *
+ * The rule set is attribute driven, so the React, Vue and web-component
+ * bindings can reuse this file unchanged.
+ */
+
+@layer components {
+  [data-slot="menu-content"][data-appearance="compact"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2px;
+    min-width: 160px;
+    z-index: 60;
+    pointer-events: auto;
+
+    background: var(--v2-background-bg-layer-01);
+    border-radius: 6px;
+    box-shadow: var(--v2-elevation-floating);
+
+    outline: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+
+  [data-slot="menu-content"][data-appearance="compact"]:focus-visible {
+    outline: none;
+  }
+
+  :dir(rtl) [data-slot="menu-item-chevron"] {
+    transform: scaleX(-1);
+  }
+
+  /*
+   * Upstream marks plain, checkbox and radio items with one attribute,
+   * `data-component="menu-v2-item"`, and does the same for a submenu trigger.
+   * ui-sdk gives each its own slot, so every rule below lists all four.
+   */
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    ) {
+    --menu-v2-fg: var(--v2-text-text-base);
+    --menu-v2-fg-muted: var(--v2-text-text-faint);
+    --menu-v2-fg-subtle: var(--v2-text-text-muted);
+    --menu-v2-icon: var(--v2-icon-icon-base);
+    --menu-v2-hover: var(--v2-overlay-simple-overlay-hover);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 12px;
+    padding-inline-end: 6px;
+    background: transparent;
+    border-radius: 4px;
+    outline: none;
+    cursor: default;
+    user-select: none;
+
+    font-variation-settings: "slnt" 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--menu-v2-fg);
+  }
+
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    )[data-variant="critical"] {
+    --menu-v2-fg: var(--v2-state-fg-danger);
+  }
+
+  [data-slot="menu-item-content"] {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    font-size: 13px;
+    font-weight: 440;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+    color: var(--menu-v2-fg);
+  }
+
+  [data-slot="menu-shortcut"] {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    height: 11px;
+
+    font-size: 11px;
+    font-weight: 530;
+    line-height: 100%;
+    letter-spacing: 0.05px;
+    color: var(--menu-v2-fg-muted);
+    white-space: nowrap;
+  }
+
+  [data-slot="menu-item-indicator"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--menu-v2-icon);
+  }
+
+  [data-slot="menu-item-indicator"]:not([data-checked]) > svg {
+    visibility: hidden;
+  }
+
+  [data-slot="menu-item-chevron"] {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--menu-v2-fg-muted);
+  }
+
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    )[data-highlighted] {
+    background: var(--menu-v2-hover);
+  }
+
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    )[data-checked] [data-slot="menu-item-content"] {
+    font-weight: 440;
+    color: var(--menu-v2-fg);
+  }
+
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    )[data-checked] [data-slot="menu-item-indicator"] {
+    color: var(--menu-v2-icon);
+  }
+
+  :is(
+      [data-slot="menu-item"],
+      [data-slot="menu-checkbox-item"],
+      [data-slot="menu-radio-item"],
+      [data-slot="menu-content"] [data-slot="menu-trigger"]
+    )[data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Like a native menu, an item stays highlighted while the pointer is in the submenu it opened. */
+  [data-slot="menu-content"][data-appearance="compact"]:not(:has([data-highlighted]))
+    [data-slot="menu-trigger"][data-open] {
+    background: var(--menu-v2-hover);
+  }
+
+  [data-slot="menu-separator"] {
+    height: 1px;
+    width: calc(100% + 4px);
+    margin: 2px -2px;
+    background: var(--v2-border-border-muted);
+    border: none;
+  }
+
+  [data-slot="menu-group-label"] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+
+    font-size: 11px;
+    font-weight: 530;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-faint);
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "type": "registry:ui",
+  "title": "Aspect Ratio",
+  "description": "Keeps its content at a fixed width-to-height ratio with native CSS aspect-ratio; images and video inside fill and cover the box.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/vue"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/vue/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/overrides/vue/aspect-ratio.ts",
+      "type": "registry:ui",
+      "target": "components/ui/aspect-ratio.ts",
+      "content": "import { defineComponent, h } from 'vue'\n\nimport './aspect-ratio.css'\n\n/**\n * AspectRatio, shadcn's AspectRatio on CSS `aspect-ratio` instead of Radix's\n * padding hack. `ratio` is width over height, like `16 / 9` (default 1).\n */\n\nexport const AspectRatio = defineComponent({\n  name: 'AspectRatio',\n  props: { ratio: { type: Number, default: 1 } },\n  setup(props, { slots, attrs }) {\n    return () =>\n      h(\n        'div',\n        {\n          ...attrs,\n          'data-slot': 'aspect-ratio',\n          style: [attrs.style, { '--aspect-ratio': String(props.ratio) }],\n        },\n        slots.default?.(),\n      )\n  },\n  inheritAttrs: false,\n})\n"
+    },
+    {
+      "path": "src/components/ui/aspect-ratio.css",
+      "type": "registry:ui",
+      "target": "components/ui/aspect-ratio.css",
+      "content": "/*\n * Aspect Ratio. Neither opencode's console nor @opencode/ui has one: the\n * console's stylesheet has a single Tailwind utility (`.aspect-[2/1]`) and\n * @opencode/ui only sets `aspect-ratio` inside other components (logo,\n * spinner, checkbox), so this is built from scratch.\n *\n * shadcn's AspectRatio is Radix's, which reserves the height with the old\n * padding-bottom hack and an absolutely positioned inner wrapper. Every\n * browser Kitsaas targets supports CSS `aspect-ratio`, so this is one element\n * with the native property. The ratio comes in as `--aspect-ratio` (set by the\n * `ratio` prop, or by a class like `[--aspect-ratio:2]`).\n *\n * `min-height: 0` keeps the box at its ratio when its content is taller\n * (otherwise `aspect-ratio` lets the min-content height win), matching Radix,\n * whose content never resizes the box. Like shadcn's it is unstyled: rounding,\n * borders and fills are left to the caller.\n *\n * Kitsaas addition: a direct <img>, <video>, <iframe>, <canvas>, <svg> or\n * <picture> child fills the box, with `object-fit: cover` on images and\n * video, which is what shadcn's examples do with `h-full w-full object-cover`.\n */\n\n@layer components {\n  [data-slot=\"aspect-ratio\"] {\n    position: relative;\n    width: 100%;\n    min-height: 0;\n    aspect-ratio: var(--aspect-ratio, 1);\n  }\n\n  [data-slot=\"aspect-ratio\"] > :is(img, video, iframe, canvas, svg, picture) {\n    display: block;\n    width: 100%;\n    height: 100%;\n  }\n\n  [data-slot=\"aspect-ratio\"] > :is(img, video) {\n    object-fit: cover;\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "vue",
+    "uiSdkPackage": "@ui-sdk/vue/aspect-ratio"
+  }
+}

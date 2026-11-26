@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "otp-input",
+  "type": "registry:ui",
+  "title": "OTP Input",
+  "description": "Collects one-time verification codes across individual slots with paste handling, autofill, and native form validation.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/web"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/web/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/web/ui/otp-input.ts",
+      "type": "registry:ui",
+      "target": "components/ui/otp-input.ts",
+      "content": "import '@ui-sdk/web/otp-input'\nimport './otp-input.css'\n\nexport {\n  createOTPInputController,\n} from '@ui-sdk/web/otp-input'\n"
+    },
+    {
+      "path": "src/components/ui/otp-input.css",
+      "type": "registry:ui",
+      "target": "components/ui/otp-input.css",
+      "content": "@layer components {\n  [data-slot=\"otp-input\"] {\n    position: relative;\n    display: inline-flex;\n    align-items: center;\n    gap: 8px;\n    max-width: 100%;\n  }\n\n  [data-slot=\"otp-input-group\"] {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n  }\n\n  [data-slot=\"otp-input-slot\"] {\n    box-sizing: border-box;\n    position: relative;\n    display: grid;\n    place-items: center;\n    width: 36px;\n    height: 40px;\n    border: 0;\n    border-radius: 6px;\n    outline: 1px solid transparent;\n    outline-offset: -1px;\n    background: var(--v2-background-bg-base);\n    box-shadow: var(--v2-elevation-input);\n    color: var(--v2-text-text-base);\n    font-family: var(--font-family-mono);\n    font-size: 15px;\n    font-weight: 530;\n    line-height: 1;\n    letter-spacing: 0;\n    font-variant-numeric: tabular-nums;\n    user-select: none;\n    transition:\n      background 85ms ease-out,\n      outline-color 85ms ease-out,\n      box-shadow 85ms ease-out;\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"otp-input\"]:hover:not([data-disabled], [data-focused], [data-invalid]):not(\n        :has([aria-invalid=\"true\"])\n      )\n      [data-slot=\"otp-input-slot\"] {\n      box-shadow:\n        inset 0 0 0 100vmax var(--v2-overlay-simple-overlay-hover),\n        var(--v2-elevation-input);\n    }\n  }\n\n  [data-slot=\"otp-input-slot\"][data-active]:not([data-disabled]) {\n    z-index: 1;\n    outline-color: var(--v2-border-border-focus);\n    box-shadow: none;\n  }\n\n  [data-slot=\"otp-input-slot\"][data-fake-caret]:empty::after {\n    content: \"\";\n    width: 1.5px;\n    height: 18px;\n    border-radius: 1px;\n    background: var(--v2-text-text-base);\n    animation: otp-caret-blink 1s steps(1, end) infinite;\n  }\n\n  [data-slot=\"otp-input\"]:is([data-invalid], :has([aria-invalid=\"true\"])):not(\n      [data-disabled]\n    )\n    [data-slot=\"otp-input-slot\"] {\n    outline-color: var(--v2-state-fg-danger);\n    box-shadow: none;\n    color: var(--v2-state-fg-danger);\n  }\n\n  [data-slot=\"otp-input\"]:is([data-invalid], :has([aria-invalid=\"true\"])):not(\n      [data-disabled]\n    )\n    [data-slot=\"otp-input-slot\"][data-fake-caret]:empty::after {\n    background: var(--v2-state-fg-danger);\n  }\n\n  [data-slot=\"otp-input-slot\"][data-disabled] {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"otp-input-separator\"] {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    flex: none;\n    color: var(--v2-text-text-faint);\n    user-select: none;\n  }\n\n  [data-slot=\"otp-input-separator\"][data-disabled] {\n    opacity: 0.5;\n  }\n\n  @keyframes otp-caret-blink {\n    0%,\n    49% {\n      opacity: 1;\n    }\n\n    50%,\n    100% {\n      opacity: 0;\n    }\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    [data-slot=\"otp-input-slot\"] {\n      transition: none;\n    }\n\n    [data-slot=\"otp-input-slot\"][data-fake-caret]:empty::after {\n      animation: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "web",
+    "uiSdkPackage": "@ui-sdk/web/otp-input"
+  }
+}

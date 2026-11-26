@@ -1,0 +1,322 @@
+@layer components {
+  /* ---------------------------------------------------------------- */
+  /* Root surface                                                     */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="command"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 480px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--v2-background-bg-layer-01);
+    box-shadow: var(--v2-elevation-floating);
+    overflow: hidden;
+    color: var(--v2-text-text-base);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+
+  /* When nested inside a Dialog, let the dialog own the outer frame & shadow. */
+  [data-slot="dialog-content"] [data-slot="command"] {
+    max-width: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Search header                                                    */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="command-input-wrapper"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--v2-border-border-muted);
+    flex-shrink: 0;
+  }
+
+  [data-slot="command-input-icon"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--v2-icon-icon-muted);
+    pointer-events: none;
+  }
+
+  [data-slot="command-input-icon"] svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+  }
+
+  [data-slot="command-input"] {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-style: normal;
+    font-weight: 440;
+    font-size: 13px;
+    line-height: var(--line-height-base);
+    letter-spacing: -0.04px;
+    color: var(--v2-text-text-base);
+    font-variation-settings: "slnt" 0;
+  }
+
+  /* Standalone input used without CommandInputWrapper */
+  [data-slot="command"] > [data-slot="command-input"] {
+    padding: 0 12px;
+    border-bottom: 1px solid var(--v2-border-border-muted);
+  }
+
+  [data-slot="command-input"]::placeholder {
+    color: var(--v2-text-text-faint);
+    user-select: none;
+  }
+
+  [data-slot="command-breadcrumbs"] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+  }
+
+  [data-slot="command-breadcrumb"] {
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: var(--v2-background-bg-layer-02);
+    border: 1px solid var(--v2-border-border-muted);
+    font-size: 11px;
+    font-weight: 530;
+    color: var(--v2-text-text-muted);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* List                                                             */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="command-list"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px;
+    gap: 1px;
+    outline: none;
+  }
+
+  [data-slot="command-list"][aria-busy="true"] {
+    opacity: 0.6;
+  }
+
+  [data-slot="command-group"] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1px;
+  }
+
+  [data-slot="command-group-label"] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 530;
+    letter-spacing: 0.05px;
+    color: var(--v2-text-text-faint);
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-slot="command-separator"] {
+    flex: none;
+    height: 1px;
+    width: calc(100% + 8px);
+    margin: 4px -4px;
+    background: var(--v2-border-border-muted);
+    border: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Command item                                                     */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="command-item"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-height: 30px;
+    padding: 4px 8px;
+    background: transparent;
+    border-radius: 6px;
+    outline: none;
+    cursor: default;
+    user-select: none;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 440;
+    line-height: var(--line-height-compact);
+    letter-spacing: -0.04px;
+    font-variation-settings: "slnt" 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--v2-text-text-base);
+    transition: background 85ms ease-out;
+  }
+
+  [data-slot="command-item"][data-highlighted] {
+    background: var(--v2-overlay-simple-overlay-hover);
+  }
+
+  [data-slot="command-item"][data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  [data-slot="command-item"][data-pending] {
+    opacity: 0.65;
+    cursor: progress;
+  }
+
+  [data-slot="command-item-icon"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--v2-icon-icon-muted);
+  }
+
+  [data-slot="command-item"][data-highlighted] [data-slot="command-item-icon"] {
+    color: var(--v2-icon-icon-base);
+  }
+
+  [data-slot="command-item-icon"] svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+  }
+
+  :dir(rtl) [data-slot="command-item-icon"][data-mirror] {
+    transform: scaleX(-1);
+  }
+
+  [data-slot="command-item-text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [data-slot="command-item-text"] mark {
+    background: var(--v2-state-bg-info);
+    color: var(--v2-state-fg-info);
+    font-weight: 530;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Shortcut badge                                                   */
+  /* ---------------------------------------------------------------- */
+
+  /* CommandShortcut draws a Kbd cap (kbd.css); here it only sits at the end
+     of the row and hides while it has no keys. */
+  [data-slot="command-item"] > [data-slot="kbd"] {
+    margin-inline-start: auto;
+  }
+
+  [data-slot="command-item"] > [data-slot="kbd"]:empty {
+    display: none;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Empty, status & footer                                           */
+  /* ---------------------------------------------------------------- */
+
+  [data-slot="command-empty"]:not(:empty) {
+    padding: 24px 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 440;
+    line-height: 18px;
+    color: var(--v2-text-text-faint);
+    user-select: none;
+  }
+
+  [data-slot="command-status"] {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--v2-border-border-muted);
+    font-size: 11px;
+    font-weight: 530;
+    color: var(--v2-text-text-faint);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+  }
+
+  [data-slot="command-status"]:empty {
+    display: none;
+  }
+
+  [data-slot="command-footer"] {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 12px;
+    border-top: 1px solid var(--v2-border-border-muted);
+    background: var(--v2-background-bg-base);
+    font-size: 11px;
+    font-weight: 440;
+    line-height: 14px;
+    color: var(--v2-text-text-faint);
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot="command-item"] {
+      transition: none;
+    }
+  }
+}

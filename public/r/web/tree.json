@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tree",
+  "type": "registry:ui",
+  "title": "Tree",
+  "description": "Navigates nested file hierarchies and expandable branches with arrow keys, typeahead, and single or tri-state selection.",
+  "dependencies": [
+    "@ui-sdk/core",
+    "@ui-sdk/web"
+  ],
+  "registryDependencies": [
+    "https://kitsaas.com/r/web/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/web/ui/tree.ts",
+      "type": "registry:ui",
+      "target": "components/ui/tree.ts",
+      "content": "import '@ui-sdk/web/tree'\nimport './tree.css'\n\nexport {\n  createTreeController,\n  toggleTreeChecked,\n  treeCheckedStates,\n  treeFromPaths,\n  visibleTreeRows,\n} from '@ui-sdk/web/tree'\n"
+    },
+    {
+      "path": "src/components/ui/tree.css",
+      "type": "registry:ui",
+      "target": "components/ui/tree.css",
+      "content": "@layer components {\n  [data-slot=\"tree\"] {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    width: 100%;\n    min-width: 0;\n    font-family: var(--font-family-sans);\n    font-size: 13px;\n    color: var(--v2-text-text-base);\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n\n  [data-slot=\"tree\"][data-disabled] {\n    opacity: 0.55;\n  }\n\n  [data-slot=\"tree-item\"] {\n    outline: none;\n  }\n\n  [data-slot=\"tree-item\"]:focus-visible > [data-slot=\"tree-label\"] {\n    outline: 2px solid var(--v2-border-border-focus);\n    outline-offset: -2px;\n  }\n\n  [data-slot=\"tree-label\"] {\n    --tree-indent: calc((var(--tree-level, 1) - 1) * 16px);\n\n    box-sizing: border-box;\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    gap: 6px;\n    min-width: 0;\n    height: 28px;\n    padding-inline: calc(8px + var(--tree-indent)) 8px;\n    border-radius: 4px;\n    color: var(--v2-text-text-base);\n    font-size: 13px;\n    font-weight: 440;\n    line-height: 16px;\n    letter-spacing: -0.04px;\n    text-decoration: none;\n    white-space: nowrap;\n    cursor: pointer;\n    user-select: none;\n    outline: none;\n    transition: background-color 85ms ease-out;\n  }\n\n  /* Indent leaves cleanly under sibling branch labels when branches carry an indicator */\n  [data-slot=\"tree\"]:has([data-slot=\"tree-indicator\"])\n    [data-slot=\"tree-label\"]:not([data-branch]) {\n    padding-inline-start: calc(8px + 22px + var(--tree-indent));\n  }\n\n  @media (hover: hover) {\n    [data-slot=\"tree-label\"]:hover:not([data-disabled]) {\n      background: var(--v2-overlay-simple-overlay-hover);\n    }\n  }\n\n  [data-slot=\"tree-label\"]:is([data-selected], [data-current]) {\n    background: var(--v2-background-bg-layer-02);\n    font-weight: 530;\n    color: var(--v2-text-text-base);\n  }\n\n  [data-slot=\"tree-label\"][data-disabled] {\n    opacity: 0.5;\n    cursor: not-allowed;\n  }\n\n  [data-slot=\"tree-label\"] > svg {\n    flex: none;\n    color: var(--v2-icon-icon-muted);\n  }\n\n  [data-slot=\"tree-label\"]:is([data-selected], [data-current]) > svg {\n    color: var(--v2-icon-icon-base);\n  }\n\n  [data-slot=\"tree-label\"] > span:not([data-slot]) {\n    min-width: 0;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* Disclose chevron */\n  [data-slot=\"tree-indicator\"] {\n    display: inline-flex;\n    flex: none;\n    align-items: center;\n    justify-content: center;\n    width: 16px;\n    height: 16px;\n    border-radius: 3px;\n    color: var(--v2-icon-icon-muted);\n    transition: transform 140ms ease-out;\n  }\n\n  [data-slot=\"tree-indicator\"][data-expanded] {\n    transform: rotate(90deg);\n  }\n\n  :dir(rtl) [data-slot=\"tree-indicator\"] {\n    transform: rotate(180deg);\n  }\n\n  :dir(rtl) [data-slot=\"tree-indicator\"][data-expanded] {\n    transform: rotate(90deg);\n  }\n\n  /* Nested branch group with smooth height animation */\n  [data-slot=\"tree-group\"] {\n    display: flex;\n    flex-direction: column;\n    gap: 1px;\n    margin-top: 1px;\n    height: var(--tree-group-height);\n    overflow: hidden;\n    transition: height 150ms ease-out;\n  }\n\n  [data-slot=\"tree-group\"]:is([data-starting-style], [data-ending-style]) {\n    height: 0;\n  }\n\n  /* Optional tri-state checkbox */\n  [data-slot=\"tree-checkbox\"] {\n    box-sizing: border-box;\n    display: inline-flex;\n    flex: none;\n    align-items: center;\n    justify-content: center;\n    width: 14px;\n    height: 14px;\n    border-radius: 3px;\n    background: var(--v2-background-bg-base);\n    box-shadow: inset 0 0 0 1px var(--v2-border-border-strong);\n    color: var(--v2-text-text-contrast);\n    transition:\n      background-color 85ms ease-out,\n      box-shadow 85ms ease-out;\n  }\n\n  [data-slot=\"tree-checkbox\"]:is([data-checked], [data-indeterminate]) {\n    background: var(--v2-background-bg-contrast);\n    box-shadow: none;\n  }\n\n  @media (prefers-reduced-motion: reduce) {\n    :is(\n        [data-slot=\"tree-label\"],\n        [data-slot=\"tree-indicator\"],\n        [data-slot=\"tree-group\"],\n        [data-slot=\"tree-checkbox\"]\n      ) {\n      transition: none;\n    }\n  }\n}\n"
+    }
+  ],
+  "meta": {
+    "framework": "web",
+    "uiSdkPackage": "@ui-sdk/web/tree"
+  }
+}
