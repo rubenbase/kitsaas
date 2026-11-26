@@ -74,7 +74,7 @@ export type ChartShowcaseItem = {
 /* Shared Card Shell & Datasets                                               */
 /* -------------------------------------------------------------------------- */
 
-function CardShell(props: {
+export function CardShell(props: {
   right?: JSX.Element
   footerTitle?: string
   footerSub?: string

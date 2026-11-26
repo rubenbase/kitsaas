@@ -16,6 +16,11 @@ const chartTabs: PageTab[] = [
   { label: 'Pie Charts', href: '/charts/pie' },
   { label: 'Radar Charts', href: '/charts/radar' },
   { label: 'Radial Charts', href: '/charts/radial' },
+  { label: 'Scatter Charts', href: '/charts/scatter' },
+  { label: 'Heatmaps', href: '/charts/heatmap' },
+  { label: 'Funnel Charts', href: '/charts/funnel' },
+  { label: 'Sankey Diagrams', href: '/charts/sankey' },
+  { label: 'Gauge Charts', href: '/charts/gauge' },
 ]
 
 /** /charts is the default: Area Charts. */

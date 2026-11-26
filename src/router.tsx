@@ -4,10 +4,15 @@ import { ChartsIndex, ChartsLayout } from '#/routes/charts'
 import {
   AreaChartsPage,
   BarChartsPage,
+  FunnelChartsPage,
+  GaugeChartsPage,
+  HeatmapChartsPage,
   LineChartsPage,
   PieChartsPage,
   RadarChartsPage,
   RadialChartsPage,
+  SankeyChartsPage,
+  ScatterChartsPage,
 } from '#/routes/charts/chart-page'
 import {
   componentChildRoutes,
@@ -33,6 +38,11 @@ const routes = defineRoutes([
       { path: '/pie', component: PieChartsPage },
       { path: '/radar', component: RadarChartsPage },
       { path: '/radial', component: RadialChartsPage },
+      { path: '/scatter', component: ScatterChartsPage },
+      { path: '/heatmap', component: HeatmapChartsPage },
+      { path: '/funnel', component: FunnelChartsPage },
+      { path: '/sankey', component: SankeyChartsPage },
+      { path: '/gauge', component: GaugeChartsPage },
     ],
   },
   {

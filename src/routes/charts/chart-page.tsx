@@ -4,10 +4,15 @@ import { For, Show, createMemo } from 'solid-js'
 import {
   AreaChartIcon,
   ChartsIcon,
+  FunnelChartIcon,
+  GaugeChartIcon,
+  HeatmapChartIcon,
   LineChartIcon,
   PieChartIcon,
   RadarChartIcon,
   RadialChartIcon,
+  SankeyChartIcon,
+  ScatterChartIcon,
 } from '#/components/icons'
 import { Tabs, TabsList, TabsPanel, TabsTab } from '#/components/ui/tabs'
 import {
@@ -19,7 +24,12 @@ import {
   useTargetFramework,
 } from '#/docs'
 
-import { chartCatalog, type ChartKind } from './chart-visuals'
+import { chartCatalog, type ChartKind as BaseChartKind } from './chart-visuals'
+import { extraChartCatalog, type ExtraChartKind } from './chart-visuals-extra'
+
+type ChartKind = BaseChartKind | ExtraChartKind
+
+const catalog = { ...chartCatalog, ...extraChartCatalog }
 
 const categoryMeta: Record<
   ChartKind,
@@ -59,14 +69,51 @@ const categoryMeta: Record<
     description: 'Progress rings, KPI gauges, half-arc meters, and concentric tracks.',
     icon: () => <RadialChartIcon />,
   },
+  scatter: {
+    title: 'Scatter Charts',
+    description: 'Point clouds, multi-series scatters, bubbles, and regression fits.',
+    icon: () => <ScatterChartIcon />,
+  },
+  heatmap: {
+    title: 'Heatmaps',
+    description: 'Calendar heatmaps, labeled matrices, and status strips.',
+    icon: () => <HeatmapChartIcon />,
+  },
+  funnel: {
+    title: 'Funnel Charts',
+    description: 'Centered, baseline, and period-over-period conversion funnels.',
+    icon: () => <FunnelChartIcon />,
+  },
+  sankey: {
+    title: 'Sankey Diagrams',
+    description: 'Weighted flows between stages, with or without labels.',
+    icon: () => <SankeyChartIcon />,
+  },
+  gauge: {
+    title: 'Gauge Charts',
+    description: 'Partial-circle meters, threshold bands, and gauge groups.',
+    icon: () => <GaugeChartIcon />,
+  },
 }
 
-const chartOrder: ChartKind[] = ['area', 'bar', 'line', 'pie', 'radar', 'radial']
+const chartOrder: ChartKind[] = [
+  'area',
+  'bar',
+  'line',
+  'pie',
+  'radar',
+  'radial',
+  'scatter',
+  'heatmap',
+  'funnel',
+  'sankey',
+  'gauge',
+]
 
 export function ChartPage(props: { kind: ChartKind }) {
   const [framework, setFramework] = useTargetFramework()
   const meta = () => categoryMeta[props.kind]
-  const items = createMemo(() => chartCatalog[props.kind])
+  const items = createMemo(() => catalog[props.kind])
   const hero = createMemo(() => items().find((item) => item.fullWidth))
   const gridItems = createMemo(() => items().filter((item) => !item.fullWidth))
 
@@ -186,4 +233,24 @@ export function RadarChartsPage() {
 
 export function RadialChartsPage() {
   return <ChartPage kind="radial" />
+}
+
+export function ScatterChartsPage() {
+  return <ChartPage kind="scatter" />
+}
+
+export function HeatmapChartsPage() {
+  return <ChartPage kind="heatmap" />
+}
+
+export function FunnelChartsPage() {
+  return <ChartPage kind="funnel" />
+}
+
+export function SankeyChartsPage() {
+  return <ChartPage kind="sankey" />
+}
+
+export function GaugeChartsPage() {
+  return <ChartPage kind="gauge" />
 }

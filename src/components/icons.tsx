@@ -383,3 +383,56 @@ export function AlertTriangleIcon(props: IconProps) {
     </Icon>
   )
 }
+
+export function ScatterChartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M2.5 2.5v11h11" />
+      <circle cx="6" cy="10" r="0.9" />
+      <circle cx="8.5" cy="7.5" r="0.9" />
+      <circle cx="11" cy="5" r="0.9" />
+      <circle cx="10.5" cy="9" r="0.9" />
+    </Icon>
+  )
+}
+
+export function HeatmapChartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="9" width="4.5" height="4.5" rx="1" fill="currentColor" />
+    </Icon>
+  )
+}
+
+export function FunnelChartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M2.5 3h11" />
+      <path d="M4.5 6.5h7" />
+      <path d="M6 10h4" />
+      <path d="M7.25 13.5h1.5" />
+    </Icon>
+  )
+}
+
+export function SankeyChartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M2.5 3v4.5M13.5 2.5v4M13.5 9.5v4" />
+      <path d="M2.5 4.5C8 4.5 8 4 13.5 4" />
+      <path d="M2.5 6C8 6 8 11.5 13.5 11.5" />
+    </Icon>
+  )
+}
+
+export function GaugeChartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M3.5 12.5a5.5 5.5 0 1 1 9 0" />
+      <path d="m8 9 2.5-3" />
+    </Icon>
+  )
+}
