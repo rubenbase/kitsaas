@@ -9,8 +9,8 @@
     "@ui-sdk/web"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/web/theme.json",
-    "https://kitsaas.dev/r/web/separator.json"
+    "https://kitsaas.com/r/web/theme.json",
+    "https://kitsaas.com/r/web/separator.json"
   ],
   "files": [
     {

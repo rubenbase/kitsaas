@@ -9,8 +9,8 @@
     "@ui-sdk/vue"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/vue/theme.json",
-    "https://kitsaas.dev/r/vue/kbd.json"
+    "https://kitsaas.com/r/vue/theme.json",
+    "https://kitsaas.com/r/vue/kbd.json"
   ],
   "files": [
     {

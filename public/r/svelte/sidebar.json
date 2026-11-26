@@ -9,11 +9,11 @@
     "@ui-sdk/svelte"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/svelte/theme.json",
-    "https://kitsaas.dev/r/svelte/drawer.json",
-    "https://kitsaas.dev/r/svelte/separator.json",
-    "https://kitsaas.dev/r/svelte/skeleton.json",
-    "https://kitsaas.dev/r/svelte/tooltip.json"
+    "https://kitsaas.com/r/svelte/theme.json",
+    "https://kitsaas.com/r/svelte/drawer.json",
+    "https://kitsaas.com/r/svelte/separator.json",
+    "https://kitsaas.com/r/svelte/skeleton.json",
+    "https://kitsaas.com/r/svelte/tooltip.json"
   ],
   "files": [
     {

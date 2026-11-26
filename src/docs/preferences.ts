@@ -71,7 +71,7 @@ export function getFrameworkMeta(id: TargetFramework) {
 
 export function formatComponentsJson(
   framework: TargetFramework,
-  origin = 'https://kitsaas.dev',
+  origin = 'https://kitsaas.com',
 ): string {
   return JSON.stringify(
     {

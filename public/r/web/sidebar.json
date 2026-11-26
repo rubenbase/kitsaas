@@ -9,11 +9,11 @@
     "@ui-sdk/web"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/web/theme.json",
-    "https://kitsaas.dev/r/web/drawer.json",
-    "https://kitsaas.dev/r/web/separator.json",
-    "https://kitsaas.dev/r/web/skeleton.json",
-    "https://kitsaas.dev/r/web/tooltip.json"
+    "https://kitsaas.com/r/web/theme.json",
+    "https://kitsaas.com/r/web/drawer.json",
+    "https://kitsaas.com/r/web/separator.json",
+    "https://kitsaas.com/r/web/skeleton.json",
+    "https://kitsaas.com/r/web/tooltip.json"
   ],
   "files": [
     {

@@ -9,7 +9,7 @@
     "@ui-sdk/web"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/web/theme.json"
+    "https://kitsaas.com/r/web/theme.json"
   ],
   "files": [
     {

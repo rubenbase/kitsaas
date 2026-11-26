@@ -9,8 +9,8 @@
     "@ui-sdk/solid"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/solid/theme.json",
-    "https://kitsaas.dev/r/solid/kbd.json"
+    "https://kitsaas.com/r/solid/theme.json",
+    "https://kitsaas.com/r/solid/kbd.json"
   ],
   "files": [
     {

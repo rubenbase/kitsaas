@@ -9,11 +9,11 @@
     "@ui-sdk/solid"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/solid/theme.json",
-    "https://kitsaas.dev/r/solid/drawer.json",
-    "https://kitsaas.dev/r/solid/separator.json",
-    "https://kitsaas.dev/r/solid/skeleton.json",
-    "https://kitsaas.dev/r/solid/tooltip.json"
+    "https://kitsaas.com/r/solid/theme.json",
+    "https://kitsaas.com/r/solid/drawer.json",
+    "https://kitsaas.com/r/solid/separator.json",
+    "https://kitsaas.com/r/solid/skeleton.json",
+    "https://kitsaas.com/r/solid/tooltip.json"
   ],
   "files": [
     {

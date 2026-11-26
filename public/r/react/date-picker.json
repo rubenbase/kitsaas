@@ -9,8 +9,8 @@
     "@ui-sdk/react"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/react/theme.json",
-    "https://kitsaas.dev/r/react/calendar.json"
+    "https://kitsaas.com/r/react/theme.json",
+    "https://kitsaas.com/r/react/calendar.json"
   ],
   "files": [
     {

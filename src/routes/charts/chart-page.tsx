@@ -188,7 +188,7 @@ export function ChartPage(props: { kind: ChartKind }) {
                   onChange={setFramework}
                 />
               }
-              exec={`shadcn@latest add https://kitsaas.dev/r/${framework()}/chart.json`}
+              exec={`shadcn@latest add https://kitsaas.com/r/${framework()}/chart.json`}
             />
           </TabsPanel>
 

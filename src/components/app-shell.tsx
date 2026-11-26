@@ -3,6 +3,7 @@ import { useLocation } from '@solidjs/router'
 import { For, createEffect, createSignal, onSettled } from 'solid-js'
 
 import { KitsaasMark } from '#/components/logo'
+import { showDevOnly } from '#/env'
 import { Button } from '#/components/ui/button'
 
 /**
@@ -94,12 +95,16 @@ function Header() {
           aria-label="Main"
           class="hidden min-w-0 items-center gap-1 md:flex"
         >
-          <Button href="/pages" variant="nav">
-            <span class="truncate">Pages</span>
-          </Button>
-          <Button href="/blocks" variant="nav">
-            <span class="truncate">Blocks</span>
-          </Button>
+          {showDevOnly && (
+            <>
+              <Button href="/pages" variant="nav">
+                <span class="truncate">Pages</span>
+              </Button>
+              <Button href="/blocks" variant="nav">
+                <span class="truncate">Blocks</span>
+              </Button>
+            </>
+          )}
           <Button href="/components" variant="nav">
             <span class="truncate">Components</span>
           </Button>

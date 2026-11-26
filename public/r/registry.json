@@ -1,37 +1,37 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "kitsaas",
-  "homepage": "https://kitsaas.dev",
+  "homepage": "https://kitsaas.com",
   "frameworks": {
     "solid": {
       "components": 69,
       "overrides": 0,
-      "indexUrl": "https://kitsaas.dev/r/solid/registry.json",
-      "namespaceTemplate": "https://kitsaas.dev/r/solid/{name}.json"
+      "indexUrl": "https://kitsaas.com/r/solid/registry.json",
+      "namespaceTemplate": "https://kitsaas.com/r/solid/{name}.json"
     },
     "react": {
       "components": 69,
       "overrides": 15,
-      "indexUrl": "https://kitsaas.dev/r/react/registry.json",
-      "namespaceTemplate": "https://kitsaas.dev/r/react/{name}.json"
+      "indexUrl": "https://kitsaas.com/r/react/registry.json",
+      "namespaceTemplate": "https://kitsaas.com/r/react/{name}.json"
     },
     "vue": {
       "components": 69,
       "overrides": 13,
-      "indexUrl": "https://kitsaas.dev/r/vue/registry.json",
-      "namespaceTemplate": "https://kitsaas.dev/r/vue/{name}.json"
+      "indexUrl": "https://kitsaas.com/r/vue/registry.json",
+      "namespaceTemplate": "https://kitsaas.com/r/vue/{name}.json"
     },
     "svelte": {
       "components": 69,
       "overrides": 13,
-      "indexUrl": "https://kitsaas.dev/r/svelte/registry.json",
-      "namespaceTemplate": "https://kitsaas.dev/r/svelte/{name}.json"
+      "indexUrl": "https://kitsaas.com/r/svelte/registry.json",
+      "namespaceTemplate": "https://kitsaas.com/r/svelte/{name}.json"
     },
     "web": {
       "components": 69,
       "overrides": 13,
-      "indexUrl": "https://kitsaas.dev/r/web/registry.json",
-      "namespaceTemplate": "https://kitsaas.dev/r/web/{name}.json"
+      "indexUrl": "https://kitsaas.com/r/web/registry.json",
+      "namespaceTemplate": "https://kitsaas.com/r/web/{name}.json"
     }
   },
   "items": [

@@ -8,7 +8,7 @@
     "@tanstack/charts"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/solid/theme.json"
+    "https://kitsaas.com/r/solid/theme.json"
   ],
   "files": [
     {

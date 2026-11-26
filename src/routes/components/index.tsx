@@ -316,7 +316,7 @@ export function ComponentDetailPage(props: { entry: ComponentEntry }) {
                   onChange={setFramework}
                 />
               }
-              exec={`shadcn@latest add https://kitsaas.dev/r/${framework()}/${props.entry.slug}.json`}
+              exec={`shadcn@latest add https://kitsaas.com/r/${framework()}/${props.entry.slug}.json`}
             />
           </TabsPanel>
 

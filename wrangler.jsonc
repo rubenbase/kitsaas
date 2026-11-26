@@ -1,0 +1,14 @@
+{
+  // kitsaas.com: the Vite build in dist/ served as static assets, no Worker code.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kitsaas",
+  "compatibility_date": "2026-11-26",
+  "assets": {
+    "directory": "./dist",
+    // Client-side routes (/charts/area, /components/button) fall back to index.html.
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [{ "pattern": "kitsaas.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false
+}

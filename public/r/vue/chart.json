@@ -8,7 +8,7 @@
     "@tanstack/charts"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/vue/theme.json"
+    "https://kitsaas.com/r/vue/theme.json"
   ],
   "files": [
     {

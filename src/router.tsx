@@ -20,6 +20,7 @@ import {
   ComponentsIndex,
   ComponentsLayout,
 } from '#/routes/components'
+import { showDevOnly } from '#/env'
 import { BlocksPage } from '#/routes/blocks'
 import { NotFoundPage } from '#/routes/not-found'
 import { PagesPage } from '#/routes/pages'
@@ -54,8 +55,13 @@ const routes = defineRoutes([
       { path: '*404', component: ComponentNotFound },
     ],
   },
-  { path: '/pages', component: PagesPage },
-  { path: '/blocks', component: BlocksPage },
+  // Development-only sections; production builds leave them out (see env.ts).
+  ...(showDevOnly
+    ? [
+        { path: '/pages', component: PagesPage },
+        { path: '/blocks', component: BlocksPage },
+      ]
+    : []),
   { path: '*404', component: NotFoundPage },
 ])
 

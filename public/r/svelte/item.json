@@ -9,8 +9,8 @@
     "@ui-sdk/svelte"
   ],
   "registryDependencies": [
-    "https://kitsaas.dev/r/svelte/theme.json",
-    "https://kitsaas.dev/r/svelte/separator.json"
+    "https://kitsaas.com/r/svelte/theme.json",
+    "https://kitsaas.com/r/svelte/separator.json"
   ],
   "files": [
     {

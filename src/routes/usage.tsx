@@ -12,6 +12,7 @@ import {
 } from '#/components/icons'
 import { Badge, type BadgeVariant } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
+import { showDevOnly } from '#/env'
 import { componentCatalog } from '#/routes/components/registry'
 import { catalog, chartGroups } from '#/routes/charts/chart-page'
 
@@ -27,6 +28,8 @@ export type Announcement = {
   text: string
   /** Optional call to action; without it the announcement is plain text. */
   cta?: { label: string; href: string }
+  /** Show only in development and preview builds, e.g. while the copy is a draft. */
+  devOnly?: boolean
 }
 
 export const announcement: Announcement | null = {
@@ -35,6 +38,8 @@ export const announcement: Announcement | null = {
   badgeVariant: 'accent',
   text: 'Kitsaas Pro is on sale through Cyber Monday, Nov 30.',
   cta: { label: 'See the deal', href: '/pages' },
+  // Draft copy and link: replace both, then remove this to show it on kitsaas.com.
+  devOnly: true,
 }
 
 const DISMISS_KEY = 'kitsaas:dismissed-announcement'
@@ -117,6 +122,7 @@ const sections: {
   meta: string
   href: string
   icon: () => JSX.Element
+  devOnly?: boolean
 }[] = [
   {
     title: 'Components',
@@ -138,6 +144,7 @@ const sections: {
     meta: 'Coming soon',
     href: '/blocks',
     icon: () => <TerminalIcon />,
+    devOnly: true,
   },
   {
     title: 'Pages',
@@ -145,14 +152,17 @@ const sections: {
     meta: 'Coming soon',
     href: '/pages',
     icon: () => <FileCodeIcon />,
+    devOnly: true,
   },
-]
+].filter((section) => showDevOnly || !section.devOnly)
+
+const liveAnnouncement = announcement && (showDevOnly || !announcement.devOnly) ? announcement : null
 
 export function UsagePage() {
   return (
     <PageLayout>
       <StickyPageBar title="Kitsaas">
-        <Show when={announcement}>{(a) => <AnnouncementSlot announcement={a()} />}</Show>
+        <Show when={liveAnnouncement}>{(a) => <AnnouncementSlot announcement={a()} />}</Show>
       </StickyPageBar>
 
       <PageContent class="pt-10 max-md:pt-6">
@@ -162,7 +172,7 @@ export function UsagePage() {
           components.
         </p>
 
-        <ul class="mt-8 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+        <ul class={["mt-8 grid gap-2.5 sm:grid-cols-2", sections.length > 2 ? "xl:grid-cols-4" : ""]}>
           <For each={sections}>
             {(section) => (
               <li>

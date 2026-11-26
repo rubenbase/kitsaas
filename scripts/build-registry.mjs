@@ -32,7 +32,7 @@ const CATALOG_PATH = path.join(ROOT, 'src/routes/components/registry.tsx')
 const THEME_PATH = path.join(ROOT, 'src/theme.css')
 
 const REGISTRY_HOMEPAGE =
-  process.env.KITSAAS_HOMEPAGE ?? 'https://kitsaas.dev'
+  process.env.KITSAAS_HOMEPAGE ?? 'https://kitsaas.com'
 const REGISTRY_BASE_URL =
   (process.env.KITSAAS_REGISTRY_URL ?? `${REGISTRY_HOMEPAGE}/r`).replace(
     /\/+$/,
